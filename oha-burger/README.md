@@ -8,7 +8,7 @@
 3. **Gamer Kova** — kutu açılır, patates / burger / içecek / tender fırlar
 4. **Çıtır Çıtır** — kayan marka bandı ve kayan yazılar
 5. **Kadro** — öne çıkan ürün kartları
-6. **Menü** — tüm menü yatay kaydırmalı (fiyatlar Migros Yemek listesinden)
+6. **Menü** — tüm menü yatay kaydırmalı (Yemeksepeti liste fiyatları)
 7. **Siparişe Özel** — parallax ürünler + sipariş butonları
 8. **Bizi Bul** — adres, telefon, harita
 
@@ -17,5 +17,5 @@ Build gerekmez. `index.html` dosyasını tarayıcıda açmak yeterli
 (ya da `npx serve oha-burger`). GSAP 3.12.5, ScrollTrigger ve Lenis `vendor/` klasöründe.
 
 ## Güncellenecekler
-- Fiyatlar `js/main.js` içindeki `MENU` listesinde.
+- Menü ve fiyatlar `js/main.js` içindeki `MENU` listesinde (kaynak: Yemeksepeti "Oha Buger" sayfası).
 - Görseller şu an SVG illüstrasyon; gerçek ürün fotoğrafları eklenebilir.

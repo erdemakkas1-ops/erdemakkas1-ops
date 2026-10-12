@@ -2,62 +2,90 @@
 (function () {
   "use strict";
 
-  /* ---------- Menü verisi (Migros Yemek listesinden) ---------- */
+  /* ---------- Menü verisi: Yemeksepeti "Oha Buger" (wvvf) liste fiyatları ---------- */
   var MENU = [
     { title: "Burgerler", tone: "", items: [
-      ["Oha Burger", "120 gr köfte, biftek dilimleri, cheddar, karamelize soğan, Oha sos, 120 gr kaşık patates", "593,75"],
-      ["King Kong Burger", "120 gr köfte, cheddar, mozzarella, füme antrikot, karamelize soğan, turşu, Oha sos + 200 gr patates", "650,00"],
-      ["Double Burger", "2 × 120 gr köfte, 2 kat cheddar, 2 kat kaşar, turşu, Oha sos + 150 gr kaşık patates", "659,00"],
-      ["Roastbeef Burger", "120 gr köfte, tereyağlı 70 gr roastbeef, cheddar, karamelize soğan, mantar sote, domates, turşu, Oha sos", "603,25"],
-      ["Klasik Burger", "Dana köfte, cheddar, kaşar, cheddar sos, turşu, Oha sos + 150 gr patates", "451,25"],
-      ["Cheese Forever Burger", "Dana köfte, cheddar, kaşar, turşu, Oha sos + 150 gr patates", "451,25"],
-      ["Hot Burger", "120 gr köfte, cheddar, karamelize soğan, turşu, acı sos, Oha sos + 150 gr kaşık patates", "445,00"],
-      ["Best Cheese Burger", "Dana köfte, çift cheddar, çift kaşar, mozzarella, turşu, Oha sos + 150 gr patates", "441,75"],
-      ["Medium Et Burger Menü", "Dana köfte, cheddar, kaşar, karamelize soğan, turşu, Oha sos + 150 gr patates", "413,25"]
+      ["Oha Burger", "120 gr hamburger köftesi, biftek dilimleri, cheddar peyniri, karamelize soğan, Oha burger sos + 120 gr kaşık patates", "535"],
+      ["Double Burger", "2 adet (240 gr) hamburger köftesi, 2 kat cheddar, 2 kat kaşar peyniri, turşu, Oha burger sos + 150 gr kaşık patates", "650"],
+      ["Rus Tavuk Burger", "190 gr panelenmiş tavuk, cheddar peyniri, kaşar peyniri, cheddar sos, marul, turşu, Oha burger sos + 150 gr kaşık patates", "550"],
+      ["Best Cheeseburger", "120 gr dana hamburger köftesi, çift kat cheddar, çift kat kaşar, turşu, Oha burger sos + 150 gr patates", "510"],
+      ["King Kong Burger", "120 gr hamburger köftesi, cheddar, mozzarella, füme antrikot, karamelize soğan, turşu, Oha burger sos + 200 gr patates", "500"],
+      ["Roastbeef Burger", "120 gr hamburger köftesi, tereyağlı 70 gr roastbeef dilimleri, cheddar, karamelize soğan, turşu, Oha burger sos + 150 gr kaşık patates", "495"],
+      ["Chicken Burger", "190 gr panelenmiş tavuk, cheddar sos, marul, Oha burger sos + 120 gr kaşık patates", "485"],
+      ["Hot Chicken Burger", "190 gr panelenmiş tavuk, acı sos, cheddar sos, marul, domates, turşu, Oha burger sos + 150 gr patates", "485"],
+      ["Tavuk Burger", "190 gr panelenmiş tavuk, cheddar sos, marul, turşu, Oha burger sos + 150 gr kaşık patates", "470"],
+      ["Klasik Burger", "120 gr dana hamburger köftesi, cheddar, kaşar, cheddar sos, turşu, Oha burger sos + 150 gr patates", "465"],
+      ["Cheese Forever Burger", "120 gr dana hamburger köftesi, cheddar peyniri, kaşar peyniri, turşu, Oha burger sos + 150 gr patates", "932"]
     ]},
-    { title: "Tavuk", tone: "dark", items: [
-      ["Hot Chicken Burger", "190 gr panelenmiş tavuk, acı sos, cheddar sos, marul, domates, turşu, Oha sos + 150 gr patates", "365,75"],
-      ["Rus Tavuk Burger", "190 gr panelenmiş tavuk, cheddar, kaşar, cheddar sos, marul, turşu, Oha sos + 150 gr kaşık patates", "346,75"],
-      ["Tavuk Burger", "190 gr panelenmiş tavuk, cheddar sos, marul, turşu, Oha sos + 150 gr kaşık patates", "323,00"],
-      ["Schnitzel Menü 250 gr", "Özel soslarda marine edilmiş schnitzel, 150 gr patates, 2 soğan halkası", "385,00"],
-      ["Çıtır Tavuk 500 gr + Patates + 1 L Fanta", "Özel marinasyonlu çıtır tavuk, 300 gr patates, 3 sos seçimi", "664,05"]
+    { title: "Tavuklar", tone: "dark", items: [
+      ["Acılı Gamer Kova", "6 tender, 3 soğan halkası, 200 gr kaşık patates, acı sos, sweet chili, peri peri sos", "750"],
+      ["Tender Kova", "5 tender, 3 soğan halkası, 200 g patates. Cheddar sos, ketçap, mayonez ile", "720"],
+      ["Futbol Kova", "5 tender, 2 mozzarella sticks, 6 soğan halkası, 200 g kaşık patates", "700"],
+      ["Big Gamer Kova", "6 tender, 6 soğan halkası, 300 gr kaşık patates", "700"],
+      ["Acılı Big Gamer Kova", "6 tender, 6 soğan halkası, 300 gr kaşık patates, acı sos, ketçap, mayonez", "700"],
+      ["Gamer Kova", "5 tender, 3 soğan halkası, 200 gr kaşık patates", "660"],
+      ["Çıtır Tavuk Dürüm", "190 g çıtır tavuk, mayonez, ketçap, cheddar sos, turşu, marul", "460"]
     ]},
-    { title: "Kovalar", tone: "orange", items: [
-      ["Big Gamer Kova", "7 tender, 6 soğan halkası, 300 gr kaşık patates", "525,00"],
-      ["Acılı Big Gamer Kova", "7 tender, 6 soğan halkası, 300 gr kaşık patates, acı sos, ketçap, mayonez", "525,00"],
-      ["Acılı Gamer Kova", "7 tender, 3 soğan halkası, 200 gr kaşık patates, acı sos, sweet chili, peri peri", "525,00"],
-      ["Futbol Kova", "5 tender, 2 mozzarella sticks, 6 soğan halkası, 200 gr kaşık patates", "498,75"],
-      ["Gamer Kova", "6 tender, 3 soğan halkası, 200 gr kaşık patates", "455,00"],
-      ["Tender Kova", "6 tender, 3 soğan halkası, 200 gr patates, cheddar sos, ketçap, mayonez", "375,25"]
+    { title: "Menüler", tone: "orange", items: [
+      ["3'lü Oha Et Burger Menü", "3 Oha Et Burger + 300 g patates + 6 soğan halkası + Pepsi (1 l)", "2.692"],
+      ["2'li Çıtır Tavuk Dürüm Menü", "2 çıtır tavuk dürüm + patates + Pepsi (1 l)", "1.923"],
+      ["2'li Çıtır Tavuk Dürüm & Ayran Menü", "2 çıtır tavuk dürüm (190 g) + patates + 2 ayran (20 cl)", "1.730"],
+      ["3'lü Oha Et Burger + Patates", "3 Oha Et Burger + 300 g patates (2 sos ile)", "1.538"],
+      ["3 Kişilik Tavuk Burger Menü", "3 tavuk burger (190 gr), 3 chicken tender, 3 soğan halkası, 1 L Cola Zero", "1.299"],
+      ["Çıtır Tavuk (1 kg) Menü", "1 kg çıtır tavuk + patates (2 sos ile) + Pepsi (1 l)", "1.250"],
+      ["Tavuk Burger Menü (2 Kişilik)", "2 tavuk burger, 3 chicken tender, 3 soğan halkası + Coca-Cola Zero Sugar (1 l)", "990"],
+      ["Çıtır Tavuk (1 kg.) Menü 1", "1 kg çıtır tavuk + 300 gr patates + Coca-Cola (1 L)", "985"],
+      ["Klasik Burger Menü", "Klasik Burger + 150 g patates + Coca-Cola (33 cl)", "961"],
+      ["2'li Lavaş Arası Karışık Sandviç", "2 lavaş arası karışık sandviç + 150 gr patates + Coca-Cola (1 L)", "945"],
+      ["2'li Lavaş Arası Çıtır Tavuk Menü", "2 lavaş arası çıtır tavuk + Coca-Cola (1 L)", "885"],
+      ["Çıtır Tavuk Dürüm Menü", "Çıtır tavuk dürüm (190 g) + patates + kutu içecek (33 cl)", "865"],
+      ["Çıtır Tavuk (500 g) Menü", "500 g çıtır tavuk + patates (2 sos ile) + Pepsi (1 l)", "865"],
+      ["Tavuk Burger Menü", "Tavuk Burger + 150 g kaşık patates + Coca-Cola (33 cl)", "860"],
+      ["Çıtır Tavuk (500 gr.) Menü", "500 gr çıtır tavuk + patates + Coca-Cola (1 L)", "845"],
+      ["2'li Lavaş Arası Çıtır Tavuk & Ayran", "2 lavaş arası çıtır tavuk (190 g, mayonez, ketçap, marul, turşu, kaşar) + 2 ayran", "826"],
+      ["Çıtır Tavuk (1 kg.) Menü", "1 kg çıtır tavuk + Coca-Cola (1 L)", "745"],
+      ["Hot Dogs Kanka Menü", "4 hot dog + 300 g patates + 2 sos", "730"],
+      ["Oha Klasik Burger Menü", "Oha Klasik Burger + içecek", "695"],
+      ["Lavaş Arası Çıtır Tavuk Menü", "Lavaş arası çıtır tavuk + 150 gr patates + Coca-Cola (33 cl)", "615"],
+      ["Klasik Burger & Coca-Cola Menü", "Klasik Burger + 150 g patates + Coca-Cola (33 cl)", "615"],
+      ["Hungry Menü", "1 tavuk burger (190 gr), 2 tender, 2 soğan halkası, 150 gr patates", "599"],
+      ["Chicken Burger Menü", "Chicken Burger + 200 gr kaşık patates + 2 soğan halkası + 2 chicken tender", "565"],
+      ["Tavuk Burger & Coca-Cola Menü", "Tavuk Burger + 150 g kaşık patates + Coca-Cola (33 cl)", "538"],
+      ["Oha Tavuk Burger Menü", "Oha Tavuk Burger + Coca-Cola (33 cl)", "495"],
+      ["Lavaş Arası Karışık Sandviç Menü", "Lavaş arası karışık sandviç + ayran (20 cl)", "495"],
+      ["Çocuk Menüsü Tavuk", "Tavuk burger (120 gr), ketçap, mayonez, marul, 120 gr patates + sürpriz oyuncak", "480"]
     ]},
-    { title: "Menüler", tone: "", items: [
-      ["3 Kişilik Oha Et Burger + 1 L Cola", "3 et burger, 6 soğan halkası, 300 gr patates, 1 L Coca-Cola", "1.200,00"],
-      ["3 Kişilik Tavuk Burger + 1 L Cola", "3 tavuk burger, 3 tender, 3 soğan halkası, 1 L Cola", "897,75"],
-      ["3 Kişilik Tavuk Burger Menü", "3 tavuk burger, 3 tender, 6 soğan halkası, 250 gr patates", "812,25"],
-      ["2 Kişilik Tavuk Burger Menü", "2 tavuk burger, 2 tender, 2 soğan halkası, 200 gr kaşık patates", "698,25"],
-      ["Hungry Menü", "1 tavuk burger, 2 tender, 2 soğan halkası, 150 gr patates", "456,00"],
-      ["Çocuk Menüsü", "Et ya da tavuk burger, 120 gr patates + sürpriz oyuncak", "450,00"],
-      ["Acılı Menü", "1 tavuk burger, 2 tender, 2 soğan halkası, 200 gr kaşık patates, acı sos", "441,75"]
+    { title: "Yan Ürünler", tone: "", items: [
+      ["Hot Dog Sandviç", "Hindi sosis, patates kızartması ve seçeceğin 2 sos", "384"],
+      ["Peynirli Sigara Böreği (250 g)", "Beyaz peynir", "249"],
+      ["Tenders (2 adet)", "Çıtır tavuk tender", "201"],
+      ["Mozzarella Sticks (2 adet)", "Mozzarella peyniri", "201"],
+      ["Patates Kızartması (500 g)", "Parmak dilim", "192"],
+      ["Soğan Halkası (12 adet)", "Çıtır soğan halkası", "152"],
+      ["Soğan Halkası (6 adet)", "Çıtır soğan halkası", "134"],
+      ["Patates Kızartması (250 g)", "Parmak dilim", "115"]
     ]},
-    { title: "Atıştırmalık", tone: "dark", items: [
-      ["Patates Kızartması 500 gr", "Kaşık patates", "294,50"],
-      ["Sigara Böreği 250 gr", "8–10 adet, iki çeşit peynirli", "190,00"],
-      ["Hotdog", "Hindi sosis, patates kızartması, dilediğin soslar", "170,05"],
-      ["Patates Kızartması 250 gr", "Kaşık patates", "132,05"],
-      ["Tender (2 adet)", "Kemiksiz çıtır tavuk", "122,55"],
-      ["Mozzarella Sticks (2 adet)", "Çıtır kaplamalı mozzarella", "122,55"],
-      ["Soğan Halkası 12'li", "12 adet soğan halkası", "104,50"],
-      ["Soğan Halkası 6'lı", "6 adet soğan halkası", "80,75"]
+    { title: "İçecekler", tone: "dark", items: [
+      ["Coca-Cola (1 L)", "", "130"],
+      ["Coca-Cola Zero Sugar (1 L)", "", "130"],
+      ["Fanta (1 L)", "", "130"],
+      ["Coca-Cola (33 cl)", "", "90"],
+      ["Coca-Cola Zero Sugar (33 cl)", "", "90"],
+      ["Fanta (33 cl)", "", "90"],
+      ["Sprite (33 cl)", "", "90"],
+      ["Sade Soda (20 cl)", "", "40"],
+      ["Damla Su (1 L)", "", "40"],
+      ["Damla Su (50 cl)", "", "30"]
     ]},
-    { title: "İçecek & Sos", tone: "", items: [
-      ["Coca-Cola / Fanta / Sprite 1 L", "", "114,00"],
-      ["Coca-Cola / Fanta / Sprite 33 cl", "", "85,50"],
-      ["Su 33 cl", "", "30,00"],
-      ["Cheddar Sos", "", "36,10"],
-      ["Sweet Chili", "", "35,00"],
-      ["Acı Sos · Hardal", "", "22,00"],
-      ["Barbekü · Ranch", "", "20,90"],
-      ["Ketçap · Mayonez", "", "19,00"]
+    { title: "Soslar", tone: "", items: [
+      ["Hardal Sos", "", "48"],
+      ["Ranch Sos", "", "48"],
+      ["Sweet Chili Sos", "", "48"],
+      ["Barbekü Sos", "", "40"],
+      ["Acı Sos", "", "40"],
+      ["Cheddar Sos", "", "40"],
+      ["Mayonez", "", "40"],
+      ["Ketçap", "", "38"]
     ]}
   ];
 
@@ -75,9 +103,9 @@
           (it[1] ? "<span>" + esc(it[1]) + "</span>" : "") + "</li>";
       }).join("");
       return '<article class="menu-panel ' + cat.tone + '"><h3>' + esc(cat.title) +
-        "<small>0" + (i + 1) + "</small></h3><ul class=\"menu-items\">" + items + "</ul></article>";
+        "<small>0" + (i + 1) + "</small></h3><ul class=\"menu-items\" data-lenis-prevent>" + items + "</ul></article>";
     }).join("");
-    html += '<div class="menu-end"><h3>Acıktın mı?</h3><p>Telefonla ya da online sipariş platformlarından hemen sipariş ver.</p>' +
+    html += '<div class="menu-end"><h3>Acıktın mı?</h3><p>Telefonla ya da Yemeksepeti üzerinden hemen sipariş ver.</p>' +
       '<div><a class="btn btn-orange" href="tel:+905015791912">Hemen Ara</a></div></div>';
     track.innerHTML = html;
   }
