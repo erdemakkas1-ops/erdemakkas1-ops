@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oha Burger | İzmir'in En Oha Burgeri — Şemikler / Karşıyaka</title>
+  <meta name="description" content="Oha Burger: %100 katkısız dana köfte, çıtır tavuk, kaşık patates ve dev kovalar. Yalı Mah. 1671 Sok. No:395/A Şemikler / Karşıyaka, İzmir. Sipariş: 0501 579 1912">
+  <meta name="theme-color" content="#0f0d0b">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23d7261e'/%3E%3Ctext x='50' y='64' font-family='Arial Black,Arial' font-weight='900' font-size='38' text-anchor='middle' fill='%23fff'%3EOHA%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ SVG kütüphanesi (gradyanlar + semboller) ============ -->
+<svg class="svg-lib" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="gBun" cx="45%" cy="25%" r="80%">
+      <stop offset="0" stop-color="#ffc165"/>
+      <stop offset=".45" stop-color="#ef8f2c"/>
+      <stop offset="1" stop-color="#b9561a"/>
+    </radialGradient>
+    <linearGradient id="gBunB" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3b267"/>
+      <stop offset="1" stop-color="#b8601f"/>
+    </linearGradient>
+    <linearGradient id="gPatty" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6b3418"/>
+      <stop offset=".5" stop-color="#4a2210"/>
+      <stop offset="1" stop-color="#2e1408"/>
+    </linearGradient>
+    <linearGradient id="gCheese" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd34d"/>
+      <stop offset="1" stop-color="#ff9f1a"/>
+    </linearGradient>
+    <linearGradient id="gFry" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffd768"/>
+      <stop offset="1" stop-color="#e9a731"/>
+    </linearGradient>
+    <linearGradient id="gCup" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff7a26"/>
+      <stop offset=".55" stop-color="#ff5a14"/>
+      <stop offset="1" stop-color="#c93d0a"/>
+    </linearGradient>
+    <linearGradient id="gTender" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4b552"/>
+      <stop offset="1" stop-color="#b8661c"/>
+    </linearGradient>
+
+    <!-- Logo -->
+    <symbol id="logo" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="96" fill="#d7261e"/>
+      <circle cx="100" cy="100" r="84" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/>
+      <path d="M100 30 l6 13 14 1.5 -10.5 9.5 3 14 -12.5 -7 -12.5 7 3 -14 -10.5 -9.5 14 -1.5z" fill="#ffc226"/>
+      <text x="100" y="126" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="62" fill="#fff" letter-spacing="1">OHA!</text>
+      <text x="100" y="156" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="20" fill="#ffc226" letter-spacing="6">BURGER</text>
+    </symbol>
+
+    <!-- Mini burger -->
+    <symbol id="burger" viewBox="0 0 200 170">
+      <ellipse cx="100" cy="164" rx="86" ry="6" fill="#000" opacity=".25"/>
+      <path d="M22 128 H178 Q182 128 180 136 Q174 160 150 162 H50 Q26 160 20 136 Q18 128 22 128Z" fill="url(#gBunB)"/>
+      <path d="M16 106 Q14 94 26 92 H174 Q186 94 184 106 Q186 126 170 130 H30 Q14 126 16 106Z" fill="url(#gPatty)"/>
+      <g fill="#2a1207" opacity=".6"><circle cx="40" cy="108" r="2.5"/><circle cx="70" cy="116" r="2"/><circle cx="110" cy="110" r="2.5"/><circle cx="150" cy="118" r="2"/><circle cx="168" cy="106" r="2"/></g>
+      <path d="M18 88 H182 L176 98 L160 118 L148 98 L120 114 L100 98 L72 120 L56 98 L36 112 L24 98Z" fill="url(#gCheese)"/>
+      <path d="M12 86 Q24 74 36 84 Q48 74 60 84 Q72 74 84 84 Q96 74 108 84 Q120 74 132 84 Q144 74 156 84 Q168 74 180 84 Q192 80 188 92 H12 Q8 90 12 86Z" fill="#62b136"/>
+      <path d="M18 80 Q14 18 100 12 Q186 18 182 80 Q182 88 172 88 H28 Q18 88 18 80Z" fill="url(#gBun)"/>
+      <ellipse cx="72" cy="34" rx="34" ry="12" fill="#fff" opacity=".22" transform="rotate(-14 72 34)"/>
+      <g fill="#fff4dc"><ellipse cx="60" cy="50" rx="4" ry="2.2" transform="rotate(-20 60 50)"/><ellipse cx="88" cy="36" rx="4" ry="2.2" transform="rotate(10 88 36)"/><ellipse cx="116" cy="44" rx="4" ry="2.2" transform="rotate(-30 116 44)"/><ellipse cx="142" cy="56" rx="4" ry="2.2" transform="rotate(20 142 56)"/><ellipse cx="104" cy="62" rx="4" ry="2.2"/><ellipse cx="76" cy="66" rx="4" ry="2.2" transform="rotate(30 76 66)"/><ellipse cx="130" cy="30" rx="4" ry="2.2"/><ellipse cx="44" cy="68" rx="4" ry="2.2" transform="rotate(-10 44 68)"/><ellipse cx="160" cy="70" rx="4" ry="2.2" transform="rotate(40 160 70)"/></g>
+    </symbol>
+
+    <!-- Patates kutusu -->
+    <symbol id="fries" viewBox="0 0 160 210">
+      <g stroke="#d08a1e" stroke-width="1.5">
+        <rect x="34" y="18" width="14" height="110" rx="3" fill="url(#gFry)" transform="rotate(-14 41 73)"/>
+        <rect x="54" y="6" width="14" height="120" rx="3" fill="url(#gFry)" transform="rotate(-5 61 66)"/>
+        <rect x="74" y="2" width="14" height="124" rx="3" fill="url(#gFry)" transform="rotate(3 81 64)"/>
+        <rect x="94" y="10" width="14" height="116" rx="3" fill="url(#gFry)" transform="rotate(10 101 68)"/>
+        <rect x="112" y="24" width="14" height="104" rx="3" fill="url(#gFry)" transform="rotate(18 119 76)"/>
+        <rect x="64" y="20" width="14" height="110" rx="3" fill="url(#gFry)" transform="rotate(-10 71 75)"/>
+        <rect x="86" y="22" width="14" height="108" rx="3" fill="url(#gFry)" transform="rotate(6 93 76)"/>
+      </g>
+      <path d="M20 82 Q80 104 140 82 L126 204 H34Z" fill="#d7261e"/>
+      <path d="M20 82 Q80 104 140 82 L138 98 Q80 120 22 98Z" fill="#ff5a14"/>
+      <use href="#logo" x="50" y="122" width="60" height="60"/>
+    </symbol>
+
+    <!-- İçecek bardağı -->
+    <symbol id="cup" viewBox="0 0 130 220">
+      <rect x="70" y="0" width="9" height="60" rx="4" fill="#fff" transform="rotate(12 74 30)"/>
+      <rect x="70" y="0" width="9" height="12" fill="#d7261e" transform="rotate(12 74 30)"/>
+      <path d="M8 44 H122 Q126 44 125 50 L122 60 H8 L5 50 Q4 44 8 44Z" fill="#f4ede2"/>
+      <path d="M12 60 H118 L104 214 H26Z" fill="url(#gCup)"/>
+      <path d="M15 96 H115 L112 126 H18Z" fill="#141110"/>
+      <text x="65" y="119" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="22" fill="#fff" letter-spacing="2">OHA!</text>
+      <path d="M30 70 L26 200" stroke="#fff" stroke-width="5" opacity=".2" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- Tender -->
+    <symbol id="tender" viewBox="0 0 160 70">
+      <path d="M10 40 Q4 18 30 14 Q60 4 92 10 Q128 6 148 24 Q160 40 140 54 Q110 66 76 60 Q40 68 20 58 Q10 52 10 40Z" fill="url(#gTender)"/>
+      <g fill="#ffe0a0" opacity=".7"><circle cx="40" cy="26" r="3"/><circle cx="66" cy="20" r="2.5"/><circle cx="96" cy="24" r="3"/><circle cx="124" cy="30" r="2.5"/><circle cx="54" cy="44" r="2"/><circle cx="110" cy="46" r="2.5"/></g>
+      <g fill="#8a4512" opacity=".45"><circle cx="30" cy="44" r="2"/><circle cx="82" cy="40" r="2.5"/><circle cx="136" cy="42" r="2"/></g>
+    </symbol>
+
+    <!-- Soğan halkası -->
+    <symbol id="ring" viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="42" fill="none" stroke="url(#gTender)" stroke-width="26"/>
+      <circle cx="60" cy="60" r="42" fill="none" stroke="#ffe0a0" stroke-width="3" stroke-dasharray="3 9" opacity=".7"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="progress" aria-hidden="true"><span></span></div>
+
+<!-- ============ Header ============ -->
+<header class="header">
+  <a href="#top" class="brand" aria-label="Oha Burger ana sayfa">
+    <svg class="brand-logo"><use href="#logo"/></svg>
+    <span>OHA BURGER</span>
+  </a>
+  <nav class="nav" aria-label="Ana menü">
+    <a href="#katman">Burger</a>
+    <a href="#kova">Kovalar</a>
+    <a href="#menu">Menü</a>
+    <a href="#konum">Konum</a>
+  </nav>
+  <a class="btn btn-orange btn-sm" href="tel:+905015791912">Sipariş Ver</a>
+</header>
+
+<main id="top">
+
+  <!-- ============ 1. HERO ============ -->
+  <section class="hero" aria-label="Giriş">
+    <div class="hero-grain"></div>
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="dash"></span>Oha Burger · Şemikler / Karşıyaka</p>
+      <h1 class="hero-title">
+        <span class="line"><span>İzmir'in</span></span>
+        <span class="line"><span>En Oha'sı.</span></span>
+      </h1>
+      <p class="hero-sub">Dev burgerler &amp; bol malzeme. %100 katkısız dana köfte, çıtır çıtır tavuk ve kaşık patates — günlük, özenle, sıcacık.</p>
+      <div class="hero-cta">
+        <a class="btn btn-orange" href="tel:+905015791912">Hemen Sipariş Ver</a>
+        <a class="btn btn-ghost" href="#menu">Menüyü Gör</a>
+      </div>
+    </div>
+    <div class="hero-burger-wrap">
+      <div class="hero-glow"></div>
+      <svg class="hero-burger" viewBox="0 0 200 170" role="img" aria-label="Oha Burger"><use href="#burger"/></svg>
+    </div>
+    <div class="scroll-hint" aria-hidden="true"><span>Kaydır</span><i></i></div>
+  </section>
+
+  <!-- ============ 2. KATMAN KATMAN (patlayan burger) ============ -->
+  <section class="stack" id="katman" aria-label="Oha Burger katmanları">
+    <div class="stack-inner">
+      <div class="stack-head">
+        <p class="eyebrow eyebrow-dark"><span class="dash"></span>İmza Burger</p>
+        <h2 class="stack-title">Katman<br>Katman.</h2>
+        <p class="stack-desc">Oha Burger: 120 gr dana köfte, biftek dilimleri, cheddar, karamelize soğan ve ev yapımı Oha sos. Köftemizde soğan, galeta unu gibi katkılar yok — <strong>%100 dana eti.</strong></p>
+        <p class="price-pill">593,75 ₺</p>
+      </div>
+
+      <div class="burger-stack" aria-hidden="true">
+        <div class="layer" data-spread="-190" style="--top:0px;--h:132px;z-index:7">
+          <svg viewBox="0 0 360 132"><path d="M14 114 C10 40 90 6 180 6 C270 6 350 40 346 114 Q346 130 330 130 H30 Q14 130 14 114Z" fill="url(#gBun)"/><ellipse cx="120" cy="44" rx="70" ry="18" fill="#fff" opacity=".2" transform="rotate(-10 120 44)"/><g fill="#fff4dc"><ellipse cx="90" cy="70" rx="7" ry="3.6" transform="rotate(-20 90 70)"/><ellipse cx="140" cy="40" rx="7" ry="3.6" transform="rotate(10 140 40)"/><ellipse cx="196" cy="56" rx="7" ry="3.6" transform="rotate(-30 196 56)"/><ellipse cx="250" cy="74" rx="7" ry="3.6" transform="rotate(20 250 74)"/><ellipse cx="180" cy="92" rx="7" ry="3.6"/><ellipse cx="120" cy="100" rx="7" ry="3.6" transform="rotate(30 120 100)"/><ellipse cx="230" cy="32" rx="7" ry="3.6"/><ellipse cx="62" cy="100" rx="7" ry="3.6" transform="rotate(-10 62 100)"/><ellipse cx="290" cy="100" rx="7" ry="3.6" transform="rotate(40 290 100)"/><ellipse cx="270" cy="48" rx="7" ry="3.6" transform="rotate(-40 270 48)"/></g></svg>
+          <span class="tag tag-r">Susamlı Burger Ekmeği</span>
+        </div>
+        <div class="layer" data-spread="-118" style="--top:120px;--h:30px;z-index:6">
+          <svg viewBox="0 0 360 30"><path d="M18 4 H342 Q354 4 348 14 Q338 22 326 16 Q318 28 306 18 Q290 24 276 16 Q262 30 248 18 Q230 24 214 16 Q200 28 186 18 Q170 24 154 16 Q140 30 126 18 Q110 24 96 16 Q82 28 70 18 Q54 24 40 16 Q26 22 14 14 Q8 4 18 4Z" fill="#f7cf8d"/><path d="M40 8 H320" stroke="#fff" stroke-width="2" opacity=".45" stroke-linecap="round"/></svg>
+          <span class="tag tag-l">Ev Yapımı Oha Sos</span>
+        </div>
+        <div class="layer" data-spread="-58" style="--top:134px;--h:34px;z-index:5">
+          <svg viewBox="0 0 360 34"><g fill="none" stroke-linecap="round" stroke-width="7"><path d="M20 18 Q50 4 80 18 T140 18 T200 16 T260 18 T340 16" stroke="#b5652e"/><path d="M30 24 Q60 12 96 24 T170 22 T240 24 T330 22" stroke="#8a4520"/><path d="M40 12 Q70 26 110 12 T190 12 T280 12 T336 12" stroke="#c97a3c"/></g></svg>
+          <span class="tag tag-r">Karamelize Soğan</span>
+        </div>
+        <div class="layer" data-spread="0" style="--top:152px;--h:46px;z-index:4">
+          <svg viewBox="0 0 360 46"><path d="M8 6 H352 L346 16 L330 42 L314 16 L280 36 L250 16 L214 44 L190 16 L150 38 L126 16 L92 42 L70 16 L40 34 L20 16Z" fill="url(#gCheese)"/></svg>
+          <span class="tag tag-l">Cheddar Peyniri</span>
+        </div>
+        <div class="layer" data-spread="58" style="--top:174px;--h:38px;z-index:3">
+          <svg viewBox="0 0 360 38"><g><rect x="22" y="8" width="110" height="20" rx="9" fill="#7b3a1c" transform="rotate(-3 77 18)"/><rect x="118" y="12" width="120" height="20" rx="9" fill="#91461f" transform="rotate(2 178 22)"/><rect x="224" y="6" width="116" height="20" rx="9" fill="#7b3a1c" transform="rotate(-2 282 16)"/><rect x="70" y="16" width="100" height="16" rx="8" fill="#a9572b"/><rect x="190" y="18" width="110" height="14" rx="7" fill="#6a2f14"/></g><g stroke="#c87245" stroke-width="2" opacity=".6" stroke-linecap="round"><path d="M40 16 H100"/><path d="M140 22 H210"/><path d="M240 14 H320"/></g></svg>
+          <span class="tag tag-r">Biftek Dilimleri</span>
+        </div>
+        <div class="layer" data-spread="122" style="--top:198px;--h:64px;z-index:2">
+          <svg viewBox="0 0 360 64"><path d="M10 26 Q6 8 30 6 H330 Q354 8 350 26 V38 Q354 60 326 60 H34 Q6 60 10 38Z" fill="url(#gPatty)"/><g fill="#2a1207" opacity=".7"><circle cx="40" cy="30" r="4"/><circle cx="80" cy="40" r="3"/><circle cx="130" cy="28" r="4"/><circle cx="180" cy="44" r="3"/><circle cx="230" cy="30" r="4"/><circle cx="280" cy="42" r="3"/><circle cx="320" cy="28" r="4"/></g><g fill="#9b5530" opacity=".55"><circle cx="60" cy="22" r="3"/><circle cx="110" cy="46" r="2.5"/><circle cx="160" cy="20" r="3"/><circle cx="210" cy="48" r="2.5"/><circle cx="262" cy="20" r="3"/><circle cx="300" cy="50" r="2.5"/></g></svg>
+          <span class="tag tag-l">120 gr %100 Dana Köfte</span>
+        </div>
+        <div class="layer" data-spread="190" style="--top:252px;--h:70px;z-index:1">
+          <svg viewBox="0 0 360 70"><path d="M12 8 H348 Q356 8 352 20 Q340 66 300 66 H60 Q20 66 8 20 Q4 8 12 8Z" fill="url(#gBunB)"/><path d="M40 16 H320" stroke="#fff" stroke-width="3" opacity=".25" stroke-linecap="round"/></svg>
+          <span class="tag tag-r">Alt Ekmek</span>
+        </div>
+        <div class="stack-shadow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. KOVA (kutu açılıyor) ============ -->
+  <section class="combo" id="kova" aria-label="Gamer Kova">
+    <div class="combo-inner">
+      <div class="combo-copy">
+        <p class="eyebrow"><span class="dash"></span>Maç Günü · Oyun Gecesi</p>
+        <h2 class="combo-title"><span class="line"><span>Gamer</span></span><span class="line"><span>Kova.</span></span></h2>
+        <ul class="combo-list">
+          <li><b>6</b> çıtır tender</li>
+          <li><b>3</b> soğan halkası</li>
+          <li><b>200 gr</b> kaşık patates</li>
+        </ul>
+        <p class="price-pill price-pill-light">455,00 ₺</p>
+      </div>
+
+      <div class="box-stage" aria-hidden="true">
+        <div class="box">
+          <div class="box-back"></div>
+          <div class="box-lid">
+            <div class="lid-face">
+              <svg class="lid-logo"><use href="#logo"/></svg>
+              <span>OHA BURGER</span>
+            </div>
+          </div>
+          <div class="box-items">
+            <svg class="item item-fries" viewBox="0 0 160 210"><use href="#fries"/></svg>
+            <svg class="item item-burger" viewBox="0 0 200 170"><use href="#burger"/></svg>
+            <svg class="item item-cup" viewBox="0 0 130 220"><use href="#cup"/></svg>
+            <svg class="item item-tender t1" viewBox="0 0 160 70"><use href="#tender"/></svg>
+            <svg class="item item-tender t2" viewBox="0 0 160 70"><use href="#tender"/></svg>
+            <svg class="item item-ring r1" viewBox="0 0 120 120"><use href="#ring"/></svg>
+            <svg class="item item-ring r2" viewBox="0 0 120 120"><use href="#ring"/></svg>
+          </div>
+          <div class="box-front">
+            <svg class="box-logo"><use href="#logo"/></svg>
+            <div class="box-word">
+              <strong>OHA<i>★</i>BURGER</strong>
+              <small>Dev Burgerler · Bol Malzeme · İzmir</small>
+            </div>
+          </div>
+        </div>
+        <p class="combo-badge">Paylaşmak<br>serbest!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. ÇITIR TAVUK (kayan kutu bandı) ============ -->
+  <section class="crispy" aria-label="Çıtır tavuk">
+    <div class="marquee marquee-a" aria-hidden="true">
+      <span>ÇITIR TAVUK ★ TENDER ★ HOT CHICKEN ★ SCHNITZEL ★ ÇITIR TAVUK ★ TENDER ★ HOT CHICKEN ★ SCHNITZEL ★</span>
+    </div>
+    <div class="crispy-band" aria-hidden="true">
+      <div class="band-track">
+        <div class="band-box">
+          <svg class="band-logo"><use href="#logo"/></svg>
+          <div><strong>OHA<i>★</i>BURGER</strong><small>Taze · Çıtır · Sıcacık</small></div>
+        </div>
+        <svg class="band-tender" viewBox="0 0 160 70"><use href="#tender"/></svg>
+        <svg class="band-tender b2" viewBox="0 0 160 70"><use href="#tender"/></svg>
+        <svg class="band-ring" viewBox="0 0 120 120"><use href="#ring"/></svg>
+        <div class="band-box band-box-2">
+          <svg class="band-logo"><use href="#logo"/></svg>
+          <div><strong>ÇITIR<i>★</i>TAVUK</strong><small>Özel Marinasyon</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="crispy-copy">
+      <h2 class="crispy-title">Çıtır<br>Çıtır.</h2>
+      <p>İzmir'in Muro abisi sizi çıtır tavuklarıyla doyuracak. Özel marinasyon ve kaplama yöntemiyle panelediğimiz tavuklar; yanında ketçap, mayonez, sweet chili ya da barbekü.</p>
+      <p class="crispy-deal"><span>Çıtır Tavuk 500 gr + 300 gr Patates + 1 L Fanta</span><b>664,05 ₺</b></p>
+    </div>
+    <div class="marquee marquee-b" aria-hidden="true">
+      <span>KAŞIK PATATES ★ SOĞAN HALKASI ★ MOZZARELLA STICKS ★ KAŞIK PATATES ★ SOĞAN HALKASI ★ MOZZARELLA STICKS ★</span>
+    </div>
+  </section>
+
+  <!-- ============ 5. KADRO / ÖNE ÇIKANLAR ============ -->
+  <section class="lineup" aria-label="Öne çıkanlar">
+    <h2 class="lineup-title">Kadro.</h2>
+    <div class="lineup-cards">
+      <article class="card">
+        <div class="card-img"><svg viewBox="0 0 200 170"><use href="#burger"/></svg></div>
+        <h3>King Kong Burger</h3>
+        <p>120 gr köfte, cheddar, mozzarella, füme antrikot, karamelize soğan, Oha sos + 200 gr patates.</p>
+        <span class="card-price">650,00 ₺</span>
+      </article>
+      <article class="card card-hot">
+        <div class="card-img"><svg viewBox="0 0 200 170"><use href="#burger"/></svg><svg class="card-side" viewBox="0 0 160 70"><use href="#tender"/></svg></div>
+        <h3>Hot Chicken Burger</h3>
+        <p>190 gr panelenmiş tavuk, acı sos, cheddar sos, marul, domates, turşu, Oha sos + 150 gr patates.</p>
+        <span class="card-price">365,75 ₺</span>
+      </article>
+      <article class="card card-combo">
+        <div class="card-img"><svg viewBox="0 0 160 210"><use href="#fries"/></svg><svg viewBox="0 0 130 220"><use href="#cup"/></svg></div>
+        <h3>Hungry Menü</h3>
+        <p>1 tavuk burger, 2 tender, 2 soğan halkası ve 150 gr patates kızartması.</p>
+        <span class="card-price">456,00 ₺</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 6. MENÜ (yatay kaydırma) ============ -->
+  <section class="menu" id="menu" aria-label="Menü">
+    <div class="menu-head">
+      <h2>Menü</h2>
+      <p>Kaydırdıkça gez. Fiyatlar online sipariş platformlarındaki güncel listeden alınmıştır, değişiklik gösterebilir.</p>
+    </div>
+    <div class="menu-track" id="menuTrack"></div>
+  </section>
+
+  <!-- ============ 7. SİPARİŞE ÖZEL ============ -->
+  <section class="smash" aria-label="Sipariş">
+    <h2 class="smash-title"><span>Siparişe</span><span>Özel.</span></h2>
+    <div class="smash-scene" aria-hidden="true">
+      <svg class="s-fries" viewBox="0 0 160 210"><use href="#fries"/></svg>
+      <svg class="s-burger" viewBox="0 0 200 170"><use href="#burger"/></svg>
+      <svg class="s-cup" viewBox="0 0 130 220"><use href="#cup"/></svg>
+      <svg class="s-ring" viewBox="0 0 120 120"><use href="#ring"/></svg>
+      <svg class="s-tender" viewBox="0 0 160 70"><use href="#tender"/></svg>
+    </div>
+    <p class="smash-sub">Her burger sipariş gelince hazırlanır. Bekletmek yok, ısıtmak yok — sadece sıcacık, taptaze Oha.</p>
+    <div class="smash-cta">
+      <a class="btn btn-orange" href="tel:+905015791912">0501 579 19 12</a>
+      <a class="btn btn-dark" href="https://www.migros.com.tr/yemek/oha-burger-karsiyaka-yali-mah-st-30ed6" target="_blank" rel="noopener">Migros Yemek</a>
+      <a class="btn btn-dark" href="https://www.yemeksepeti.com/restaurant/byzp/oha-buger" target="_blank" rel="noopener">Yemeksepeti</a>
+    </div>
+  </section>
+
+  <!-- ============ 8. KONUM ============ -->
+  <section class="visit" id="konum" aria-label="Konum ve iletişim">
+    <div class="visit-copy">
+      <p class="eyebrow"><span class="dash"></span>Gel, Ye, Oha De</p>
+      <h2>Bizi<br>Bul.</h2>
+      <dl class="visit-list">
+        <div><dt>Adres</dt><dd>Yalı Mah. 1671 Sok. No:395/A<br>Şemikler / Karşıyaka — İzmir</dd></div>
+        <div><dt>Telefon</dt><dd><a href="tel:+905015791912">0501 579 19 12</a></dd></div>
+        <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/ohaburgerofficial/" target="_blank" rel="noopener">@ohaburgerofficial</a></dd></div>
+      </dl>
+      <a class="btn btn-orange" href="https://www.google.com/maps/search/?api=1&query=Oha+Burger+1671+Sok.+No%3A395%2FA+Yal%C4%B1+Mah.+Kar%C5%9F%C4%B1yaka+%C4%B0zmir" target="_blank" rel="noopener">Yol Tarifi Al</a>
+    </div>
+    <div class="visit-map">
+      <iframe title="Oha Burger harita" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://maps.google.com/maps?q=1671%20Sok.%20No%3A395%2FA%20Yal%C4%B1%20Mah.%20Kar%C5%9F%C4%B1yaka%20%C4%B0zmir&z=16&output=embed"></iframe>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-big" aria-hidden="true">OHA!</div>
+  <div class="footer-row">
+    <span>© <span id="year">2026</span> Oha Burger · Şemikler / Karşıyaka, İzmir</span>
+    <span><a href="https://www.instagram.com/ohaburgerofficial/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@ohaburgerofficial" target="_blank" rel="noopener">TikTok</a> · <a href="tel:+905015791912">Ara</a></span>
+  </div>
+</footer>
+
+<a class="float-call" href="tel:+905015791912" aria-label="Oha Burger'i ara">
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+</a>
+
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
