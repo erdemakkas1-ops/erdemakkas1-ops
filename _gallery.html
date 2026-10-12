@@ -1,11 +1,11 @@
 <!doctype html><html><head><meta charset="utf-8"><title>g</title>
 <style>html,body{margin:0;background:#fff}#g{display:flex;flex-wrap:wrap}#g figure{margin:0;width:25%;position:relative}#g img{width:100%;display:block}#g figcaption{position:absolute;left:4px;top:4px;background:#000;color:#fff;font:bold 18px sans-serif;padding:2px 6px}
 #one{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}#one img{max-width:100%;max-height:100%}</style></head>
-<body><div id="g"></div><div id="one"></div>
+<body><h1 id="mk" style="margin:0;font:20px sans-serif">RENDER-OK</h1><div id="g"></div><div id="one"></div>
 <script>
 var U=["86546153/da6bb9df-80a0-4d74-a069-aeda33cbae81","86546147/e6f02982-379c-4cac-a714-787163e21aa1","86546148/293a7954-4dd2-4016-9fa4-1d0973cc3476","86546149/4ab9dfc5-2a7a-44d8-8537-6eed8471ddd2","86546150/d1d59534-caae-4aa8-a301-71d7ab138aae","86546151/55424307-f4e4-4ae3-9dea-0d284a824251","86546154/76ff6a4e-e77e-4b32-ad16-1bcb8fb8f39f","86546155/458ea6da-24b3-4460-a528-363b9e31b419","86546156/74f8d5bd-d264-486f-96dc-3672e6aa7794","86546157/c62218d3-3fd3-4a8e-854c-de4e3003ad20","86546160/79499cd7-9586-4440-b6e2-902989b94a9c","86546142/ac7ba914-e06b-4f77-80ee-37fda804d415","86546143/e95a017b-0a26-49fe-bfe9-562a582ce6be","86546144/5aa0662c-0dc7-40b7-afa3-727c2f4811d2","86546145/78c8d7c7-ecd2-4031-850c-582d74ddf9d6","86546146/ef0ddd1b-1afe-4bae-b3b7-b197fd6ddc98","91933124/883209c0-1100-4625-a632-56b9b3c85f5f","86546161/4fcbbd27-90d1-4b05-8e83-1a7d8d3e1c2b","86546162/ab89ebd2-898f-481a-b40c-37a251d392bd","86546163/5b4c1d9a-9751-44b7-a2dd-e7dd098a998c","86546164/7a6772b3-4468-4b8d-8abe-890feabe0c5c","86546165/34bde661-5efd-4af4-bf68-9291daa845f4","86546166/9a5b6bcb-de2c-4492-b710-51dbbc98fa5e","86546138/88c93f90-78a9-4c7b-b771-0f3241869057","86546139/ddd84dda-dafe-43a0-92ac-7d51f2a149c1","86546141/d52aa2a7-38ef-4a50-8dd6-d7deea3409b9"];
 function src(i,w){return "https://yemeksepeti.dhmedia.io/image/global-menu-service/YS_TR/vendor/wvvf/product/"+U[i]+".jpg"+(w?"?width="+w:"")}
 var q=new URLSearchParams(location.search),i=q.get("i"),w=q.get("w");
-if(i!==null){document.getElementById("one").innerHTML='<img src="'+src(+i,w)+'">';}
-else{document.getElementById("g").innerHTML=U.map(function(_,k){return '<figure><img src="'+src(k,400)+'"><figcaption>'+k+'</figcaption></figure>'}).join("");}
+if(i!==null){document.getElementById("one").innerHTML='<img referrerpolicy="no-referrer" src="'+src(+i,w)+'">';}
+else{document.getElementById("g").innerHTML=U.map(function(_,k){return '<figure><img referrerpolicy="no-referrer" src="'+src(k,400)+'"><figcaption>'+k+'</figcaption></figure>'}).join("");}
 </script></body></html>
