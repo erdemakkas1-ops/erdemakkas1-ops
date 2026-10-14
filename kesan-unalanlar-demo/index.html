@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keşan Ünalanlar Prefabrik — Prefabrik & Çelik Evler</title>
+  <meta name="description" content="Keşan Ünalanlar Prefabrik: Trakya genelinde bütçenize uygun prefabrik ve çelik konstrüksiyon evler. Modelleri 3D inceleyin, fiyatınızı hesaplayın.">
+  <meta name="theme-color" content="#0e100f">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e100f'/%3E%3Cpath d='M6 16 16 7l10 9v9H6z' fill='none' stroke='%23e9a945' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M13 25v-6h6v6' fill='none' stroke='%23e9a945' stroke-width='2.5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/" } }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#modeller">Modellere geç</a>
+
+  <header class="site-header" data-header>
+    <a class="brand" href="#hero" aria-label="Keşan Ünalanlar Prefabrik — başa dön">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 20 20 7l15 13v14H5z"/><path d="M15 34v-9h10v9"/><path d="M20 7v6"/></svg>
+      <span><b>ÜNALANLAR</b><small>Prefabrik · Çelik Yapı</small></span>
+    </a>
+    <nav aria-label="Ana menü">
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="menu" data-nav-toggle>
+        <span></span><span></span><span class="sr">Menü</span>
+      </button>
+      <ul id="menu" data-menu>
+        <li><a href="#modeller">Modeller</a></li>
+        <li><a href="#fiyat">Fiyat hesapla</a></li>
+        <li><a href="#surec">Süreç</a></li>
+        <li><a href="#bolge">Hizmet bölgesi</a></li>
+        <li><a href="#iletisim">İletişim</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-sm btn-accent header-call" href="tel:+905386777042">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+      <span>0538 677 70 42</span>
+    </a>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero-stage" role="img" aria-label="Seçilen prefabrik ev modelinin 3D görünümü. Döndürmek için sürükleyin; yapım aşamalarını alttaki düğmelerle izleyin.">
+        <div class="hero-canvas" data-hero-canvas></div>
+        <p class="hero-hint" aria-hidden="true"><span class="mouse"><span></span></span>Sürükleyerek evi döndürün</p>
+      </div>
+      <div class="hero-shade" aria-hidden="true"></div>
+
+      <div class="hero-copy">
+        <p class="eyebrow">Keşan · Edirne · Trakya</p>
+        <h1 id="hero-title">Yeni başlangıçlara<br><span>hazır mısınız?</span></h1>
+        <p class="lede">Bütçenize uygun prefabrik ve çelik konstrüksiyon evler. Zemin betonundan anahtar teslime kadar, tek elden.</p>
+
+        <div class="model-picker" role="group" aria-label="Model seçimi">
+          <button type="button" aria-label="Önceki model" data-prev>←</button>
+          <label>Model
+            <select data-model-select></select>
+          </label>
+          <button type="button" aria-label="Sonraki model" data-next>→</button>
+        </div>
+        <p class="model-note" data-model-note aria-live="polite"></p>
+
+        <div class="hero-ctas">
+          <a class="btn btn-accent" href="#fiyat">Fiyatını hesapla →</a>
+          <a class="btn btn-ghost" href="#modeller">Planı incele</a>
+        </div>
+      </div>
+
+      <dl class="hero-stats">
+        <div><dt>Model</dt><dd>4</dd></div>
+        <div><dt>Alan</dt><dd>45–140<small> m²</small></dd></div>
+        <div><dt>Oda</dt><dd>1+1 → 4+1</dd></div>
+        <div><dt>Bölge</dt><dd>Trakya</dd></div>
+      </dl>
+
+      <div class="build-steps" role="group" aria-label="Yapım aşaması">
+        <p class="eyebrow">Yapım aşaması</p>
+        <ol data-stages></ol>
+        <button type="button" class="replay" data-replay>↻ Baştan izle</button>
+      </div>
+    </section>
+
+    <!-- MODELLER / PLANLAR -->
+    <section id="modeller" class="section" aria-labelledby="plan-title">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Modeller &amp; kat planları</p>
+          <h2 id="plan-title" tabindex="-1">Her metrekare,<br>yaşam için çizildi.</h2>
+        </div>
+        <p class="muted">Modeli seçin, planı 2D inceleyin ya da tek tıkla 3D maket görünümüne geçin. Odaların üzerine gelerek ölçüleri görün.</p>
+      </div>
+
+      <div class="model-tabs" role="tablist" aria-label="Modeller" data-model-tabs></div>
+
+      <div class="plan-grid">
+        <aside class="card plan-side">
+          <p class="plan-desc" data-plan-desc></p>
+          <dl class="plan-summary" data-plan-summary></dl>
+          <ul class="room-list" data-room-list aria-label="Odalar"></ul>
+          <a class="btn btn-accent btn-block" href="#fiyat" data-plan-price>Bu modelin fiyatını hesapla →</a>
+        </aside>
+        <div class="card plan-view">
+          <div class="view-toggle" role="group" aria-label="Plan görünümü">
+            <button type="button" aria-pressed="true" data-view="2d">2D PLAN</button>
+            <button type="button" aria-pressed="false" data-view="3d">3D MAKET</button>
+          </div>
+          <div class="plan-canvas" data-plan-svg></div>
+          <div class="plan-canvas plan-3d" data-plan-3d hidden></div>
+          <p class="plan-readout" data-plan-readout aria-live="polite"></p>
+          <p class="plan-foot">Örnek plan · ölçüler yaklaşıktır · kişiye özel çizilir</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AVANTAJLAR -->
+    <section class="section band" aria-labelledby="why-title">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Neden çelik prefabrik?</p>
+          <h2 id="why-title">Hazır değil,<br><span class="accent">hazırlıklı yapılar.</span></h2>
+        </div>
+        <p class="muted">Tasarım, mühendislik ve üretimi bir arada düşünüyoruz. Sonuç: kısa sürede kurulan, uzun yıllar kullanılan evler.</p>
+      </div>
+      <ul class="features">
+        <li class="card reveal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>
+          <h3>Hızlı kurulum</h3>
+          <p>Fabrikada hazırlanan elemanlar sahada kısa sürede monte edilir; şantiye süresi ve masrafı azalır.</p>
+        </li>
+        <li class="card reveal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V9l8-6 8 6v12M4 13h16M9 21v-8M15 21v-8"/></svg>
+          <h3>Hafif ve sağlam çelik</h3>
+          <p>Galvaniz çelik konstrüksiyon, düşük ağırlığı ve esnek yapısıyla deprem yüklerine karşı avantaj sağlar.</p>
+        </li>
+        <li class="card reveal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 7l7 4 7-4M5 17l7-4 7 4"/></svg>
+          <h3>Isı ve ses yalıtımı</h3>
+          <p>Yalıtımlı panel duvarlar ve çatı ile kışın sıcak, yazın serin; enerji faturası düşük.</p>
+        </li>
+        <li class="card reveal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4zM4 11h16M8 15h3"/></svg>
+          <h3>Şeffaf bütçe</h3>
+          <p>Kaba, yarı ya da anahtar teslim; ne ödediğinizi baştan bilin. Ölçü ve malzemeyi siz seçin.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- FİYAT -->
+    <section id="fiyat" class="section" aria-labelledby="price-title">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Fiyat hesaplama aracı</p>
+          <h2 id="price-title">Evinizin fiyatını<br><span class="accent">kendiniz hesaplayın.</span></h2>
+        </div>
+        <p class="muted">Metrekareyi, teslim şeklini ve yapı detaylarını seçin; tahmini tutar anında hesaplansın. Sonucu tek tıkla WhatsApp'tan iletin.</p>
+      </div>
+
+      <div class="calc" data-calc>
+        <div class="card calc-form">
+          <div class="slider-field">
+            <div class="slider-top"><label for="alan">Kullanım alanı</label><output id="alan-out" for="alan"></output></div>
+            <input id="alan" type="range" min="30" max="200" step="1" value="108">
+            <div class="slider-ends"><span>30 m²</span><span>200 m²</span></div>
+            <div class="chips" data-presets></div>
+          </div>
+
+          <fieldset class="teslim">
+            <legend>Teslim şekli</legend>
+            <div class="teslim-grid" data-teslim></div>
+          </fieldset>
+
+          <div class="seg-grid" data-options></div>
+
+          <fieldset>
+            <legend>Ekstralar</legend>
+            <div class="checks" data-ekstra></div>
+          </fieldset>
+        </div>
+
+        <div class="card calc-result">
+          <p class="eyebrow">Tahmini tutar</p>
+          <p class="total" data-total aria-live="polite"></p>
+          <p class="muted per-m2" data-per-m2></p>
+          <ul class="breakdown" data-breakdown></ul>
+
+          <div class="pay">
+            <div class="slider-field">
+              <div class="slider-top"><label for="pesinat">Peşinat</label><output id="pesinat-out" for="pesinat"></output></div>
+              <input id="pesinat" type="range" min="30" max="100" step="10" value="50">
+            </div>
+            <div class="slider-field">
+              <div class="slider-top"><label for="vade">Vade</label><output id="vade-out" for="vade"></output></div>
+              <input id="vade" type="range" min="3" max="24" step="3" value="12">
+            </div>
+            <dl class="pay-out">
+              <div><dt>Peşinat</dt><dd data-down></dd></div>
+              <div><dt>Aylık taksit</dt><dd data-monthly></dd></div>
+            </dl>
+          </div>
+
+          <button type="button" class="btn btn-accent btn-block" data-send>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/></svg>
+            Teklifi WhatsApp'tan gönder
+          </button>
+          <p class="fine">Demo hesaplama: birim fiyatlar örnektir. Kesin fiyat; arsa, nakliye ve güncel malzeme fiyatlarına göre keşif sonrası verilir. Resmi işlemler hariçtir.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SÜREÇ -->
+    <section id="surec" class="section band" aria-labelledby="process-title">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Süreç</p>
+          <h2 id="process-title">Hayalden anahtara,<br><span class="accent">beş adımda.</span></h2>
+        </div>
+        <p class="muted">İlk telefondan teslim gününe kadar her adımda tek muhatabınız biziz.</p>
+      </div>
+      <ol class="process">
+        <li class="reveal"><span class="n">01</span><h3>Keşif &amp; ölçü</h3><p>Arsanızı yerinde görüyor, ihtiyaçlarınızı dinliyoruz.</p></li>
+        <li class="reveal"><span class="n">02</span><h3>Proje &amp; teklif</h3><p>Planı birlikte çiziyor, kalem kalem net fiyat veriyoruz.</p></li>
+        <li class="reveal"><span class="n">03</span><h3>Zemin betonu</h3><p>Radye temel, seçtiğiniz kalınlıkta dökülüyor.</p></li>
+        <li class="reveal"><span class="n">04</span><h3>Çelik &amp; panel montaj</h3><p>İskelet, duvarlar ve çatı hızla yükseliyor.</p></li>
+        <li class="reveal"><span class="n">05</span><h3>Anahtar teslim</h3><p>Doğrama, tesisat ve ince işler bitince anahtar sizde.</p></li>
+      </ol>
+    </section>
+
+    <!-- BÖLGE -->
+    <section id="bolge" class="section" aria-labelledby="area-title">
+      <div class="map-grid">
+        <div class="map-copy reveal">
+          <p class="eyebrow">Hizmet bölgesi</p>
+          <h2 id="area-title">Keşan'dan<br><span class="accent">tüm Trakya'ya.</span></h2>
+          <p class="muted">Edirne, Tekirdağ ve Çanakkale yakasında keşif ve kurulum. Bir ilçenin üzerine gelin; rotası haritada belirsin.</p>
+          <ul class="town-list" data-town-list aria-label="Hizmet verilen ilçeler"></ul>
+          <p class="map-readout" data-map-readout aria-live="polite"></p>
+        </div>
+        <div class="card map-card" data-map></div>
+      </div>
+    </section>
+
+    <!-- INSTAGRAM -->
+    <section class="section band insta" aria-labelledby="insta-title">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">@kesanunalanlarprefabrik</p>
+          <h2 id="insta-title">Uygulamalarımızı<br><span class="accent">yerinde görün.</span></h2>
+        </div>
+        <a class="btn btn-ghost" href="https://www.instagram.com/kesanunalanlarprefabrik/" target="_blank" rel="noopener">Instagram'da takip et ↗</a>
+      </div>
+      <ul class="insta-grid" data-insta></ul>
+      <p class="fine center">Demo: bu alana Instagram hesabınızdaki gerçek proje fotoğrafları ve videoları eklenecek.</p>
+    </section>
+
+    <!-- İLETİŞİM -->
+    <section id="iletisim" class="section" aria-labelledby="contact-title">
+      <div class="contact-grid">
+        <div class="reveal">
+          <p class="eyebrow">İletişim</p>
+          <h2 id="contact-title">Hayalinizdeki evi<br><span class="accent">birlikte kuralım.</span></h2>
+          <ul class="contact-list">
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+              <div><small>İsmail Yolcu</small><a href="tel:+905386777042">0538 677 70 42</a></div>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              <div><small>Adres</small><a href="https://www.google.com/maps/search/?api=1&amp;query=Ke%C5%9Fan+%C3%9Cnalanlar+Prefabrik" target="_blank" rel="noopener">Aşağı Zaferiye Mah. Anafartalar Cd. No:46/B<br>Keşan / Edirne</a></div>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+              <div><small>Instagram</small><a href="https://www.instagram.com/kesanunalanlarprefabrik/" target="_blank" rel="noopener">@kesanunalanlarprefabrik</a></div>
+            </li>
+          </ul>
+        </div>
+
+        <form class="card contact-form" data-contact>
+          <p class="eyebrow">Ücretsiz bilgi alın</p>
+          <h3>Size dönüş yapalım.</h3>
+          <label>Ad soyad<input name="ad" autocomplete="name" required minlength="2" maxlength="80"></label>
+          <label>Telefon<input name="tel" type="tel" autocomplete="tel" required pattern="[+0-9() .\-]{7,20}" placeholder="05xx xxx xx xx"></label>
+          <label>İlgilendiğiniz model<select name="model" data-contact-model></select></label>
+          <label>Arsanızın konumu<input name="konum" placeholder="Örn. Keşan, Yerlisu köyü" maxlength="80"></label>
+          <label>Mesajınız<textarea name="mesaj" rows="3" maxlength="500"></textarea></label>
+          <button type="submit" class="btn btn-accent btn-block">WhatsApp ile gönder →</button>
+          <p class="fine">Form, mesajınızı WhatsApp üzerinden firmaya iletir.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span data-year></span> Keşan Ünalanlar — İnşaat · Yapı · Prefabrik</p>
+    <p class="fine">Bu sayfa tanıtım amaçlı bir demodur; fiyatlar ve planlar örnektir.</p>
+  </footer>
+
+  <a class="wa-float" href="https://wa.me/905386777042" target="_blank" rel="noopener" aria-label="WhatsApp ile yazın">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-1.8-1.8l.8-1-1-2z"/></svg>
+  </a>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
