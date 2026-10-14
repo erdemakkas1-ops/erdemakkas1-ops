@@ -171,7 +171,9 @@ function plan3d(container, onHover) {
   const floors = [];
   const wallMat = new THREE.MeshStandardMaterial({ color: '#f3eee6', roughness: 0.9 });
 
+  let current = null;
   function build(model) {
+    current = model;
     scene.remove(group);
     group.traverse((o) => {
       o.geometry?.dispose();
@@ -220,7 +222,7 @@ function plan3d(container, onHover) {
     group.add(base);
     scene.add(group);
 
-    const size = Math.max(model.w, model.d);
+    const size = Math.max(model.w, model.d) * Math.max(1, 1.75 / (camera.aspect || 1));
     camera.position.set(size * 0.55, size * 1.05, size * 1.05);
     controls.target.set(0, 0, 0.6);
     controls.minDistance = size * 0.7;
@@ -255,6 +257,7 @@ function plan3d(container, onHover) {
     renderer.domElement.style.height = '100%';
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
+    if (current) build(current);
   }
   new ResizeObserver(resize).observe(container);
 
