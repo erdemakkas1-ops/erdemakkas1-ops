@@ -3,9 +3,6 @@ name: Deploy HALO Store to GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - "halo-store/**"
-      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
