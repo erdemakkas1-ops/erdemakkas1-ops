@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="HALO — havada süzülen ayakkabılarla interaktif sneaker mağazası.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='15' cy='17' r='10' fill='none' stroke='%23141619' stroke-width='5'/%3E%3Ccircle cx='25' cy='7' r='4' fill='%23e23a2c'/%3E%3C/svg%3E">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}*{-webkit-tap-highlight-color:transparent}</style>
+<title>Halo Orbit Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one-screen gallery — sneakers float on a tilted orbit; click one and it lands in a product panel */
+:root{
+  --bg:#efeeea; --bg2:#e6e5e0; --ink:#141619; --mute:#7c7f86; --line:#d3d2cc;
+  --accent:#e23a2c; --card:#f7f6f3;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"Archivo",system-ui,-apple-system,Segoe UI,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+html,body{height:100%}
+body{background:radial-gradient(120% 90% at 50% 40%,var(--card) 0%,var(--bg) 55%,var(--bg2) 100%);color:var(--ink);font-family:var(--body);overflow:hidden;user-select:none;-webkit-user-select:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+.app{position:relative;height:100%;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));box-sizing:border-box}
+
+/* nav */
+header{position:absolute;top:0;left:0;right:0;z-index:30;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:20px max(24px,env(safe-area-inset-right,0px)) 0 max(24px,env(safe-area-inset-left,0px))}
+.brand{font-family:var(--display);font-weight:900;font-stretch:70%;font-size:20px;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.brand i{width:18px;height:18px;border-radius:50%;border:3px solid var(--ink);display:inline-block;box-sizing:border-box;position:relative}
+.brand i::after{content:"";position:absolute;width:5px;height:5px;border-radius:50%;background:var(--accent);right:-4px;top:-4px}
+nav{display:flex;gap:26px;font-size:12px}
+nav a{color:var(--ink);text-decoration:none;opacity:.6}
+nav a.on{opacity:1}
+.tools{justify-self:end;display:flex;gap:18px;align-items:center;font-size:12px}
+.tools .search{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line);padding:4px 2px;color:var(--mute);min-width:110px}
+.bag{position:relative;display:flex;align-items:center;gap:6px}
+.bag b{min-width:18px;height:18px;border-radius:9px;background:var(--ink);color:var(--card);font-size:10px;display:grid;place-items:center;padding:0 4px;box-sizing:border-box;transition:transform .3s}
+.bag b.pop{transform:scale(1.35);background:var(--accent)}
+
+/* hero title */
+.hero{position:absolute;left:max(40px,env(safe-area-inset-left,0px));top:30%;z-index:20;max-width:34vw;transition:opacity .45s,transform .45s}
+.hero h1{font-family:var(--display);font-weight:800;font-stretch:78%;font-size:clamp(40px,5.6vw,88px);line-height:.9;margin:0 0 18px;text-transform:uppercase;letter-spacing:-.01em;text-wrap:balance}
+.hero .price{font-family:var(--mono);font-size:13px;margin-bottom:14px}
+.hero .link{font-size:12px;border-bottom:1px solid var(--ink);padding-bottom:2px}
+.hero .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:14px}
+.hero h1 span{display:inline-block;animation:rise .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{transform:translateY(40%);opacity:0}to{transform:none;opacity:1}}
+.detail-on .hero{opacity:0;transform:translateX(-40px);pointer-events:none}
+
+/* stage */
+.stage{position:absolute;inset:0;z-index:10;cursor:grab;touch-action:none}
+.stage.drag{cursor:grabbing}
+.shoe{position:absolute;left:0;top:0;width:300px;height:170px;margin:-85px 0 0 -150px;will-change:transform,opacity;transform-origin:50% 50%}
+.shoe.anim{transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .5s,filter .5s}
+.shoe .bob{width:100%;height:100%;animation:bob 4.2s ease-in-out infinite}
+.shoe .bob{display:flex;align-items:flex-end;justify-content:center}
+.shoe img{width:100%;height:100%;object-fit:contain;object-position:50% 100%;display:block;pointer-events:none;filter:drop-shadow(0 6px 6px rgba(20,22,25,.12))}
+.shoe .shadow{position:absolute;left:14%;right:14%;bottom:-14px;height:14px;border-radius:50%;background:radial-gradient(closest-side,rgba(20,22,25,.28),rgba(20,22,25,0));animation:shad 4.2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(-6px) rotate(-1deg)}50%{transform:translateY(6px) rotate(1deg)}}
+@keyframes shad{0%,100%{transform:scaleX(.8);opacity:.7}50%{transform:scaleX(1);opacity:1}}
+.shoe button{position:absolute;inset:0;border-radius:40px}
+
+/* orbit trail */
+canvas#trail{position:absolute;inset:0;z-index:5;pointer-events:none;transition:opacity .5s}
+.detail-on canvas#trail{opacity:0}
+
+/* wheel */
+.wheel{position:absolute;left:50%;bottom:max(28px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity .4s}
+.track{width:min(300px,60vw);height:16px;border-radius:10px;background:linear-gradient(var(--card),var(--bg2));box-shadow:inset 0 1px 3px rgba(0,0,0,.18),0 1px 0 #fff;position:relative;overflow:hidden;cursor:ew-resize;touch-action:none}
+.ticks{position:absolute;inset:3px 0;background:repeating-linear-gradient(90deg,rgba(20,22,25,.35) 0 1px,transparent 1px 6px)}
+.track::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--bg2),transparent 25%,transparent 75%,var(--bg2))}
+.wheel small{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.wheel .row{display:flex;align-items:center;gap:12px}
+.wheel .num{font-family:var(--mono);font-size:10px;color:var(--mute);font-variant-numeric:tabular-nums;width:22px;text-align:center}
+.detail-on .wheel{opacity:0;pointer-events:none}
+
+/* detail panel */
+.panel{position:absolute;z-index:25;right:9vw;top:50%;width:min(330px,40vw);transform:translate(40px,-52%);opacity:0;pointer-events:none;transition:opacity .45s .15s,transform .6s .15s cubic-bezier(.2,.8,.2,1)}
+.detail-on .panel{opacity:1;transform:translate(0,-52%);pointer-events:auto}
+.panel h2{font-family:var(--display);font-weight:800;font-stretch:80%;font-size:clamp(28px,2.6vw,40px);line-height:.95;margin:0 0 10px;text-transform:uppercase;text-wrap:balance}
+.panel .price{font-family:var(--mono);font-size:13px;margin-bottom:22px}
+.panel .meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
+.sizes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.sizes button{height:34px;border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-size:11px;background:var(--card);transition:background .2s,color .2s,border-color .2s}
+.sizes button:hover{border-color:var(--ink)}
+.sizes button[aria-pressed="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.sizes button:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+.sizes.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.add{width:100%;height:42px;border-radius:22px;background:var(--ink);color:var(--card);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .3s,transform .15s}
+.add:active{transform:scale(.98)}
+.add.done{background:var(--accent)}
+.add .spin{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hint{font-size:11px;color:var(--accent);height:16px;margin-top:8px}
+.full{display:inline-block;margin-top:6px;font-size:11px;border-bottom:1px solid var(--ink);padding-bottom:2px}
+.desc{font-size:12px;line-height:1.55;color:var(--mute);margin:18px 0 0;max-width:36ch}
+
+/* thumbs + pager */
+.foot{position:absolute;left:max(40px,env(safe-area-inset-left,0px));right:max(40px,env(safe-area-inset-right,0px));bottom:max(36px,env(safe-area-inset-bottom,0px));z-index:25;display:flex;justify-content:space-between;align-items:center;gap:16px;opacity:0;pointer-events:none;transition:opacity .4s .25s}
+.detail-on .foot{opacity:1;pointer-events:auto}
+.thumbs{display:flex;gap:8px;overflow-x:auto;padding:4px}
+.thumbs button{width:58px;height:40px;flex:none;border-radius:6px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;padding:4px;transition:border-color .2s,box-shadow .2s}
+.thumbs button[aria-current="true"]{border-color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.thumbs img{width:100%;height:100%;object-fit:contain}
+.pager{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:11px;font-variant-numeric:tabular-nums;color:var(--mute)}
+.pager button{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;color:var(--ink)}
+.pager button:hover{border-color:var(--ink)}
+.back{position:absolute;z-index:26;left:max(40px,env(safe-area-inset-left,0px));top:84px;font-size:12px;display:flex;gap:8px;align-items:center;opacity:0;pointer-events:none;transition:opacity .4s .2s}
+.detail-on .back{opacity:1;pointer-events:auto}
+
+@media (max-width:760px){
+  nav{display:none}
+  header{grid-template-columns:1fr auto}
+  .tools .search input{width:70px}
+  .hero{top:86px;max-width:none;right:16px}
+  .hero h1{font-size:44px;margin-bottom:10px}
+  .panel{left:max(20px,env(safe-area-inset-left,0px));right:max(20px,env(safe-area-inset-right,0px));width:auto;top:auto;bottom:110px;transform:translateY(30px)}
+  .detail-on .panel{transform:none}
+  .desc{display:none}
+  .foot{left:16px;right:16px;bottom:max(20px,env(safe-area-inset-bottom,0px))}
+  .thumbs button{width:46px;height:34px}
+  .back{top:70px}
+}
+@media (prefers-reduced-motion:reduce){
+  .shoe .bob,.shoe .shadow{animation:none}
+  .shoe.anim{transition-duration:.01s}
+}
+
+.search{position:relative}
+.search input{border:0;background:none;font:inherit;color:var(--ink);width:110px;outline:none}
+.results{position:absolute;right:120px;top:46px;width:260px;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,.12);padding:6px;z-index:60}
+.results button{display:flex;align-items:center;gap:10px;width:100%;padding:6px;border-radius:6px;text-align:left;font-size:12px}
+.results button:hover,.results button:focus-visible{background:var(--bg)}
+.results img{width:48px;height:30px;object-fit:contain}
+.results p{margin:8px;font-size:12px;color:var(--mute)}
+.add u{text-decoration:underline;font-weight:500;opacity:.9}
+
+.scrim{position:fixed;inset:0;background:rgba(20,22,25,.35);backdrop-filter:blur(2px);z-index:70;opacity:0;pointer-events:none;transition:opacity .35s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--card);z-index:80;transform:translateX(100%);transition:transform .45s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 50px rgba(0,0,0,.12);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px)}
+.drawer.on{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:22px 24px;border-bottom:1px solid var(--line)}
+.dh h3{margin:0;font-family:var(--display);font-stretch:80%;font-weight:800;font-size:22px;text-transform:uppercase}
+.x{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:14px}
+.x:hover{border-color:var(--ink)}
+.dbody{flex:1;overflow-y:auto;padding:8px 24px}
+.item{display:grid;grid-template-columns:84px 1fr auto;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:center}
+.item img{width:84px;height:56px;object-fit:contain;background:var(--bg);border-radius:8px;padding:4px;box-sizing:border-box}
+.item h4{margin:0 0 4px;font-size:13px;font-weight:700}
+.item .sub{font-family:var(--mono);font-size:10px;color:var(--mute);display:flex;gap:8px;align-items:center}
+.item select{font:inherit;font-size:10px;border:1px solid var(--line);border-radius:4px;background:var(--card);padding:2px}
+.qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:16px;margin-top:8px;width:max-content}
+.qty button{width:26px;height:24px;font-size:13px}
+.qty span{min-width:18px;text-align:center;font-family:var(--mono);font-size:11px}
+.item .right{text-align:right;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.item .lp{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.rm{font-size:10px;color:var(--mute);text-decoration:underline}
+.rm:hover{color:var(--accent)}
+.empty{text-align:center;padding:60px 10px;color:var(--mute);font-size:13px}
+.empty b{display:block;font-family:var(--display);font-stretch:80%;font-size:22px;color:var(--ink);text-transform:uppercase;margin-bottom:8px}
+.dfoot{border-top:1px solid var(--line);padding:18px 24px 24px;display:flex;flex-direction:column;gap:8px}
+.line{display:flex;justify-content:space-between;font-size:12px;color:var(--mute)}
+.line b{font-family:var(--mono);font-weight:500;color:var(--ink)}
+.line.total{font-size:14px;color:var(--ink);font-weight:700;padding-top:6px}
+.line.total b{font-size:15px}
+.free{height:4px;background:var(--bg2);border-radius:2px;overflow:hidden;margin:2px 0 6px}
+.free i{display:block;height:100%;background:var(--ink);transition:width .4s}
+.note{font-size:11px;color:var(--mute)}
+.btn{height:44px;border-radius:22px;background:var(--ink);color:var(--card);font-weight:600;font-size:13px;width:100%}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+form.co{display:flex;flex-direction:column;gap:12px;padding:16px 0}
+form.co label{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--mute)}
+form.co input,form.co textarea{font:inherit;font-size:13px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px}
+form.co input,form.co textarea{width:100%;box-sizing:border-box;min-width:0}
+form.co .two>label{min-width:0}
+form.co input:focus,form.co textarea:focus{outline:none;border-color:var(--ink)}
+form.co .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pay{display:flex;gap:8px}
+.pay label{flex:1;flex-direction:row;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--ink);font-size:12px;cursor:pointer}
+.pay label:has(input:checked){border-color:var(--ink)}
+.ok{text-align:center;padding:50px 10px}
+.ok .tick{width:56px;height:56px;border-radius:50%;background:var(--ink);color:var(--card);display:grid;place-items:center;font-size:24px;margin:0 auto 16px}
+.ok h4{font-family:var(--display);font-stretch:80%;font-size:26px;text-transform:uppercase;margin:0 0 8px}
+.ok p{font-size:12px;color:var(--mute);margin:0 0 4px}
+
+.sheet{position:fixed;inset:0;z-index:75;display:grid;place-items:center;pointer-events:none;padding:20px max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px))}
+.sheet .card{pointer-events:auto;width:min(980px,100%);max-height:calc(100% - 20px);overflow-y:auto;background:var(--card);border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.2);display:grid;grid-template-columns:1.1fr 1fr;opacity:0;transform:translateY(30px) scale(.98);transition:opacity .35s,transform .45s cubic-bezier(.2,.8,.2,1)}
+.sheet:not(.on) .card{pointer-events:none}
+.sheet.on .card{opacity:1;transform:none}
+.sheet .pic{background:radial-gradient(circle at 50% 45%,#fff,var(--bg2));display:grid;place-items:center;padding:40px;position:sticky;top:0;min-height:360px}
+.sheet .pic img{width:100%;max-width:440px;filter:drop-shadow(0 20px 18px rgba(0,0,0,.18))}
+.sheet .info{padding:32px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.sheet .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.sheet h3{margin:0;font-family:var(--display);font-stretch:80%;font-weight:800;font-size:34px;line-height:.95;text-transform:uppercase}
+.sheet .pr{font-family:var(--mono);font-size:14px;margin-top:8px}
+.sheet p.lead{font-size:13px;line-height:1.6;color:var(--ink);margin:0}
+.specs{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:12px;margin:0}
+.specs dt{color:var(--mute)}
+.specs dd{margin:0}
+details{border-top:1px solid var(--line);padding-top:12px}
+details summary{cursor:pointer;font-size:12px;font-weight:600;list-style:none;display:flex;justify-content:space-between}
+details summary::after{content:"+";font-family:var(--mono)}
+details[open] summary::after{content:"–"}
+details p{font-size:12px;color:var(--mute);line-height:1.6;margin:10px 0 0}
+.guide{overflow-x:auto;margin-top:10px}
+.guide table{border-collapse:collapse;font-family:var(--mono);font-size:11px;width:100%;font-variant-numeric:tabular-nums}
+.guide td,.guide th{border:1px solid var(--line);padding:5px 6px;text-align:center}
+.guide th{color:var(--mute);font-weight:400}
+.sheet .sizes{margin:0}
+.toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--card);font-size:12px;padding:10px 16px;border-radius:20px;z-index:90;opacity:0;transition:.3s;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:760px){
+  .sheet{padding:0;place-items:end center}
+  .sheet .card{grid-template-columns:1fr;border-radius:18px 18px 0 0;max-height:92%}
+  .sheet .pic{position:static;min-height:0;padding:24px}
+  .sheet .info{padding:22px}
+  .results{right:0;left:auto;top:40px;width:min(260px,80vw)}
+}
+</style>
+
+</head>
+<body>
+<div class="app" id="app">
+  <header>
+    <div class="brand"><i></i>HALO</div>
+    <nav aria-label="Main">
+      <a href="#" class="on">Ana Sayfa</a><a href="#">Orbit</a><a href="#">Court Pro</a><a href="#">Runway</a>
+    </nav>
+    <div class="tools">
+      <label class="search">⌕ <input id="q" placeholder="Ara" autocomplete="off"></label><div class="results" id="results" hidden></div>
+      <button class="bag" id="bagBtn" aria-label="Sepeti aç">Sepet <b id="bagCount">0</b></button>
+    </div>
+  </header>
+
+  <canvas id="trail"></canvas>
+  <div class="stage" id="stage"></div>
+
+  <div class="hero" id="hero" aria-live="polite">
+    <div class="eyebrow" id="heroIdx">04 / 07 — Kış koleksiyonu</div>
+    <h1 id="heroName"></h1>
+    <div class="price" id="heroPrice"></div>
+    <button class="link" id="heroLink">Detayları gör →</button>
+  </div>
+
+  <div class="wheel">
+    <div class="row">
+      <span class="num" id="wl">01</span>
+      <div class="track" id="track"><div class="ticks" id="ticks"></div></div>
+      <span class="num" id="wr">07</span>
+    </div>
+    <small>Çarkı çevir</small>
+  </div>
+
+  <button class="back" id="back">← Tüm ayakkabılar</button>
+
+  <aside class="panel" id="panel" aria-label="Product">
+    <h2 id="pName"></h2>
+    <div class="price" id="pPrice"></div>
+    <div class="meta"><span>Numara (EU)</span><span id="pSel">—</span></div>
+    <div class="sizes" id="sizes"></div>
+    <button class="add" id="add">Sepete ekle</button>
+    <div class="hint" id="hint"></div>
+    <button class="full" id="fullBtn">Tüm detaylar →</button>
+    <p class="desc" id="pDesc"></p>
+  </aside>
+
+  <div class="foot">
+    <div class="thumbs" id="thumbs"></div>
+    <div class="pager">
+      <button id="prev" aria-label="Previous">←</button>
+      <span id="count">04 / 07</span>
+      <button id="next" aria-label="Next">→</button>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Sepet" aria-hidden="true">
+  <div class="dh"><h3 id="dTitle">Sepet</h3><button class="x" id="dClose" aria-label="Kapat">✕</button></div>
+  <div class="dbody" id="dBody"></div>
+  <div class="dfoot" id="dFoot"></div>
+</aside>
+<div class="sheet" id="sheet" aria-hidden="true">
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="sName">
+    <div class="pic"><img id="sImg" alt=""></div>
+    <div class="info">
+      <div class="top"><div><h3 id="sName"></h3><div class="pr" id="sPrice"></div></div><button class="x" id="sClose" aria-label="Kapat">✕</button></div>
+      <p class="lead" id="sDesc"></p>
+      <dl class="specs" id="sSpecs"></dl>
+      <div>
+        <div class="meta" style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:8px"><span>Numara (EU)</span><span id="sSel">—</span></div>
+        <div class="sizes" id="sSizes"></div>
+        <div class="hint" id="sHint"></div>
+        <button class="add" id="sAdd">Sepete ekle</button>
+      </div>
+      <details><summary>Numara rehberi</summary><div class="guide"><table><tr><th>EU</th><td>40</td><td>41</td><td>42</td><td>43</td><td>44</td><td>45</td><td>46</td></tr><tr><th>US</th><td>7</td><td>8</td><td>8.5</td><td>9.5</td><td>10</td><td>11</td><td>12</td></tr><tr><th>cm</th><td>25</td><td>26</td><td>26.5</td><td>27.5</td><td>28</td><td>29</td><td>30</td></tr></table></div><p>Ayak uzunluğunu topuktan en uzun parmağa kadar ölç. İki numara arasında kalırsan büyük olanı seç.</p></details>
+      <details><summary>Kargo ve iade</summary><p>5.000 ₺ ve üzeri siparişlerde kargo ücretsiz, altında 149 ₺. Siparişler 1–3 iş günü içinde kargoya verilir. Kullanılmamış ürünleri 30 gün içinde ücretsiz iade edebilirsin.</p></details>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const SHOES=[
+  {name:"Retro 3 Sail Mocha",price:8299,out:[46],d:"Krem deri gövde, kahve desenli topuk ve burun, kırmızı dış taban ve görünür hava yastığı.",img:"img/shoe-1.webp"},
+  {name:"Mid Triple Black",price:5299,out:[40],d:"Kumaş ve deri karışımı siyah gövde, gri yan detay ve tamamen siyah taban.",img:"img/shoe-2.webp"},
+  {name:"High OG Royal",price:8999,out:[],d:"Siyah ve kraliyet mavisi tam tahıllı deri, beyaz ara taban, yüksek bilek.",img:"img/shoe-3.webp"},
+  {name:"Low Olive Suede",price:5599,out:[43],d:"Krem süet ve zeytin yeşili deri, benekli krem taban.",img:"img/shoe-4.webp"},
+  {name:"Mid Dusty Rose",price:6499,out:[41, 45],d:"Pembe benekli süet, işlemeli yan detay ve krem taban.",img:"img/shoe-5.webp"},
+  {name:"Low Iridescent",price:8699,out:[],d:"Işığa göre renk değiştiren yanardöner deri, siyah ara taban ve yeşil şeffaf dış taban.",img:"img/shoe-6.webp"},
+  {name:"Mid Forest Glow",price:6299,out:[42],d:"Siyah süet ve çatlak dokulu koyu yeşil deri, parlayan yeşil dış taban.",img:"img/shoe-7.webp"},
+];
+const N=SHOES.length;
+
+function shoeSVG(s,id){
+  const c=s.c;
+  const upper=s.high
+    ?"M30 104 Q20 70 26 30 Q28 16 44 14 Q66 12 86 18 Q96 30 104 46 L150 40 Q172 56 202 66 Q244 76 270 84 Q288 92 282 104 Z"
+    :"M30 104 Q22 74 36 56 Q48 44 66 48 Q86 54 108 52 L150 44 Q172 58 202 68 Q244 78 270 86 Q288 94 282 104 Z";
+  const heel=s.high
+    ?"M30 104 Q20 70 26 30 Q28 16 44 14 Q56 13 64 15 Q70 60 84 104 Z"
+    :"M30 104 Q22 74 36 56 Q48 44 66 48 L80 104 Z";
+  const collar=s.high?"M44 14 Q66 22 86 18":"M36 56 Q54 60 70 50";
+  const eyestay=s.high?"M100 44 L150 38 Q174 56 198 66 L182 76 Q150 66 116 62 Z":"M106 52 L150 42 Q174 58 198 68 L182 78 Q150 70 118 66 Z";
+  let laces="";
+  for(let i=0;i<5;i++){const x=118+i*15,y=(s.high?58:62)+i*3.2;laces+=`<path d="M${x} ${y-10} l10 ${8}" stroke="${c.lace}" stroke-width="3" stroke-linecap="round"/>`}
+  return `<svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs><linearGradient id="g${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+    <path d="M22 116 Q18 130 36 132 L266 132 Q292 131 290 116 L288 110 L24 110 Z" fill="${c.out}"/>
+    <path d="M24 110 L288 110 Q290 101 282 100 L30 102 Q20 103 24 110Z" fill="${c.sole}" stroke="rgba(0,0,0,.12)"/>
+    <path d="M28 116 L286 116" stroke="rgba(0,0,0,.18)" stroke-dasharray="2 4"/>
+    <path d="${upper}" fill="${c.base}"/>
+    <path d="${heel}" fill="${c.a}"/>
+    <path d="M226 74 Q252 80 270 86 Q288 94 282 104 L218 104 Q214 88 226 74Z" fill="${c.a}"/>
+    <path d="${eyestay}" fill="${c.a}"/>
+    <path d="M84 104 L${s.high?70:72} ${s.high?30:56} Q92 ${s.high?40:60} 112 ${s.high?60:64} Q140 88 150 104Z" fill="${c.b}" opacity=".95"/>
+    <circle cx="176" cy="88" r="9" fill="none" stroke="${c.a===c.base?c.b:c.a}" stroke-width="3.5"/>
+    <circle cx="183" cy="81" r="2.6" fill="${SHOES.indexOf(s)%2?'#e23a2c':c.b}"/>
+    <path d="M150 104 Q148 96 158 92" stroke="rgba(0,0,0,.15)" fill="none"/>
+    ${laces}
+    <path d="${collar}" stroke="rgba(0,0,0,.35)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M40 108 L280 108" stroke="rgba(0,0,0,.08)"/>
+    <path d="${upper}" fill="url(#g${id})"/>
+    <path d="${upper}" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="1"/>
+  </svg>`;
+}
+
+const $=id=>document.getElementById(id);
+const app=$("app"),stage=$("stage");
+const els=SHOES.map((s,i)=>{
+  const d=document.createElement("div");d.className="shoe anim";
+  d.innerHTML=`<div class="bob" style="animation-delay:${-i*.6}s"><img src="${s.img}" alt="" draggable="false"><div class="shadow" style="animation-delay:${-i*.6}s"></div></div><button aria-label="Open ${s.name}"></button>`;
+  d.querySelector("button").addEventListener("click",e=>{if(moved>6)return;e.stopPropagation();openDetail(i)});
+  stage.appendChild(d);return d;
+});
+$("thumbs").innerHTML=SHOES.map((s,i)=>`<button data-i="${i}" aria-label="${s.name}"><img src="${s.img}" alt="" draggable="false"></button>`).join("");
+
+// orbit state
+const STEP=2*Math.PI/N;
+let rot=-3*STEP, target=rot, vel=0, mode="orbit", sel=3, size=null;
+const mod=(n,m)=>((n%m)+m)%m;
+function activeIndex(r){return mod(Math.round(-r/STEP),N)}
+
+function geom(){
+  const W=innerWidth,H=innerHeight,mobile=W<760;
+  return {W,H,mobile,cx:mobile?W*.5:W*.56,cy:mobile?H*.56:H*.5,R:mobile?W*.42:Math.min(W*.3,520),tilt:mobile?.55:.42,base:mobile?Math.min(W/330,1.05):Math.min(W/1200,1.25)};
+}
+
+function layout(){
+  const g=geom();
+  els.forEach((el,i)=>{
+    if(mode==="detail"){
+      if(i===sel){
+        const x=g.mobile?g.W*.5:g.W*.36, y=g.mobile?g.H*.32:g.H*.46, s=g.mobile?Math.min(g.W/320,1.2):Math.min(g.W/620,2.1);
+        el.style.transform=`translate(${x}px,${y}px) scale(${s})`;el.style.opacity=1;el.style.zIndex=20;el.style.filter="none";
+      }else{
+        const a=i*STEP+rot,u=Math.sin(a);
+        el.style.transform=`translate(${g.cx+u*g.R*1.6}px,${g.cy-u*g.R*g.tilt*1.6}px) scale(.3)`;el.style.opacity=0;el.style.zIndex=1;
+      }
+      return;
+    }
+    const a=i*STEP+rot,u=Math.sin(a),d=Math.cos(a);
+    const x=g.cx+u*g.R, y=g.cy-u*g.R*g.tilt+d*g.R*.12;
+    const t=(d+1)/2, s=g.base*(.42+.68*t*t);
+    el.style.transform=`translate(${x}px,${y}px) scale(${s}) rotate(${-u*10}deg)`;
+    el.style.opacity=.25+.75*t;el.style.zIndex=Math.round(t*100);
+    el.style.filter=t<.4?`blur(${(0.4-t)*4}px)`:"none";
+  });
+  drawTrail(g);
+  $("ticks").style.backgroundPosition=`${rot*60}px 0`;
+}
+
+const cv=$("trail"),ctx=cv.getContext("2d");
+function drawTrail(g){
+  const dpr=devicePixelRatio||1;
+  if(cv.width!==g.W*dpr){cv.width=g.W*dpr;cv.height=g.H*dpr;cv.style.width=g.W+"px";cv.style.height=g.H+"px"}
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,g.W,g.H);
+  ctx.strokeStyle="rgba(20,22,25,.12)";ctx.lineWidth=1;ctx.setLineDash([2,5]);ctx.beginPath();
+  for(let k=0;k<=120;k++){const a=k/120*2*Math.PI,u=Math.sin(a),d=Math.cos(a);const x=g.cx+u*g.R,y=g.cy-u*g.R*g.tilt+d*g.R*.12+40*g.base*(.42+.68*((d+1)/2)**2);k?ctx.lineTo(x,y):ctx.moveTo(x,y)}
+  ctx.stroke();
+}
+
+let lastActive=-1;
+function updateHero(){
+  const i=activeIndex(rot);if(i===lastActive)return;lastActive=i;
+  const s=SHOES[i];
+  $("heroName").innerHTML=s.name.split(" ").map((w,k)=>`<span style="animation-delay:${k*60}ms">${w}</span>`).join(" ");
+  $("heroPrice").textContent=`${s.price.toLocaleString("tr-TR")} ₺`;
+  $("heroIdx").textContent=`${String(i+1).padStart(2,"0")} / ${String(N).padStart(2,"0")} — Kış koleksiyonu`;
+  $("wl").textContent=String(mod(i-1,N)+1).padStart(2,"0");$("wr").textContent=String(mod(i+1,N)+1).padStart(2,"0");
+}
+
+// animation loop
+let dragging=false;
+function tick(){
+  if(mode==="orbit"&&!dragging){
+    if(Math.abs(vel)>.0005){target+=vel;vel*=.92}
+    else{const snap=Math.round(target/STEP)*STEP;target+=(snap-target)*.12}
+    rot+=(target-rot)*.14;
+  }
+  if(mode==="orbit")layout();
+  updateHero();
+  requestAnimationFrame(tick);
+}
+
+// drag on stage + wheel track
+let sx=0,lx=0,moved=0,lt=0;
+function startDrag(e,gain){if(mode!=="orbit")return;dragging=true;stage.classList.add("drag");sx=lx=e.clientX;moved=0;lt=performance.now();vel=0;els.forEach(el=>el.classList.remove("anim"));dragGain=gain}
+let dragGain=1;
+addEventListener("pointermove",e=>{if(!dragging)return;const dx=e.clientX-lx;lx=e.clientX;moved+=Math.abs(dx);const now=performance.now();const dr=dx*.006*dragGain;rot+=dr;target=rot;vel=dr/Math.max(1,(now-lt)/16);lt=now});
+addEventListener("pointerup",()=>{if(!dragging)return;dragging=false;stage.classList.remove("drag");vel=Math.max(-.12,Math.min(.12,vel))});
+stage.addEventListener("pointerdown",e=>{if(document.querySelector(".drawer.on,.sheet.on"))return;startDrag(e,1)});
+$("track").addEventListener("pointerdown",e=>{e.preventDefault();startDrag(e,1.6)});
+addEventListener("wheel",e=>{if(mode!=="orbit"||document.querySelector(".drawer.on,.sheet.on"))return;target-=(e.deltaY+e.deltaX)*.0025},{passive:true});
+addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&mode==="detail")closeDetail();
+  if(mode==="orbit"){if(e.key==="ArrowRight")target-=STEP;if(e.key==="ArrowLeft")target+=STEP;if(e.key==="Enter")openDetail(activeIndex(rot))}
+  else{if(e.key==="ArrowRight")go(1);if(e.key==="ArrowLeft")go(-1)}
+});
+$("heroLink").onclick=()=>openDetail(activeIndex(rot));
+
+// detail
+function openDetail(i){
+  mode="detail";sel=i;size=null;
+  els.forEach(el=>el.classList.add("anim"));
+  app.classList.add("detail-on");fillPanel();layout();
+}
+function closeDetail(){
+  mode="orbit";app.classList.remove("detail-on");
+  rot=target=-sel*STEP;els.forEach(el=>el.classList.add("anim"));layout();
+  setTimeout(()=>{if(!dragging)els.forEach(el=>el.classList.remove("anim"))},800);
+}
+function go(dir){
+  const old=els[sel];sel=mod(sel+dir,N);size=null;rot=target=-sel*STEP;
+  els[sel].classList.remove("anim");
+  const g=geom();els[sel].style.transform=`translate(${dir>0?g.W+200:-300}px,${g.H*.46}px) scale(1)`;els[sel].style.opacity=0;
+  els[sel].getBoundingClientRect();els[sel].classList.add("anim");
+  old.style.transform=`translate(${dir>0?-300:g.W+200}px,${g.H*.46}px) scale(1)`;old.style.opacity=0;
+  fillPanel();
+  requestAnimationFrame(()=>{els.forEach((el,i)=>{if(i===sel){layout()}})});
+}
+function fillPanel(){
+  const s=SHOES[sel];
+  $("pName").textContent=s.name;$("pPrice").textContent=`${s.price.toLocaleString("tr-TR")} ₺`;$("pDesc").textContent=s.d;
+  $("pSel").textContent="—";$("hint").textContent="";
+  $("sizes").innerHTML=[40,41,42,43,44,45,46].map(n=>`<button aria-pressed="false" data-s="${n}" ${s.out.includes(n)?"disabled":""}>${n}</button>`).join("");
+  $("count").textContent=`${String(sel+1).padStart(2,"0")} / ${String(N).padStart(2,"0")}`;
+  document.querySelectorAll("#thumbs button").forEach((b,i)=>b.setAttribute("aria-current",i===sel));
+  const add=$("add");add.className="add";add.textContent="Sepete ekle";add.disabled=false;
+}
+$("sizes").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b||b.disabled)return;
+  size=+b.dataset.s;document.querySelectorAll("#sizes button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  $("pSel").textContent=size;$("hint").textContent="";
+});
+$("add").onclick=()=>{
+  const add=$("add");
+  if(add.classList.contains("done")){openCart();return}
+  if(!size){$("hint").textContent="Önce numara seç";const z=$("sizes");z.classList.remove("shake");void z.offsetWidth;z.classList.add("shake");return}
+  add.disabled=true;add.innerHTML='<span class="spin"></span>';
+  setTimeout(()=>{
+    add.classList.add("done");add.innerHTML=`Sepete eklendi · EU ${size} ✓ <u>Sepete git</u>`;add.disabled=false;
+    addToCart(sel,size);
+    setTimeout(()=>{add.classList.remove("done");add.textContent="Sepete ekle";add.disabled=false},1800);
+  },900);
+};
+$("thumbs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const i=+b.dataset.i;if(i!==sel)go(i>sel?i-sel:-(sel-i))});
+$("prev").onclick=()=>go(-1);$("next").onclick=()=>go(1);
+$("back").onclick=closeDetail;
+stage.addEventListener("click",e=>{if(mode==="detail"&&e.target===stage)closeDetail()});
+addEventListener("resize",layout);
+
+// ---------- cart ----------
+const fmt=n=>n.toLocaleString("tr-TR")+" ₺";
+let cart=[];try{cart=JSON.parse(localStorage.getItem("halo-cart")||"[]").filter(x=>SHOES[x.i])}catch(e){}
+const save=()=>{try{localStorage.setItem("halo-cart",JSON.stringify(cart))}catch(e){}};
+let dStep="cart";
+function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),1800)}
+function count(){return cart.reduce((a,x)=>a+x.q,0)}
+function sub(){return cart.reduce((a,x)=>a+SHOES[x.i].price*x.q,0)}
+function updBadge(pop){const b=$("bagCount");b.textContent=count();if(pop){b.classList.add("pop");setTimeout(()=>b.classList.remove("pop"),400)}}
+function addToCart(i,s){const f=cart.find(x=>x.i===i&&x.s===s);f?f.q++:cart.push({i,s,q:1});save();updBadge(true);renderCart();toast(`${SHOES[i].name} · EU ${s} sepete eklendi`)}
+function openCart(){dStep="cart";renderCart();$("drawer").classList.add("on");$("drawer").setAttribute("aria-hidden","false");$("scrim").classList.add("on");setTimeout(()=>$("dClose").focus(),50)}
+function closeCart(){$("drawer").classList.remove("on");$("drawer").setAttribute("aria-hidden","true");if(!$("sheet").classList.contains("on"))$("scrim").classList.remove("on")}
+function renderCart(){
+  const body=$("dBody"),foot=$("dFoot");
+  if(dStep==="done")return;
+  if(dStep==="checkout"){
+    $("dTitle").textContent="Ödeme";
+    body.innerHTML=`<form class="co" id="co">
+      <label>Ad soyad<input id="coName" required autocomplete="name"></label>
+      <div class="two"><label>Telefon<input id="coTel" required inputmode="tel" placeholder="05xx xxx xx xx"></label><label>E-posta<input id="coMail" type="email" required></label></div>
+      <label>Adres<textarea id="coAdr" rows="3" required></textarea></label>
+      <div class="two"><label>İl<input id="coCity" required></label><label>İlçe<input id="coDist" required></label></div>
+      <div class="pay"><label><input type="radio" name="pay" value="kart" checked> Kredi kartı</label><label><input type="radio" name="pay" value="kapida"> Kapıda ödeme</label></div>
+      <p class="note">Bu bir demo; ödeme alınmaz.</p>
+    </form>`;
+    foot.innerHTML=totals()+`<button class="btn" type="submit" form="co">Siparişi tamamla · ${fmt(total())}</button><button class="btn ghost" id="toCart">← Sepete dön</button>`;
+    $("co").onsubmit=e=>{e.preventDefault();const no="HL"+Math.floor(100000+Math.random()*900000);const name=$("coName").value.split(" ")[0];
+      dStep="done";$("dTitle").textContent="Sipariş alındı";
+      body.innerHTML=`<div class="ok"><div class="tick">✓</div><h4>Teşekkürler ${name}!</h4><p>Sipariş no: <b>${no}</b></p><p>${count()} ürün · ${fmt(total())}</p><p>Kargo bilgisi e-posta adresine gönderilecek.</p></div>`;
+      foot.innerHTML=`<button class="btn" id="contShop">Alışverişe devam et</button>`;
+      cart=[];save();updBadge();
+      $("contShop").onclick=closeCart;};
+    $("toCart").onclick=()=>{dStep="cart";renderCart()};
+    return;
+  }
+  $("dTitle").textContent=`Sepet (${count()})`;
+  if(!cart.length){body.innerHTML=`<div class="empty"><b>Sepetin boş</b>Beğendiğin ayakkabıya tıkla, numaranı seç ve sepete ekle.</div>`;foot.innerHTML=`<button class="btn" id="contShop">Ayakkabılara göz at</button>`;$("contShop").onclick=closeCart;return}
+  body.innerHTML=cart.map((x,k)=>{const s=SHOES[x.i];return `<div class="item">
+    <img src="${s.img}" alt="">
+    <div><h4>${s.name}</h4><div class="sub">EU <select data-k="${k}" aria-label="Numara">${[40,41,42,43,44,45,46].filter(n=>!s.out.includes(n)).map(n=>`<option ${n===x.s?"selected":""}>${n}</option>`).join("")}</select> · ${fmt(s.price)}</div>
+      <div class="qty"><button data-k="${k}" data-d="-1" aria-label="Azalt">−</button><span>${x.q}</span><button data-k="${k}" data-d="1" aria-label="Artır">+</button></div></div>
+    <div class="right"><span class="lp">${fmt(s.price*x.q)}</span><button class="rm" data-rm="${k}">Kaldır</button></div></div>`}).join("");
+  const left=Math.max(0,5000-sub());
+  foot.innerHTML=`<div class="note">${left?`Ücretsiz kargo için ${fmt(left)} daha ekle`:"Kargo ücretsiz 🎉"}</div><div class="free"><i style="width:${Math.min(100,sub()/50)}%"></i></div>`+totals()+`<button class="btn" id="toCo">Ödemeye geç</button>`;
+  $("toCo").onclick=()=>{dStep="checkout";renderCart()};
+}
+const ship=()=>sub()>=5000||!cart.length?0:149;
+const total=()=>sub()+ship();
+function totals(){return `<div class="line"><span>Ara toplam</span><b>${fmt(sub())}</b></div><div class="line"><span>Kargo</span><b>${ship()?fmt(ship()):"Ücretsiz"}</b></div><div class="line total"><span>Toplam</span><b>${fmt(total())}</b></div>`}
+$("dBody").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.rm!==undefined){const x=cart[+b.dataset.rm];cart.splice(+b.dataset.rm,1);toast(`${SHOES[x.i].name} kaldırıldı`)}
+  else if(b.dataset.d){const x=cart[+b.dataset.k];x.q+=+b.dataset.d;if(x.q<1)cart.splice(+b.dataset.k,1)}
+  else return;
+  save();updBadge();renderCart();
+});
+$("dBody").addEventListener("change",e=>{
+  if(!e.target.matches("select"))return;const k=+e.target.dataset.k,x=cart[k],s=+e.target.value;
+  const dup=cart.findIndex((y,j)=>j!==k&&y.i===x.i&&y.s===s);
+  if(dup>-1){cart[dup].q+=x.q;cart.splice(k,1)}else x.s=s;save();renderCart();
+});
+$("bagBtn").onclick=openCart;$("dClose").onclick=closeCart;
+$("scrim").onclick=()=>{closeCart();closeSheet()};
+
+
+// ---------- full details ----------
+const SPECS=[
+ {Malzeme:"Deri ve süet",Taban:"Kauçuk, görünür hava yastığı",Kesim:"Mid",Renk:"Krem / Kahve / Kırmızı",Kod:"HL-R3-118"},
+ {Malzeme:"Tekstil ve sentetik deri",Taban:"Kauçuk cupsole",Kesim:"Mid",Renk:"Siyah / Gri",Kod:"HL-M1-204"},
+ {Malzeme:"Tam tahıllı deri",Taban:"Kauçuk, köşeli diş",Kesim:"High",Renk:"Siyah / Mavi / Beyaz",Kod:"HL-H1-085"},
+ {Malzeme:"Süet ve deri",Taban:"Benekli kauçuk",Kesim:"Low",Renk:"Krem / Zeytin",Kod:"HL-L1-312"},
+ {Malzeme:"Süet, işlemeli detay",Taban:"Kauçuk cupsole",Kesim:"Mid",Renk:"Pembe / Bordo / Krem",Kod:"HL-M1-417"},
+ {Malzeme:"Yanardöner sentetik deri",Taban:"Yarı şeffaf kauçuk",Kesim:"Low",Renk:"Çok renkli / Yeşil",Kod:"HL-L1-520"},
+ {Malzeme:"Süet ve dokulu deri",Taban:"Parlayan yeşil kauçuk",Kesim:"Mid",Renk:"Siyah / Orman yeşili",Kod:"HL-M1-633"}];
+let sSize=null,sIdx=0;
+function openSheet(i){
+  sIdx=i;const s=SHOES[i];sSize=size;
+  $("sImg").src=s.img;$("sName").textContent=s.name;$("sPrice").textContent=fmt(s.price);$("sDesc").textContent=s.d;
+  $("sSpecs").innerHTML=Object.entries(SPECS[i]||{}).map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")+`<dt>Stok</dt><dd>${7-s.out.length} numara mevcut</dd>`;
+  drawSheetSizes();$("sHint").textContent="";
+  const a=$("sAdd");a.className="add";a.textContent="Sepete ekle";a.disabled=false;
+  $("sheet").classList.add("on");$("sheet").setAttribute("aria-hidden","false");$("scrim").classList.add("on");setTimeout(()=>$("sClose").focus(),50);
+}
+function drawSheetSizes(){const s=SHOES[sIdx];$("sSel").textContent=sSize||"—";$("sSizes").innerHTML=[40,41,42,43,44,45,46].map(n=>`<button aria-pressed="${n===sSize}" data-s="${n}" ${s.out.includes(n)?"disabled":""}>${n}</button>`).join("")}
+function closeSheet(){$("sheet").classList.remove("on");$("sheet").setAttribute("aria-hidden","true");if(!$("drawer").classList.contains("on"))$("scrim").classList.remove("on")}
+$("sSizes").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;sSize=+b.dataset.s;$("sHint").textContent="";drawSheetSizes()};
+$("sAdd").onclick=()=>{const a=$("sAdd");
+  if(!sSize){$("sHint").textContent="Önce numara seç";const z=$("sSizes");z.classList.remove("shake");void z.offsetWidth;z.classList.add("shake");return}
+  a.disabled=true;a.innerHTML='<span class="spin"></span>';
+  setTimeout(()=>{addToCart(sIdx,sSize);a.classList.add("done");a.textContent="Sepete eklendi ✓";setTimeout(()=>{closeSheet();openCart()},700)},700)};
+$("sClose").onclick=closeSheet;
+$("fullBtn").onclick=()=>openSheet(sel);
+$("sheet").addEventListener("click",e=>{if(e.target.id==="sheet")closeSheet()});
+addEventListener("keydown",e=>{if(e.key==="Escape"){if($("sheet").classList.contains("on")){closeSheet();e.stopImmediatePropagation()}else if($("drawer").classList.contains("on")){closeCart();e.stopImmediatePropagation()}}},true);
+
+// ---------- search ----------
+const q=$("q"),res=$("results");
+q.addEventListener("input",()=>{const t=q.value.trim().toLocaleLowerCase("tr");if(!t){res.hidden=true;return}
+  const m=SHOES.map((s,i)=>({s,i})).filter(({s})=>s.name.toLocaleLowerCase("tr").includes(t)||s.d.toLocaleLowerCase("tr").includes(t));
+  res.innerHTML=m.length?m.map(({s,i})=>`<button data-i="${i}"><img src="${s.img}" alt="">${s.name}<span style="margin-left:auto;font-family:var(--mono);font-size:10px">${fmt(s.price)}</span></button>`).join(""):"<p>Sonuç yok</p>";res.hidden=false});
+res.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;res.hidden=true;q.value="";openDetail(+b.dataset.i)});
+document.addEventListener("pointerdown",e=>{if(!e.target.closest(".search,.results"))res.hidden=true});
+updBadge();
+
+
+layout();
+setTimeout(()=>els.forEach(el=>el.classList.remove("anim")),900);
+requestAnimationFrame(tick);
+</script>
+
+</body>
+</html>
