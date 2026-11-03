@@ -442,16 +442,18 @@ async function start() {
     return 1;
   };
 
-  let shadowT = -1;
+  let shadowT = -1, camOverride = null;
   function frame(t) {
     const u = pathU(t);
     posCurve.getPoint(u, tmp); tgtCurve.getPoint(u, look);
+    if (camOverride) { tmp.set(...camOverride[0]); look.set(...camOverride[1]); }
     const aspect = cw / ch;
     const pull = aspect < 1 ? 1 + (1 - aspect) * 1.6 : aspect < 1.5 ? 1.12 : 1;
     camera.position.copy(look).add(tmp.sub(look).multiplyScalar(pull));
     camera.lookAt(look);
     // leave room for the copy: on the left on wide screens, at the bottom on tall ones
-    if (aspect < 1) camera.setViewOffset(cw, ch, 0, ch * .2, cw, ch);
+    if (camOverride) camera.clearViewOffset();
+    else if (aspect < 1) camera.setViewOffset(cw, ch, 0, ch * .2, cw, ch);
     else camera.setViewOffset(cw, ch, -cw * (aspect > 1.3 ? .17 : .08), 0, cw, ch);
 
     // the plan plots in on load and stays until the room is built
@@ -578,5 +580,9 @@ async function start() {
   update();
 
   // ?capture: __film.seek(t) jumps to a film second (for posters and checks)
-  if (/[?&]capture\b/.test(location.search)) window.__film = { seek: t => { current = target = t; intro = 1; draw(); } };
+  if (/[?&]capture\b/.test(location.search)) window.__film = {
+    seek: t => { current = target = t; intro = 1; draw(); },
+    // fixed camera for reference renders: __film.view([x, y, z], [lookX, lookY, lookZ], fov); null restores the path
+    view: (pos, at, fov = 36) => { camOverride = pos ? [pos, at] : null; camera.fov = fov; camera.updateProjectionMatrix(); draw(); },
+  };
 }
