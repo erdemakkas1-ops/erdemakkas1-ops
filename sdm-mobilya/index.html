@@ -37,7 +37,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 [hidden]{display:none!important}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 max(20px,env(safe-area-inset-left))}
 section{position:relative}
-.sec{padding:110px 0;border-top:1px solid var(--line)}
+.sec{padding:88px 0;border-top:1px solid var(--line)}
 .sec.alt{background:var(--bg2)}
 
 /* ===== Type helpers ===== */
@@ -45,7 +45,7 @@ section{position:relative}
 .tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brass)}
 .h2{font-size:clamp(30px,4.4vw,54px);line-height:1.05;letter-spacing:-.035em;font-weight:700;margin:18px 0 14px}
 .lead{color:var(--mute);max-width:560px;margin:0;font-size:17px}
-.sec-head{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:end;margin-bottom:56px;padding-bottom:36px;border-bottom:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:end;margin-bottom:40px;padding-bottom:30px;border-bottom:1px solid var(--line)}
 .sec-head .lead{justify-self:end;font-size:15px;font-weight:500}
 
 /* ===== Buttons ===== */
@@ -90,23 +90,29 @@ section{position:relative}
 .chip{font-size:13px;font-weight:600;padding:9px 18px;border-radius:99px;background:var(--surface);border:1px solid var(--line);color:var(--text);transition:border-color .2s,background .2s}
 a.chip:hover{border-color:var(--brass);background:var(--surface2)}
 
-/* ===== Promise strip ===== */
-.promise{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
-.promise div{padding:26px 24px;border-right:1px solid var(--line)}
-.promise div:last-child{border-right:0}
-.promise b{display:block;font-size:16px;margin-bottom:4px}
-.promise span{color:var(--mute);font-size:13.5px}
-.promise i{display:inline-block;font-style:normal;font-family:var(--mono);font-size:11px;color:var(--brass);margin-bottom:12px}
-
 /* ===== Projects ===== */
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
 .filters button{font-size:13px;font-weight:600;padding:9px 16px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--mute);transition:.2s}
 .filters button:hover{color:var(--text)}
 .filters button[aria-pressed="true"]{background:var(--cream);color:var(--brown);border-color:var(--cream)}
-.grid-projects{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+/* Horizontal rail: projects always, services on phones. Keeps the page short. */
+.rail{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;padding:4px 0 8px}
+.rail::-webkit-scrollbar{display:none}
+.rail>*{flex:0 0 calc((100% - 36px)/3);scroll-snap-align:start}
+.rail-ctrl{display:flex;align-items:center;gap:14px;margin-top:22px}
+.rail-nav{flex:1;display:flex;align-items:center;gap:12px;min-width:0}
+.rail-nav[hidden]{display:none!important}
+.rail-nav button{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line2);display:grid;place-items:center;transition:.2s}
+.rail-nav button svg{width:18px;height:18px}
+.rail-nav button:hover:not(:disabled){background:var(--surface2);border-color:var(--brass)}
+.rail-nav button:disabled{opacity:.3;cursor:default}
+.rail-nav .bar{flex:1;height:2px;background:var(--line2);border-radius:2px;overflow:hidden}
+.rail-nav .bar i{display:block;height:100%;background:var(--brass);width:30%;transition:transform .15s}
+.rail-nav .count{font-family:var(--mono);font-size:12px;color:var(--mute);min-width:56px;text-align:right}
+.rail-ctrl .ig{flex:none;height:44px;padding:0 18px;font-size:13.5px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:transform .3s,border-color .3s}
 .card:hover{transform:translateY(-4px);border-color:var(--line2)}
-.proj .media{aspect-ratio:4/5;position:relative;overflow:hidden}
+.proj .media{aspect-ratio:1/1;position:relative;overflow:hidden}
 .proj .media img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
 .proj:hover .media img{transform:scale(1.04)}
 .ph{position:absolute;inset:0;display:flex;align-items:flex-end;padding:16px}
@@ -115,15 +121,14 @@ a.chip:hover{border-color:var(--brass);background:var(--surface2)}
 .proj .badge{position:absolute;top:14px;left:14px;z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;background:rgba(20,17,15,.75);border:1px solid var(--line2);padding:6px 11px;border-radius:99px;color:var(--cream)}
 .proj .body{padding:20px 22px 22px}
 .proj h3{margin:0 0 6px;font-size:18px;letter-spacing:-.01em}
-.proj p{margin:0;color:var(--mute);font-size:14px;line-height:1.55}
+.proj p{margin:0;color:var(--mute);font-size:14px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .proj .meta{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:12px}
 .proj .meta span:first-child{font-family:var(--mono);color:var(--dim);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
 .proj .meta span:last-child{font-weight:700}
-.more{margin-top:34px;text-align:center}
 
 /* ===== Services ===== */
 .grid-services{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.svc{padding:28px 26px 30px}
+.svc{padding:24px 24px 26px}
 .ico{width:46px;height:46px;border-radius:12px;background:var(--surface2);border:1px solid var(--line2);display:grid;place-items:center;margin-bottom:22px;color:var(--cream)}
 .ico svg{width:22px;height:22px}
 .svc h3{margin:0 0 8px;font-size:20px;letter-spacing:-.02em}
@@ -135,7 +140,7 @@ a.chip:hover{border-color:var(--brass);background:var(--surface2)}
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:s}
 .step{padding:28px 24px;position:relative}
 .step .n{font-family:var(--mono);font-size:12px;color:var(--brass);letter-spacing:.1em}
-.step h3{margin:30px 0 8px;font-size:19px;letter-spacing:-.015em}
+.step h3{margin:22px 0 8px;font-size:19px;letter-spacing:-.015em}
 .step p{margin:0;color:var(--mute);font-size:14px}
 .step .free{display:inline-block;margin-top:14px;font-size:11px;font-weight:700;color:var(--brown);background:var(--cream);padding:4px 10px;border-radius:99px}
 .step-line{height:2px;background:linear-gradient(90deg,var(--brass),transparent);margin-top:18px;width:40%;border-radius:2px}
@@ -184,12 +189,8 @@ form.quote .btn{width:100%;margin-top:6px}
 .btn-wa:hover{transform:translateY(-2px);filter:brightness(1.05)}
 .note{font-size:12px;color:var(--dim);text-align:center;margin:12px 0 0}
 
-/* ===== CTA band + Footer ===== */
-.band{border-radius:28px;padding:64px 40px;text-align:center;background:radial-gradient(80% 120% at 50% 0%,rgba(201,164,106,.22),transparent 70%),var(--surface);border:1px solid var(--line2)}
-.band h2{margin:0 0 12px}
-.band .lead{margin:0 auto 30px}
-.band .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:110px}
+/* ===== Footer ===== */
+footer{border-top:1px solid var(--line);padding:52px 0 36px}
 .foot{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px}
 .foot p{color:var(--mute);font-size:14px;max-width:340px}
 .foot h4{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin:6px 0 16px;font-weight:500}
@@ -217,12 +218,10 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:110px}
   .nav.open .menu{display:flex;position:absolute;top:74px;left:0;right:0;flex-direction:column;gap:0;background:var(--bg);box-shadow:0 30px 40px rgba(0,0,0,.5);border-bottom:1px solid var(--line);padding:8px 20px 22px}
   .nav.open .menu a{padding:14px 0;border-bottom:1px solid var(--line);font-size:16px;color:var(--text)}
   .nav.open .menu a.on::after{display:none}
-  .grid-projects,.grid-services{grid-template-columns:1fr 1fr}
+  .grid-services{grid-template-columns:1fr 1fr}
+  .rail>*{flex-basis:calc((100% - 18px)/2)}
   .steps{grid-template-columns:1fr 1fr}
   .swatches{grid-template-columns:repeat(3,1fr)}
-  .promise{grid-template-columns:1fr 1fr}
-  .promise div:nth-child(2){border-right:0}
-  .promise div:nth-child(-n+2){border-bottom:1px solid var(--line)}
   .about,.contact{grid-template-columns:1fr}
   .sec-head{grid-template-columns:1fr;gap:12px}
   .sec-head .lead{justify-self:start}
@@ -230,21 +229,38 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:110px}
 @media (max-width:640px){
   body{font-size:15px}
   .wrap{padding:0 16px}
-  .sec{padding:76px 0}
+  .sec{padding:60px 0}
+  .sec-head{margin-bottom:24px;padding-bottom:20px}
+  .h2{margin:14px 0 6px}
+  .rail,.grid-services{margin:0 -16px;padding:4px 16px 8px;scroll-padding:0 16px;gap:12px}
+  .rail>*,.grid-services>*{flex:0 0 82%;scroll-snap-align:start}
+  .grid-services{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+  .grid-services::-webkit-scrollbar{display:none}
+  .rail-ctrl{flex-wrap:wrap;margin-top:16px}
+  .rail-nav button{display:none}
+  .rail-ctrl .ig{width:100%}
+  .steps{grid-template-columns:1fr 1fr;gap:10px}
+  .step{padding:18px 16px}
+  .step h3{margin:14px 0 6px;font-size:16px}
+  .step p{font-size:13px;line-height:1.5}
+  .step-line{display:none}
+  .swatches{grid-template-columns:repeat(3,1fr);gap:8px}
+  .sw{padding:6px}
+  .sw b{font-size:12px;margin:8px 2px 0;line-height:1.3}
+  .sw span{display:none}
+  .about-visual{display:none}
+  .values{grid-template-columns:1fr 1fr;gap:8px}
+  .values div{padding:12px 14px;font-size:12.5px}
+  .contact{gap:24px}
+  .contact-info .row{padding:12px 0}
   .hero{padding:110px 0 60px}
   .hero-ctas .btn{width:100%;max-width:340px}
-  .grid-projects,.grid-services,.steps{grid-template-columns:1fr}
   .proj .media{aspect-ratio:4/3}
-  .swatches{grid-template-columns:1fr 1fr}
-  .promise{grid-template-columns:1fr}
-  .promise div{border-right:0;border-bottom:1px solid var(--line)}
-  .promise div:last-child{border-bottom:0}
-  .values,.row2{grid-template-columns:1fr}
+  .row2{grid-template-columns:1fr}
   form.quote{padding:22px 18px}
-  .band{padding:44px 20px;border-radius:22px}
-  .band .btn{width:100%}
-  .foot{grid-template-columns:1fr;gap:28px}
-  footer{margin-top:76px}
+  .foot{grid-template-columns:1fr 1fr;gap:24px 16px}
+  .foot>div:first-child{grid-column:1/-1}
+  .copy{margin-top:28px}
   .brand small{display:none}
 }
 </style>
@@ -314,18 +330,8 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:110px}
   </div>
 </section>
 
-<!-- ===== PROMISE ===== -->
-<div class="wrap rv">
-  <div class="promise">
-    <div><i>01</i><b>Ücretsiz keşif</b><span>Adresinize gelip yerinde ölçü alıyoruz.</span></div>
-    <div><i>02</i><b>3D tasarım</b><span>Üretimden önce sonucu birlikte görüyoruz.</span></div>
-    <div><i>03</i><b>Ölçüye özel üretim</b><span>Her santimi değerlendiren çözümler.</span></div>
-    <div><i>04</i><b>Anahtar teslim montaj</b><span>Kurulumu ekibimiz eksiksiz tamamlar.</span></div>
-  </div>
-</div>
-
 <!-- ===== PROJECTS ===== -->
-<section class="sec" id="projeler" style="margin-top:70px">
+<section class="sec" id="projeler">
   <div class="wrap">
     <div class="sec-head">
       <div>
@@ -335,9 +341,14 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:110px}
       <p class="lead rv">Her proje, boş bir duvar ve bir ölçü defteriyle başlar. Ev sahiplerimizle birlikte tasarlayıp, atölyemizde üretip yerinde monte ettiğimiz işlerden bir seçki.</p>
     </div>
     <div class="filters rv" role="group" aria-label="Proje filtresi" id="filters"></div>
-    <div class="grid-projects" id="projects"></div>
-    <div class="more rv">
-      <a class="btn btn-ghost" href="https://www.instagram.com/sdm_mobilya_mimarlk/" target="_blank" rel="noopener"><svg><use href="#ig"/></svg> Tüm projeler Instagram'da</a>
+    <div class="rail rv" id="projects" tabindex="0" aria-label="Projeler, yana kaydırın"></div>
+    <div class="rail-ctrl rv">
+      <div class="rail-nav" id="projects-nav">
+        <button type="button" data-dir="-1" aria-label="Önceki"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button type="button" data-dir="1" aria-label="Sonraki"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        <span class="bar"><i></i></span><span class="count" aria-live="polite"></span>
+      </div>
+      <a class="btn btn-ghost ig" href="https://www.instagram.com/sdm_mobilya_mimarlk/" target="_blank" rel="noopener"><svg><use href="#ig"/></svg> Tümü Instagram'da</a>
     </div>
   </div>
 </section>
@@ -352,7 +363,14 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:110px}
       </div>
       <p class="lead rv">Hazır ölçüler yerine, alanınızın ve alışkanlıklarınızın gerektirdiği mobilyayı tasarlıyoruz.</p>
     </div>
-    <div class="grid-services" id="services"></div>
+    <div class="grid-services rv" id="services"></div>
+    <div class="rail-ctrl rv">
+      <div class="rail-nav" id="services-nav">
+        <button type="button" data-dir="-1" aria-label="Önceki"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button type="button" data-dir="1" aria-label="Sonraki"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        <span class="bar"><i></i></span><span class="count" aria-live="polite"></span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -473,21 +491,6 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:110px}
   </div>
 </section>
 
-<!-- ===== CTA BAND ===== -->
-<section style="padding-top:110px" class="cta-wrap">
-  <div class="wrap">
-    <div class="band rv">
-      <span class="tag">Ücretsiz keşif</span>
-      <h2 class="h2">Hayalinizdeki alan bir ölçü uzaklıkta.</h2>
-      <p class="lead">Randevunuzu oluşturun, ekibimiz adresinize gelip ölçü alsın ve ilk 3D taslağınızı hazırlayalım.</p>
-      <div class="btns">
-        <a class="btn btn-primary" data-wa="Merhaba, ücretsiz keşif ve ölçü için randevu almak istiyorum." href="#">Keşif Randevusu Al <svg><use href="#arrow"/></svg></a>
-        <a class="btn btn-ghost" href="tel:+905358784749">Hemen Ara</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 </main>
 
 <!-- ===== FOOTER ===== -->
@@ -596,7 +599,7 @@ filters.innerHTML = CATEGORIES.map((c,i) => `<button type="button" data-cat="${c
 function renderProjects(cat="all"){
   const list = PROJECTS.filter(p => cat==="all" || p.cat===cat);
   grid.innerHTML = list.map(p => `
-    <article class="card proj rv">
+    <article class="card proj">
       <div class="media" style="background:linear-gradient(160deg,${p.tone[0]},${p.tone[1]})">
         <span class="badge">${esc(p.tag)}</span>
         ${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.title)}" loading="lazy">` : `<div class="ph"><span>Görsel eklenecek</span></div>`}
@@ -607,7 +610,8 @@ function renderProjects(cat="all"){
         <div class="meta"><span>${esc(p.meta)}</span><a href="${waLink(`Merhaba, "${p.title}" projesine benzer bir çalışma için bilgi almak istiyorum.`)}" target="_blank" rel="noopener">Benzerini İste ↗</a></div>
       </div>
     </article>`).join("");
-  observe(grid);
+  grid.scrollLeft = 0;
+  projRail && projRail();
 }
 function setFilter(cat){
   filters.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.cat===cat));
@@ -616,9 +620,33 @@ function setFilter(cat){
 filters.addEventListener("click", e => { const b = e.target.closest("button"); if (b) setFilter(b.dataset.cat); });
 document.querySelectorAll("[data-go]").forEach(a => a.addEventListener("click", () => setFilter(a.dataset.go)));
 
+// Rails: arrows, progress bar and "01 / 09" counter; the nav hides when everything fits
+function rail(el, nav){
+  const [prev, next] = nav.querySelectorAll("button"), bar = nav.querySelector(".bar i"), count = nav.querySelector(".count");
+  const step = () => { const c = el.firstElementChild; return c ? c.getBoundingClientRect().width + (parseFloat(getComputedStyle(el).columnGap) || 0) : el.clientWidth; };
+  nav.addEventListener("click", e => { const b = e.target.closest("button"); if (b) el.scrollBy({left: step() * b.dataset.dir, behavior: "smooth"}); });
+  function update(){
+    const max = el.scrollWidth - el.clientWidth, n = el.children.length;
+    nav.hidden = max <= 4;
+    if (nav.hidden) return;
+    const r = el.clientWidth / el.scrollWidth;
+    bar.style.width = r * 100 + "%";
+    bar.style.transform = `translateX(${(el.scrollLeft / max) * (1 / r - 1) * 100}%)`;
+    prev.disabled = el.scrollLeft < 4; next.disabled = el.scrollLeft > max - 4;
+    const shown = Math.max(1, Math.round(el.clientWidth / step()));
+    const last = el.scrollLeft > max - 4 ? n : Math.min(n, Math.round(el.scrollLeft / step()) + shown);
+    count.textContent = `${String(last).padStart(2, "0")} / ${String(n).padStart(2, "0")}`;
+  }
+  el.addEventListener("scroll", update, {passive: true});
+  addEventListener("resize", update);
+  update();
+  return update;
+}
+let projRail = null;
+
 // Services
 $("#services").innerHTML = SERVICES.map(s => `
-  <article class="card svc rv">
+  <article class="card svc">
     <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${s.icon}</svg></div>
     <h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p>
     <ul>${s.items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>
@@ -670,7 +698,11 @@ const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.
   if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
 }), {threshold:.12}) : null;
 function observe(root=document){ root.querySelectorAll(".rv:not(.in)").forEach(el => io ? io.observe(el) : el.classList.add("in")); }
-renderProjects(); observe();
+renderProjects();
+projRail = rail(grid, $("#projects-nav"));
+rail($("#services"), $("#services-nav"));
+grid.addEventListener("keydown", e => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); grid.scrollBy({left: (e.key === "ArrowRight" ? 1 : -1) * grid.firstElementChild.offsetWidth, behavior: "smooth"}); } });
+observe();
 </script>
 </body>
 </html>
