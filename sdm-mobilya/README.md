@@ -20,10 +20,13 @@ Hero · Taahhütler · Projeler (filtreli) · Hizmetler · Süreç (4 adım) · 
 | `SWATCHES` | Malzeme / renk örnekleri |
 | `CATEGORIES`, `AREAS` | Proje filtreleri ve formdaki alan seçenekleri |
 
-## Görselleri ekleme (sonraki adım)
-1. Fotoğrafları `img/` klasörüne koyun (tercihen `.webp`, ~1200 px genişlik).
-2. `PROJECTS` içindeki ilgili projenin `img: null` alanını değiştirin, örn. `img: "img/siyah-mermer-mutfak.webp"`.
-3. Görseli olmayan kartlar otomatik olarak renkli yer tutucu gösterir.
+## Görseller
+- 6 proje görseli SDM'nin Instagram profil ekran görüntüsünden kırpıldı (`python3 tools/instagram.py`,
+  kaynak `instagram-raw/` içinde, git'e eklenmez). Görseller ~356 px genişliğinde; yayından önce
+  SDM'den tam çözünürlüklü fotoğraflar istenmeli.
+- Giyinme odası, kiler ve banyo kartları hâlâ yer tutucu (`img: null`).
+- Yeni görsel eklemek: dosyayı `img/proje/` içine koyun ve `PROJECTS` içinde ilgili kartın `img`
+  alanına yolunu yazın, örn. `img: "img/proje/giyinme-mozaik.webp"`.
 
 ## Yerelde açmak
 `index.html` dosyasına çift tıklayın ya da bu klasörde `python3 -m http.server` çalıştırıp `http://localhost:8000` adresine gidin.
