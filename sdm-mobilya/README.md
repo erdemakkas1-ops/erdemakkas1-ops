@@ -6,25 +6,26 @@ Saf HTML/CSS/JS'dir, kurulum gerektirmez. Ziyaretçiyi WhatsApp üzerinden tekli
 **Yayın adresi:** `https://erdemakkas1-ops.github.io/erdemakkas1-ops/sdm-mobilya/`
 (`main` dalına her push'ta `.github/workflows/pages.yml` ile yayınlanır.)
 
-## Açılış filmi (Maviron Çelik demosundaki kaydırma filmiyle aynı motor)
-Hero, ekrana sabitlenen bir sahne. Kaydırdıkça three.js ile kodla kurulmuş bir L mutfak + ada
-"film" gibi oynar (`js/film.js`):
+## Açılış filmi (Maviron / D&M Mutfak'taki kaydırma filmiyle aynı fikir)
+Hero ekrana sabitlenen bir sahne; kaydırdıkça aynı mutfağın Gemini ile üretilmiş kareleri birbirine geçer
+(`js/film.js`, kareler `img/film/`, nasıl üretildikleri `GEMINI.md`):
 
-| Film saniyesi | Sahne |
-|---|---|
-| 0–1.1 | Hero; plan çizgileri açılışta çizilir |
-| 1.4–3.3 | 01 Keşif & ölçü: ölçü çizgileri ve etiketleri (420 / 240 / 270 cm, ada 190 × 95) |
-| 3.6–5.7 | 02 3D tasarım: parçalar yarı saydam hacimler olarak belirir, kamera döner |
-| 6–8.2 | 03 Üretim & montaj: gövdeler, kapaklar, tezgahlar, ada gelir; gün ışığı açılır |
-| 8.5–10.2 | Detaylar: shaker kapak, siyah mermer, bordo çıta, pirinç, gizli LED |
-| 10.5–12 | Akşam: LED'ler ve sarkıtlar yanar, keşif çağrısı |
+| Film saniyesi | Kare | Bölüm |
+|---|---|---|
+| 0–1.1 | `1-olcu` (varsa) / `2-tasarim` | Hero |
+| 1.4–3.1 | `1-olcu` / `2-tasarim` | 01 Keşif & ölçü, ölçü etiketleri |
+| 3.4–5.1 | `2-tasarim` | 02 3D tasarım, parça etiketleri |
+| 5.5–7.6 | `3-govde`, ardından `4-gunduz` pirinç bir tarama çizgisiyle soldan sağa açılır | 03 Üretim & montaj |
+| 8.3–9.9 | `4-gunduz` | Detaylar: shaker kapak, siyah mermer, bordo çıta, pirinç sarkıt, ceviz raf |
+| 10.4–12 | `5-aksam` | Kapanış ve keşif çağrısı |
 
-- `#film` üzerindeki `data-map` kaydırma oranını film saniyesine çevirir; sahneler `data-from`/`data-to`,
-  etiketler ayrıca `data-at` (metre cinsinden 3D nokta) kullanır.
-- WebGL2 yoksa, "hareketi azalt" açıksa ya da adrese `?still` eklenirse film yüklenmez, sabit hero görünür.
-- `?capture` ile açıp konsolda `__film.seek(t)` filmi istenen saniyeye atlatır.
-- three.js r180 `js/vendor/` içinden, meşe zemin dokusu (CC0, Poly Haven `oak_veneer_01`) `img/tex/` içinden
-  servis edilir; ikisi de Maviron Çelik demosundaki dosyalar.
+- Kareler `data-in="a,b"` ile a–b saniyeleri arasında öncekilerin üstüne gelir (`data-wipe` varsa tarama ile).
+  Sahneler `data-from`/`data-to`, etiketler ayrıca `data-at="u,v"` (görselin genişlik/yüksekliğine oranla nokta) kullanır.
+- Film boyunca görüntü %7 yavaşça yakınlaşır; etiketler görsele kilitli kalır. Dikey ekranlarda görsel üstte, yazı altta durur.
+- `python3 tools/keyframes.py`: `gemini/` klasöründeki kareleri birbirine hizalar, EDSR ile 2 kat netleştirir ve
+  1920 × 1080 (varsa `-m` için 1080 × 1920) WebP'ye çevirir; paylaşım görseli `img/og.jpg` akşam karesinden üretilir.
+- "Hareketi azalt" açıksa ya da adrese `?still` eklenirse film yerine sabit hero görünür. `?capture` ile `__film.seek(t)`.
+- Önceki three.js sürümü (kodla kurulmuş 3D mutfak) git geçmişinde: commit `cd9e23d`.
 
 ## Bölümler
 Açılış filmi · Projeler (filtreli, yatay kaydırmalı) · Hizmetler (telefonda yatay kaydırmalı) · Süreç (4 adım) · Malzeme & Renk · Hakkımızda · İletişim + WhatsApp teklif formu · Footer · Sabit WhatsApp butonu

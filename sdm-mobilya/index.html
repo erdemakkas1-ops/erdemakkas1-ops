@@ -96,12 +96,20 @@ a.chip:hover{border-color:var(--brass);background:var(--surface2)}
 .film:not(.film--static)::before,.film:not(.film--static)::after{display:none}
 .film__stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--bg)}
 .film--static .film__stage{display:contents}
-.film__canvas{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .6s}
-.film.is-ready .film__canvas{opacity:1}
-.film--static .film__canvas,.film--static .film__notes,.film--static .film__hint,.film--static .film__scene:not(.film__scene--hero){display:none}
+.film__frames{position:absolute;left:0;top:0;width:100%;height:100%;transform-origin:0 0;will-change:transform}
+.film__frame{position:absolute;inset:0;width:100%;height:100%;display:block;visibility:hidden;opacity:0}
+.film__wipe{position:absolute;left:0;top:0;bottom:0;width:3px;margin-left:-1.5px;z-index:1;opacity:0;pointer-events:none;background:linear-gradient(180deg,transparent,var(--brass) 15%,#f3d9a6 50%,var(--brass) 85%,transparent);box-shadow:0 0 24px 4px rgba(201,164,106,.55)}
+.film.is-tall .film__wipe{bottom:auto;height:var(--band)}
+.film.is-tall .film__stage>.film__shade{position:absolute;left:0;right:0;top:calc(var(--band) - 34%);height:34%;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(20,17,15,0),var(--bg))}
+.film.is-tall.is-light .film__stage>.film__shade{background:linear-gradient(180deg,rgba(240,236,230,0),#f0ece6)}
+.film.is-tall.is-light .film__stage{background:#f0ece6}
+.film--static .film__frames,.film--static .film__wipe,.film--static .film__shade,.film--static .film__notes,.film--static .film__hint,.film--static .film__scene:not(.film__scene--hero){display:none}
 .film:not(.film--static) .film__stage::after,.film:not(.film--static) .film__stage::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;transition:opacity .6s}
-.film:not(.film--static) .film__stage::after{background:linear-gradient(90deg,rgba(20,17,15,.9) 0%,rgba(20,17,15,.55) 30%,rgba(20,17,15,0) 55%)}
-.film:not(.film--static) .film__stage::before{opacity:0;background:linear-gradient(90deg,rgba(236,230,221,.94) 0%,rgba(236,230,221,.6) 30%,rgba(236,230,221,0) 55%)}
+.film:not(.film--static) .film__stage::after{background:linear-gradient(90deg,rgba(20,17,15,.92) 0%,rgba(20,17,15,.66) 30%,rgba(20,17,15,0) 56%)}
+.film:not(.film--static) .film__stage::before{opacity:0;background:linear-gradient(90deg,rgba(246,243,238,.96) 0%,rgba(246,243,238,.78) 30%,rgba(246,243,238,0) 56%)}
+html.live-film .nav{background:rgba(20,17,15,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+.film.is-light .film__scene--hero p.lead{color:var(--fg2)}
+.film.is-light .btn-primary{background:#1d1915;color:var(--cream);box-shadow:0 6px 20px rgba(0,0,0,.2)}
 .film.is-light{--fg:#1d1915;--fg2:#51473e}
 .film.is-light .film__stage::after{opacity:0}
 .film.is-light .film__stage::before{opacity:1}
@@ -139,9 +147,8 @@ a.chip:hover{border-color:var(--brass);background:var(--surface2)}
 .film__label--left::after{left:auto;right:8px;transform-origin:right}
 .film__label--left .film__tag{left:auto;right:62px}
 @media (max-aspect-ratio:4/5){
-  .film:not(.film--static) .film__stage::after{background:linear-gradient(0deg,rgba(20,17,15,.95) 0%,rgba(20,17,15,.8) 32%,rgba(20,17,15,0) 52%)}
-  .film:not(.film--static) .film__stage::before{background:linear-gradient(0deg,rgba(236,230,221,.97) 0%,rgba(236,230,221,.82) 32%,rgba(236,230,221,0) 52%)}
-  .film:not(.film--static) .film__scene{top:auto;bottom:clamp(40px,7vh,72px);translate:none;left:16px;width:calc(100% - 32px)}
+  .film:not(.film--static) .film__stage::after,.film:not(.film--static) .film__stage::before{display:none}
+  .film:not(.film--static) .film__scene{top:auto;bottom:clamp(28px,5vh,56px);translate:none;left:16px;width:calc(100% - 32px)}
   .film__label small{display:none}
   .film__label::after{width:24px}
   .film__tag{left:36px;padding:5px 8px}
@@ -368,26 +375,12 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
   .brand small{display:none}
 }
 </style>
-<script type="importmap">
-{
-  "imports": {
-    "three": "./js/vendor/three.module.min.js",
-    "three/addons/environments/RoomEnvironment.js": "./js/vendor/RoomEnvironment.js",
-    "three/addons/geometries/RoundedBoxGeometry.js": "./js/vendor/RoundedBoxGeometry.js"
-  }
-}
-</script>
 <script>
-/* The scroll film needs WebGL2 and motion; otherwise the hero stays a still page (film--static). */
-(function () {
-  var gl = false;
-  try { gl = !!document.createElement("canvas").getContext("webgl2"); } catch (e) {}
-  if (gl && !matchMedia("(prefers-reduced-motion: reduce)").matches && !/[?&]still\b/.test(location.search))
-    document.documentElement.classList.add("live-film");
-})();
+/* The scroll film needs motion; with reduced motion or ?still the hero stays a still page (film--static). */
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches && !/[?&]still\b/.test(location.search))
+  document.documentElement.classList.add("live-film");
 </script>
-<link rel="modulepreload" href="js/vendor/three.module.min.js">
-<link rel="modulepreload" href="js/vendor/three.core.min.js">
+<link rel="preload" as="image" href="img/film/2-tasarim.webp" fetchpriority="high">
 </head>
 <body>
 
@@ -432,12 +425,19 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
 <main id="top">
 
 <!-- ===== HERO / FILM =====
-     A kitchen modelled in three.js (js/film.js), scrubbed by page scroll. data-map: scroll progress →
-     film seconds; scenes and notes use data-from / data-to in film seconds, notes data-at in metres.
-     Without WebGL2, with reduced motion or with ?still the section stays the still hero (film--static). -->
-<section class="hero film film--static" id="film" data-map="0:0,.07:.7,.2:2.9,.34:4.6,.5:6.6,.62:8,.74:9.1,.86:10.4,1:12">
+     SDM kitchen in Gemini keyframes (img/film/, js/film.js), scrubbed by page scroll. data-map: scroll progress →
+     film seconds; frames use data-in, scenes and notes data-from / data-to, notes data-at (fractions of the picture).
+     With reduced motion or with ?still the section stays the still hero (film--static). -->
+<section class="hero film film--static" id="film" data-map="0:0,.07:.7,.2:2.6,.34:4.4,.5:6.4,.62:7.9,.74:9.1,.86:10.4,1:12" data-evening="10.2">
  <div class="film__stage">
-  <canvas class="film__canvas" aria-hidden="true"></canvas>
+  <div class="film__frames" aria-hidden="true">
+    <img class="film__frame" data-in="0,0" src="img/film/2-tasarim.webp" width="1920" height="1080" alt="" fetchpriority="high">
+    <img class="film__frame" data-in="5.2,6" src="img/film/3-govde.webp" width="1920" height="1080" alt="">
+    <img class="film__frame" data-in="7,8.2" data-wipe src="img/film/4-gunduz.webp" width="1920" height="1080" alt="">
+    <img class="film__frame" data-in="10,10.9" src="img/film/5-aksam.webp" width="1920" height="1080" alt="">
+  </div>
+  <div class="film__wipe" aria-hidden="true"></div>
+  <div class="film__shade" aria-hidden="true"></div>
   <div class="film__scene film__scene--hero" data-from="0" data-to="1.1">
   <div class="wrap">
     <span class="tag rv" style="--d:0">Ücretsiz keşif &amp; ölçü hizmeti</span>
@@ -461,26 +461,26 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
   </div>
   </div>
 
-  <div class="film__scene" data-from="1.4" data-to="3.3" aria-hidden="true">
+  <div class="film__scene" data-from="1.4" data-to="3.1" aria-hidden="true">
     <p class="film__eyebrow">01 · Keşif &amp; ölçü</p>
     <p class="film__title">Önce <em>ölçü.</em></p>
     <p class="film__lede">Adresinize gelir; duvarları, tesisatı ve tavan yüksekliğini milimetresine kadar ölçeriz. Keşif ücretsiz.</p>
   </div>
-  <div class="film__scene" data-from="3.6" data-to="5.7" aria-hidden="true">
+  <div class="film__scene" data-from="3.4" data-to="5.1" aria-hidden="true">
     <p class="film__eyebrow">02 · 3D tasarım</p>
     <p class="film__title">Sonra <em>tasarım.</em></p>
     <p class="film__lede">Kapak, renk ve tezgah seçeneklerini 3D olarak birlikte deneriz. Onayınız olmadan üretime geçmeyiz.</p>
   </div>
-  <div class="film__scene" data-from="6" data-to="8.2" aria-hidden="true">
+  <div class="film__scene" data-from="5.5" data-to="7.6" aria-hidden="true">
     <p class="film__eyebrow">03 · Üretim &amp; montaj</p>
     <p class="film__title">Ve <em>montaj.</em></p>
     <p class="film__lede">Gövdeler atölyemizde birebir ölçüyle üretilir. Ekibimiz yerinde kurar: önce gövde, sonra kapaklar, en son tezgah.</p>
   </div>
-  <div class="film__scene" data-from="8.5" data-to="10.2" aria-hidden="true">
+  <div class="film__scene" data-from="8.3" data-to="9.9" aria-hidden="true">
     <p class="film__eyebrow">Anahtar teslim</p>
     <p class="film__title">Detayda <em>ustalık.</em></p>
   </div>
-  <div class="film__scene" data-from="10.5" data-to="99">
+  <div class="film__scene" data-from="10.4" data-to="99">
     <p class="film__eyebrow">Sıra sizin evinizde</p>
     <p class="film__title">Ölçüsü <em>sizin.</em></p>
     <p class="film__lede">Ücretsiz keşif için yazın; ölçüyü alalım, 3D tasarımınızı hazırlayalım.</p>
@@ -490,17 +490,22 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
     </div>
   </div>
 
+  <!-- Notes. data-at: a point on the picture, as fractions of its width and height. -->
   <div class="film__notes" aria-hidden="true">
-    <p class="film__dim" data-from="1.5" data-to="3.4" data-at="2.1,2.75,.05">420 cm<small>A duvarı</small></p>
-    <p class="film__dim" data-from="1.65" data-to="3.4" data-at=".05,2.75,1.3">240 cm<small>B duvarı</small></p>
-    <p class="film__dim" data-from="1.8" data-to="3.4" data-at="4.45,1.35,.05">270 cm<small>Tavan</small></p>
-    <p class="film__dim" data-from="1.95" data-to="3.4" data-at="2.15,.01,2.97">190 × 95 cm<small>Ada</small></p>
+    <p class="film__dim" data-from="1.5" data-to="3.2" data-at=".56,.15">420 cm<small>Mutfak duvarı</small></p>
+    <p class="film__dim" data-from="1.65" data-to="3.2" data-at=".22,.9">240 cm<small>Yan duvar</small></p>
+    <p class="film__dim" data-from="1.8" data-to="3.2" data-at=".905,.42">270 cm<small>Tavan</small></p>
+    <p class="film__dim" data-from="1.95" data-to="3.2" data-at=".6,.72">190 × 95 cm<small>Ada</small></p>
 
-    <p class="film__label" data-from="8.6" data-to="10.3" data-at=".6,.5,2.1"><span class="film__tag"><b>Shaker kapak</b><small>Antrasit mat</small></span></p>
-    <p class="film__label" data-from="8.72" data-to="10.3" data-at="3.05,.87,2.6"><span class="film__tag"><b>Siyah mermer</b><small>Tezgah &amp; şelale ada</small></span></p>
-    <p class="film__label" data-from="8.84" data-to="10.3" data-at="1.7,.45,2.63"><span class="film__tag"><b>Bordo çıta</b><small>Ada paneli</small></span></p>
-    <p class="film__label" data-from="8.96" data-to="10.3" data-at="1.65,1.2,.2"><span class="film__tag"><b>Pirinç detay</b><small>Kulp &amp; armatür</small></span></p>
-    <p class="film__label" data-from="9.08" data-to="10.3" data-at="1,1.43,.3"><span class="film__tag"><b>Gizli LED</b><small>Dolap altı aydınlatma</small></span></p>
+    <p class="film__label" data-from="3.6" data-to="5.1" data-at=".33,.3"><span class="film__tag"><b>Shaker kapak</b><small>Çerçeveli, mat</small></span></p>
+    <p class="film__label" data-from="3.72" data-to="5.1" data-at=".52,.83"><span class="film__tag"><b>Çıtalı ada</b><small>Şelale kenarlı</small></span></p>
+    <p class="film__label" data-from="3.84" data-to="5.1" data-at=".86,.5"><span class="film__tag"><b>Boy dolabı</b><small>Ankastre fırın &amp; buzdolabı</small></span></p>
+
+    <p class="film__label" data-from="8.4" data-to="10" data-at=".3,.3"><span class="film__tag"><b>Shaker kapak</b><small>Antrasit mat</small></span></p>
+    <p class="film__label" data-from="8.52" data-to="10" data-at=".62,.47"><span class="film__tag"><b>Siyah mermer</b><small>Tezgah &amp; tam boy panel</small></span></p>
+    <p class="film__label" data-from="8.64" data-to="10" data-at=".46,.8"><span class="film__tag"><b>Bordo çıta</b><small>Ada paneli</small></span></p>
+    <p class="film__label" data-from="8.76" data-to="10" data-at=".66,.3"><span class="film__tag"><b>Pirinç sarkıt</b><small>Kulp &amp; armatür uyumlu</small></span></p>
+    <p class="film__label" data-from="8.88" data-to="10" data-at=".12,.31"><span class="film__tag"><b>Ceviz raf</b><small>Açık raf</small></span></p>
   </div>
 
   <p class="film__hint" aria-hidden="true">Kaydır</p>
@@ -941,6 +946,6 @@ rail($("#services"), $("#services-nav"));
 grid.addEventListener("keydown", e => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); grid.scrollBy({left: (e.key === "ArrowRight" ? 1 : -1) * grid.firstElementChild.offsetWidth, behavior: "smooth"}); } });
 observe();
 </script>
-<script type="module" src="js/film.js"></script>
+<script src="js/film.js"></script>
 </body>
 </html>
