@@ -237,6 +237,7 @@ html.live-film .nav{background:rgba(20,17,15,.82);backdrop-filter:blur(14px);-we
 .ph::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 2px,transparent 2px 13px),linear-gradient(180deg,transparent 40%,rgba(0,0,0,.35))}
 .ph span{position:relative;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7);background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.14);padding:5px 10px;border-radius:99px;backdrop-filter:blur(4px)}
 .proj .badge{position:absolute;top:14px;left:14px;z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;background:rgba(20,17,15,.75);border:1px solid var(--line2);padding:6px 11px;border-radius:99px;color:var(--cream)}
+.proj .ai-note{position:absolute;right:12px;bottom:12px;z-index:2;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.85);background:rgba(20,17,15,.6);padding:4px 9px;border-radius:99px;pointer-events:none}
 .proj .body{padding:20px 22px 22px}
 .proj h3{margin:0 0 6px;font-size:18px;letter-spacing:-.01em}
 .proj p{margin:0;color:var(--mute);font-size:14px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -969,8 +970,9 @@ const PROJECTS = [
   {cat:"mutfak", title:"Krem & Ceviz Ada Mutfak", desc:"Krem mat shaker kapaklar, açık ahşap üst dolaplar ve bordo mermer tezgahlı ada.", tag:"Mutfak", meta:"3 renk varyasyonu", img:"img/proje/krem-ceviz-ada.webp", tone:["#d8c9ae","#7a4b33"]},
   {cat:"tv",     title:"Krem TV Duvarı", desc:"Ahşap çıtalı çerçeve, açık renk asma ünite ve aydınlatmalı cam vitrin dolap.", tag:"TV Ünitesi", meta:"Yaşam alanı", img:"img/proje/krem-tv-duvari.webp", tone:["#bfae95","#5d4c3b"]},
   {cat:"mutfak", title:"L Mutfak · 3D Varyasyon", desc:"165 + 135 cm L mutfak için hazırladığımız 3D varyasyon çalışması; terracotta vurgu ve açık ahşap tezgah.", tag:"3D Tasarım", meta:"Varyasyon 02", img:"img/proje/l-mutfak-3d.webp", tone:["#d08a5c","#8e5b3c"]},
-  {cat:"giyinme",title:"Mozaik Park Giyinme Odası", desc:"Mozaik Park sitesindeki projemiz: ölçüye özel giyinme odası, açık raf ve askı bölümleri.", tag:"Giyinme Odası", meta:"Mozaik Park", img:null, tone:["#c7b79c","#6e5d48"]},
-  {cat:"kiler",  title:"Kiler Raf Sistemi", desc:"Zeminden tavana ölçüye özel açık raflar; buzdolabı ve beyaz eşya için entegre bölümler.", tag:"Kiler", meta:"Depolama", img:null, tone:["#e0d3bb","#9b8566"]},
+  // ai: a Gemini image standing in until SDM sends a photo of a real job; the card says "Temsili görsel"
+  {cat:"giyinme",title:"Ölçüye Özel Giyinme Odası", desc:"Antrasit shaker kapaklar, ceviz raf ve çekmeceler, LED aydınlatmalı askı bölümleri.", tag:"Giyinme Odası", meta:"Temsili tasarım", img:"img/proje/giyinme-temsili.webp", ai:true, tone:["#c7b79c","#6e5d48"]},
+  {cat:"kiler",  title:"Kiler Raf Sistemi", desc:"Zeminden tavana ölçüye özel açık raflar, ankastre buzdolabı kolonu ve antrasit çekmeceler.", tag:"Kiler", meta:"Temsili tasarım", img:"img/proje/kiler-temsili.webp", ai:true, tone:["#e0d3bb","#9b8566"]},
   {cat:"banyo",  title:"Banyo & Lavabo Dolabı", desc:"Neme dayanıklı malzemeyle ölçüye özel lavabo altı ve boy dolabı çözümleri.", tag:"Banyo", meta:"Ölçüye özel", img:null, tone:["#9aa3a2","#4c5352"]},
 ];
 
@@ -1018,7 +1020,7 @@ function renderProjects(cat="all"){
   grid.innerHTML = list.map(p => `
     <article class="card proj">
       <div class="media" style="background:linear-gradient(160deg,${p.tone[0]},${p.tone[1]})">
-        <span class="badge">${esc(p.tag)}</span>
+        <span class="badge">${esc(p.tag)}</span>${p.ai ? '<span class="ai-note">Temsili görsel</span>' : ''}
         ${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.title)}" loading="lazy">` : `<div class="ph"><span>Görsel eklenecek</span></div>`}
       </div>
       <div class="body">
