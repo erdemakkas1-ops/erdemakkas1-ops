@@ -23,12 +23,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-      # HALO Store stays at the site root; SDM Mobilya is served under /sdm-mobilya/
+      # HALO stays at the site root; each demo gets its own folder next to it
       - name: Assemble site
         run: |
           mkdir -p _site
           cp -r halo-store/. _site/
-          mkdir -p _site/sdm-mobilya
+          rsync -a --exclude instagram-raw arqli-interiors/ _site/arqli-interiors/
           cp -r sdm-mobilya/. _site/sdm-mobilya/
       - uses: actions/upload-pages-artifact@v3
         with:
