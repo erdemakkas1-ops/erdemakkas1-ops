@@ -32,9 +32,22 @@ Hero ekrana sabitlenen bir sahne; kaydırdıkça aynı mutfağın Gemini ile ür
 - Önceki three.js sürümü (kodla kurulmuş 3D mutfak) git geçmişinde: commit `cd9e23d`.
 
 ## Bölümler
-Açılış filmi · Projeler (filtreli, yatay kaydırmalı) · Hizmetler (telefonda yatay kaydırmalı) · Süreç (4 adım) · Malzeme & Renk · Hakkımızda · İletişim + WhatsApp teklif formu · Footer · Sabit WhatsApp butonu
+Açılış filmi · Projeler (filtreli, yatay kaydırmalı) · Hizmetler (telefonda yatay kaydırmalı) · Süreç (4 adım) · Malzeme & Renk ·
+**Işık** (gündüz/akşam karşılaştırma) · **Mutfağını tasarla** · Hakkımızda · İletişim + WhatsApp teklif formu · Footer · Sabit WhatsApp butonu
 
-Sayfa kısa tutulsun diye projeler ve (telefonda) hizmetler alt alta değil yan yana kaydırılan şeritlerde; şeridin altında oklar, ilerleme çubuğu ve `03 / 09` sayacı var.
+- **Işık** (`#isik`, `js/extras.js`): gündüz ve akşam kareleri üst üste; çizgi bir `range` girdisi (klavye ve dokunmayla çalışır).
+  Bölüm ilk göründüğünde çizgi bir kez gidip gelir ki hareket ettiği anlaşılsın ("hareketi azalt" açıksa yapmaz).
+- **Mutfağını tasarla** (`#tasarla`, `js/extras.js`): düz / L / U, ada, A-B-C duvar ölçüleri, kapak, renk, tezgah, LED.
+  Kuşbakışı SVG plan cm cinsinden çizilir; 60 cm alt modüller, A duvarında 35 cm üst dolaplar (davlumbaz için 60 cm boşluk),
+  ada ile dolap arasında 110 cm, yan dolapla ada arasında en az 100 cm koridor. Sonuç (modül sayısı, tezgah metresi)
+  WhatsApp mesajı olarak gönderilir. Rakamlar ilk fikir içindir, teklif değildir.
+- Filmde ve karşılaştırmada "Temsili görseldir" notu var: Gemini kareleri SDM'nin gerçek bir işi değil.
+
+## Paylaşım ve Google
+- `og:image` / Twitter kartı `img/og.jpg` (akşam karesi, 1200 × 630); `canonical` yayın adresini gösterir.
+  Alan adı alınınca `og:url`, `og:image`, `twitter:image`, `canonical` ve JSON-LD'deki adresler güncellenmeli.
+- `application/ld+json` içinde `HomeAndConstructionBusiness` (LocalBusiness) bilgisi var. **Adres ve hizmet bölgesi
+  (`address`, `areaServed`) SDM'den gelince eklenmeli**; yerel aramada en çok bunlar işe yarar.
 
 ## İçeriği düzenleme
 `index.html` dosyasının altındaki `<script>` bölümünün başında tüm içerik dizileri var:
