@@ -1,4 +1,4 @@
-name: Deploy HALO Store to GitHub Pages
+name: Deploy sites to GitHub Pages
 
 on:
   push:
@@ -23,8 +23,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      # HALO Store stays at the site root; SDM Mobilya is served under /sdm-mobilya/
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp -r halo-store/. _site/
+          mkdir -p _site/sdm-mobilya
+          cp -r sdm-mobilya/. _site/sdm-mobilya/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: halo-store
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
