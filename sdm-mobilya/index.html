@@ -205,10 +205,44 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
 .fab::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--wa);animation:pulse 2.4s infinite}
 @keyframes pulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.5);opacity:0}}
 
-/* ===== Reveal ===== */
-.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+/* ===== Scroll animations ===== */
+:root{--ease:cubic-bezier(.2,.7,.1,1)}
+/* fade-up */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .9s var(--ease);transition-delay:calc(var(--d,0)*110ms)}
 .rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rv{opacity:1;transform:none;transition:none}.fab::after{animation:none}*{transition-duration:.01ms!important}}
+/* children one after another */
+.stagger>*{opacity:0;transform:translateY(34px) scale(.97);transition:opacity .7s ease,transform .9s var(--ease),border-color .3s;transition-delay:calc(var(--i,0)*90ms)}
+.stagger.in>*{opacity:1;transform:none}
+.stagger.done>*{transition-delay:0s}
+.stagger.done>.card:hover{transform:translateY(-4px)}
+/* section headings rise word by word */
+.h2.split{opacity:1;transform:none}
+.h2.split .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+.h2.split .w>span{display:inline-block;transform:translateY(110%);transition:transform 1s var(--ease);transition-delay:calc(var(--i)*55ms)}
+.h2.split.in .w>span{transform:none}
+/* project photos wipe in from the bottom */
+.proj .media img{clip-path:inset(100% 0 0 0);transition:clip-path 1.2s cubic-bezier(.7,0,.2,1),transform .6s}
+.stagger.in .proj .media img{clip-path:inset(0);transition-delay:calc(var(--i,0)*90ms + 150ms),0s}
+/* page progress */
+.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:70;background:linear-gradient(90deg,var(--brass),var(--cream));transform-origin:0 50%;transform:scaleX(var(--p,0));pointer-events:none}
+/* hero drifts and fades as you leave it */
+.hero .wrap{transform:translateY(calc(var(--hy,0)*.35px));opacity:calc(1 - var(--hy,0)/700)}
+.hero::before{transform:translateY(calc(var(--hy,0)*-.25px)) scale(calc(1 + var(--hy,0)/2000))}
+/* process line fills with scroll, steps light up in turn */
+.step-line{width:100%;transform-origin:0 50%;transform:scaleX(var(--f,0));transition:transform .2s linear}
+.step{transition:border-color .4s,background .4s}
+.step .n{transition:color .4s}
+.step:not(.lit) .n{color:var(--dim)}
+.step.lit{border-color:rgba(201,164,106,.35);background:linear-gradient(180deg,rgba(201,164,106,.07),transparent 60%),var(--surface)}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv,.stagger>*,.h2.split .w>span{opacity:1;transform:none;transition:none}
+  .proj .media img{clip-path:none}
+  .hero .wrap,.hero::before{transform:none;opacity:1}
+  .step-line{transform:none}
+  .fab::after{animation:none}
+  *{transition-duration:.01ms!important}
+}
 
 /* ===== Responsive ===== */
 @media (max-width:1020px){
@@ -243,7 +277,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
   .step{padding:18px 16px}
   .step h3{margin:14px 0 6px;font-size:16px}
   .step p{font-size:13px;line-height:1.5}
-  .step-line{display:none}
+  .step-line{margin-top:12px}
   .swatches{grid-template-columns:repeat(3,1fr);gap:8px}
   .sw{padding:6px}
   .sw b{font-size:12px;margin:8px 2px 0;line-height:1.3}
@@ -304,19 +338,20 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
   </div>
 </header>
 
+<div class="progress" aria-hidden="true"></div>
 <main id="top">
 
 <!-- ===== HERO ===== -->
 <section class="hero">
   <div class="wrap">
-    <span class="tag rv">Ücretsiz keşif &amp; ölçü hizmeti</span>
-    <h1 class="rv">Evinize <em>ölçüsünde</em>,<br>size özel mobilya.</h1>
-    <p class="lead rv">SDM Mobilya Mimarlık; mutfaktan giyinme odasına, yaşam alanlarınızı ölçüye özel üretim, 3D tasarım ve anahtar teslim montajla hayata geçirir.</p>
-    <div class="hero-ctas rv">
+    <span class="tag rv" style="--d:0">Ücretsiz keşif &amp; ölçü hizmeti</span>
+    <h1 class="rv" style="--d:1">Evinize <em>ölçüsünde</em>,<br>size özel mobilya.</h1>
+    <p class="lead rv" style="--d:2">SDM Mobilya Mimarlık; mutfaktan giyinme odasına, yaşam alanlarınızı ölçüye özel üretim, 3D tasarım ve anahtar teslim montajla hayata geçirir.</p>
+    <div class="hero-ctas rv" style="--d:3">
       <a class="btn btn-primary" data-wa="Merhaba, projem için teklif almak istiyorum." href="#">WhatsApp'tan Teklif Al <svg><use href="#arrow"/></svg></a>
       <a class="btn btn-ghost" href="#projeler">Projeleri Gör <svg><use href="#arrow"/></svg></a>
     </div>
-    <div class="rv">
+    <div class="rv" style="--d:4">
       <div class="chips-label">Çalıştığımız alanlar</div>
       <div class="chips">
         <a class="chip" href="#projeler" data-go="mutfak">Mutfak Dolabı</a>
@@ -341,7 +376,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
       <p class="lead rv">Her proje, boş bir duvar ve bir ölçü defteriyle başlar. Ev sahiplerimizle birlikte tasarlayıp, atölyemizde üretip yerinde monte ettiğimiz işlerden bir seçki.</p>
     </div>
     <div class="filters rv" role="group" aria-label="Proje filtresi" id="filters"></div>
-    <div class="rail rv" id="projects" tabindex="0" aria-label="Projeler, yana kaydırın"></div>
+    <div class="rail stagger" id="projects" tabindex="0" aria-label="Projeler, yana kaydırın"></div>
     <div class="rail-ctrl rv">
       <div class="rail-nav" id="projects-nav">
         <button type="button" data-dir="-1" aria-label="Önceki"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
@@ -363,7 +398,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
       </div>
       <p class="lead rv">Hazır ölçüler yerine, alanınızın ve alışkanlıklarınızın gerektirdiği mobilyayı tasarlıyoruz.</p>
     </div>
-    <div class="grid-services rv" id="services"></div>
+    <div class="grid-services stagger" id="services"></div>
     <div class="rail-ctrl rv">
       <div class="rail-nav" id="services-nav">
         <button type="button" data-dir="-1" aria-label="Önceki"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
@@ -384,11 +419,11 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
       </div>
       <p class="lead rv">Süreç boyunca tek muhatabınız biziz; tasarım, üretim ve montaj aynı ekibin elinden çıkar.</p>
     </div>
-    <div class="steps">
-      <div class="card step rv"><span class="n">ADIM 01</span><div class="step-line"></div><h3>Keşif &amp; Ölçü</h3><p>Adresinize gelir, alanı ölçer; ihtiyaçlarınızı ve beklentilerinizi dinleriz.</p><span class="free">Ücretsiz</span></div>
-      <div class="card step rv"><span class="n">ADIM 02</span><div class="step-line"></div><h3>3D Tasarım</h3><p>Renk, malzeme ve ölçü varyasyonlarını 3D olarak hazırlar, onayınıza sunarız.</p></div>
-      <div class="card step rv"><span class="n">ADIM 03</span><div class="step-line"></div><h3>Üretim</h3><p>Onaylanan tasarım, birebir ölçülerle atölyemizde üretilir.</p></div>
-      <div class="card step rv"><span class="n">ADIM 04</span><div class="step-line"></div><h3>Anahtar Teslim Montaj</h3><p>Ekibimiz montajı yapar, alanı kullanıma hazır şekilde teslim eder.</p></div>
+    <div class="steps stagger" id="steps">
+      <div class="card step"><span class="n">ADIM 01</span><div class="step-line"></div><h3>Keşif &amp; Ölçü</h3><p>Adresinize gelir, alanı ölçer; ihtiyaçlarınızı ve beklentilerinizi dinleriz.</p><span class="free">Ücretsiz</span></div>
+      <div class="card step"><span class="n">ADIM 02</span><div class="step-line"></div><h3>3D Tasarım</h3><p>Renk, malzeme ve ölçü varyasyonlarını 3D olarak hazırlar, onayınıza sunarız.</p></div>
+      <div class="card step"><span class="n">ADIM 03</span><div class="step-line"></div><h3>Üretim</h3><p>Onaylanan tasarım, birebir ölçülerle atölyemizde üretilir.</p></div>
+      <div class="card step"><span class="n">ADIM 04</span><div class="step-line"></div><h3>Anahtar Teslim Montaj</h3><p>Ekibimiz montajı yapar, alanı kullanıma hazır şekilde teslim eder.</p></div>
     </div>
   </div>
 </section>
@@ -403,7 +438,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
       </div>
       <p class="lead rv">Kapak modeli, renk ve tezgah seçeneklerini 3D tasarım aşamasında birlikte deniyoruz. Öne çıkan kombinasyonlarımızdan bazıları:</p>
     </div>
-    <div class="swatches" id="swatches"></div>
+    <div class="swatches stagger" id="swatches"></div>
   </div>
 </section>
 
@@ -419,7 +454,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
       <h2 class="h2 rv">Mobilyayı eve göre değil, size göre yapıyoruz.</h2>
       <p class="rv">SDM Mobilya Mimarlık; iç mimari tasarım ile ölçüye özel mobilya üretimini tek çatı altında buluşturur. Her projeye ücretsiz keşif ve ölçüyle başlar, 3D tasarımla netleştirir, üretim ve montajı kendi ekibimizle tamamlarız.</p>
       <p class="rv">Mutfak dolaplarından TV ünitelerine, giyinme odalarından banyo dolaplarına kadar; estetik ve işlevi aynı anda düşünen, uzun yıllar keyifle kullanacağınız alanlar tasarlıyoruz.</p>
-      <div class="values rv">
+      <div class="values stagger">
         <div><b>Tek muhatap</b>Tasarımdan montaja aynı ekip</div>
         <div><b>Şeffaf süreç</b>3D onay olmadan üretim yok</div>
         <div><b>Detay odaklı</b>Kulptan aydınlatmaya her şey planlı</div>
@@ -440,7 +475,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
       <p class="lead rv">Formu doldurun, mesajınız WhatsApp'ta hazır olarak açılsın. Size en kısa sürede dönüş yapıyoruz.</p>
     </div>
     <div class="contact">
-      <div class="contact-info rv">
+      <div class="contact-info stagger">
         <a class="row" data-wa="Merhaba, bilgi almak istiyorum." href="#">
           <span class="ico" style="color:var(--wa)"><svg style="fill:currentColor"><use href="#wa"/></svg></span>
           <span><small>WhatsApp</small><b>+90 535 878 47 49</b></span>
@@ -612,6 +647,7 @@ function renderProjects(cat="all"){
     </article>`).join("");
   grid.scrollLeft = 0;
   projRail && projRail();
+  if (grid.classList.contains("in")) { grid.classList.remove("in", "done"); requestAnimationFrame(() => requestAnimationFrame(() => play(grid))); }
 }
 function setFilter(cat){
   filters.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.cat===cat));
@@ -654,7 +690,7 @@ $("#services").innerHTML = SERVICES.map(s => `
 
 // Swatches
 $("#swatches").innerHTML = SWATCHES.map(s => `
-  <div class="card sw rv"><div class="c ${s.cls}" style="background:${s.bg}"></div><b>${esc(s.name)}</b><span>${esc(s.type)}</span></div>`).join("");
+  <div class="card sw"><div class="c ${s.cls}" style="background:${s.bg}"></div><b>${esc(s.name)}</b><span>${esc(s.type)}</span></div>`).join("");
 
 // Quote form -> WhatsApp
 $("#q-areas").innerHTML = AREAS.map(a => `<label><input type="checkbox" value="${esc(a)}"><span>${esc(a)}</span></label>`).join("");
@@ -693,11 +729,69 @@ const spy = new IntersectionObserver(entries => entries.forEach(en => {
 }), {rootMargin:"-45% 0px -50% 0px"});
 [".hero","#projeler","#hizmetler","#surec","#hakkimizda","#iletisim"].forEach(s => spy.observe($(s)));
 
-// Reveal on scroll
+// ===== Scroll animations =====
+const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Split section headings into words so they can rise one by one
+if (!calm) document.querySelectorAll(".h2").forEach(h => {
+  let i = 0;
+  (function walk(node){
+    [...node.childNodes].forEach(c => {
+      if (c.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        c.textContent.split(/(\s+)/).forEach(t => {
+          if (!t) return;
+          if (/^\s+$/.test(t)) { frag.append(t); return; }
+          const w = document.createElement("span"), inner = document.createElement("span");
+          w.className = "w"; inner.textContent = t; inner.style.setProperty("--i", i++);
+          w.append(inner); frag.append(w);
+        });
+        c.replaceWith(frag);
+      } else if (c.nodeType === 1 && c.tagName !== "BR") walk(c);
+    });
+  })(h);
+  h.classList.add("split");
+});
+
+// Containers whose children appear one after another
+function play(el){
+  [...el.children].forEach((c, i) => c.style.setProperty("--i", i));
+  el.classList.add("in");
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.add("done"), el.children.length * 90 + 1400);
+}
 const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(en => {
-  if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
-}), {threshold:.12}) : null;
-function observe(root=document){ root.querySelectorAll(".rv:not(.in)").forEach(el => io ? io.observe(el) : el.classList.add("in")); }
+  if (!en.isIntersecting) return;
+  en.target.classList.contains("stagger") ? play(en.target) : en.target.classList.add("in");
+  io.unobserve(en.target);
+}), {threshold:.12, rootMargin:"0px 0px -6% 0px"}) : null;
+function observe(root=document){
+  root.querySelectorAll(".rv:not(.in), .h2:not(.in)").forEach(el => io ? io.observe(el) : el.classList.add("in"));
+  root.querySelectorAll(".stagger:not(.in)").forEach(el => io ? io.observe(el) : play(el));
+}
+
+// Scroll-linked: page progress, hero drift, process line
+const prog = $(".progress"), hero = $(".hero"), steps = [...document.querySelectorAll("#steps .step")], stepsBox = $("#steps");
+let ticking = false;
+function onFrame(){
+  ticking = false;
+  const max = document.documentElement.scrollHeight - innerHeight;
+  prog.style.setProperty("--p", max > 0 ? scrollY / max : 0);
+  if (calm) return;
+  hero.style.setProperty("--hy", Math.min(scrollY, innerHeight));
+  const r = stepsBox.getBoundingClientRect();
+  // 0 when the steps' top reaches 85% of the screen, 1 when their bottom reaches 55%
+  const start = innerHeight * .85, end = innerHeight * .55;
+  const t = Math.min(1, Math.max(0, (start - r.top) / ((start - end) + r.height)));
+  steps.forEach((st, i) => {
+    const f = Math.min(1, Math.max(0, t * steps.length - i));
+    st.querySelector(".step-line") && st.querySelector(".step-line").style.setProperty("--f", f);
+    st.classList.toggle("lit", f > .35);
+  });
+}
+addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onFrame); } }, {passive:true});
+addEventListener("resize", onFrame);
+onFrame();
 renderProjects();
 projRail = rail(grid, $("#projects-nav"));
 rail($("#services"), $("#services-nav"));
