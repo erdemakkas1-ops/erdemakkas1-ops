@@ -5,11 +5,16 @@ phone screenshot of @sdm_mobilya_mimarlk). instagram-raw/ is kept out of git.
 
 Each grid tile is about 356 x 475 px; the top 80 px are dropped to remove the reel / carousel icon
 (a third tuple value cuts extra px, e.g. the swatch labels on krem-ceviz-ada).
-Replace with full-resolution photos from SDM before going live.
+Sharpening: each tile is upscaled 2x with the EDSR super-resolution model (OpenCV dnn_superres,
+`pip install opencv-contrib-python-headless`; model instagram-raw/models/EDSR_x2.pb from
+github.com/Saafke/EDSR_Tensorflow) and then given a light unsharp mask. Without OpenCV or the model it
+falls back to Lanczos. This only makes the screenshot crops cleaner; it cannot add real detail, so
+replace with full-resolution photos from SDM before going live.
 """
 import os
 
-from PIL import Image
+import numpy as np
+from PIL import Image, ImageFilter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "instagram-raw", "profil-ekran.jpg")
@@ -27,12 +32,33 @@ TILES = {
 }
 
 
+MODEL = os.path.join(ROOT, "instagram-raw", "models", "EDSR_x2.pb")
+
+
+def upscaler():
+    try:
+        import cv2
+        sr = cv2.dnn_superres.DnnSuperResImpl_create()
+        sr.readModel(MODEL)
+        sr.setModel("edsr", 2)
+    except Exception as e:  # no OpenCV / no model
+        print("EDSR unavailable, using Lanczos:", e)
+        return lambda t: t.resize((t.width * 2, t.height * 2), Image.LANCZOS)
+
+    def run(tile):
+        bgr = np.asarray(tile)[:, :, ::-1].copy()
+        return Image.fromarray(sr.upsample(bgr)[:, :, ::-1])
+    return run
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     im = Image.open(SRC).convert("RGB")
+    up = upscaler()
     for name, (r, c, *extra) in TILES.items():
         (x0, x1), (y0, y1) = COLS[c], ROWS[r]
         tile = im.crop((x0, y0 + CUT + sum(extra), x1, y1))
+        tile = up(tile).filter(ImageFilter.UnsharpMask(radius=1.6, percent=70, threshold=2))
         tile.save(os.path.join(OUT, name + ".webp"), "WEBP", quality=88, method=6)
         print(name, tile.size)
 

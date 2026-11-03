@@ -7,7 +7,9 @@ Saf HTML/CSS/JS'dir, kurulum gerektirmez. Ziyaretçiyi WhatsApp üzerinden tekli
 (`main` dalına her push'ta `.github/workflows/pages.yml` ile yayınlanır.)
 
 ## Bölümler
-Hero · Taahhütler · Projeler (filtreli) · Hizmetler · Süreç (4 adım) · Malzeme & Renk · Hakkımızda · İletişim + WhatsApp teklif formu · Keşif CTA · Footer · Sabit WhatsApp butonu
+Hero · Projeler (filtreli, yatay kaydırmalı) · Hizmetler (telefonda yatay kaydırmalı) · Süreç (4 adım) · Malzeme & Renk · Hakkımızda · İletişim + WhatsApp teklif formu · Footer · Sabit WhatsApp butonu
+
+Sayfa kısa tutulsun diye projeler ve (telefonda) hizmetler alt alta değil yan yana kaydırılan şeritlerde; şeridin altında oklar, ilerleme çubuğu ve `03 / 09` sayacı var.
 
 ## İçeriği düzenleme
 `index.html` dosyasının altındaki `<script>` bölümünün başında tüm içerik dizileri var:
@@ -22,8 +24,9 @@ Hero · Taahhütler · Projeler (filtreli) · Hizmetler · Süreç (4 adım) · 
 
 ## Görseller
 - 6 proje görseli SDM'nin Instagram profil ekran görüntüsünden kırpıldı (`python3 tools/instagram.py`,
-  kaynak `instagram-raw/` içinde, git'e eklenmez). Görseller ~356 px genişliğinde; yayından önce
-  SDM'den tam çözünürlüklü fotoğraflar istenmeli.
+  kaynak `instagram-raw/` içinde, git'e eklenmez). Kırpımlar EDSR süper çözünürlük modeliyle 2 kat
+  büyütülüp hafifçe keskinleştirildi (~712 px). Bu yalnızca görüntüyü temizler, gerçek detay eklemez;
+  yayından önce SDM'den tam çözünürlüklü fotoğraflar istenmeli.
 - Giyinme odası, kiler ve banyo kartları hâlâ yer tutucu (`img: null`).
 - Yeni görsel eklemek: dosyayı `img/proje/` içine koyun ve `PROJECTS` içinde ilgili kartın `img`
   alanına yolunu yazın, örn. `img: "img/proje/giyinme-mozaik.webp"`.
