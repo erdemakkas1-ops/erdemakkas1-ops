@@ -21,7 +21,11 @@ Hero ekrana sabitlenen bir sahne; kaydırdıkça aynı mutfağın Gemini ile ür
 
 - Kareler `data-in="a,b"` ile a–b saniyeleri arasında öncekilerin üstüne gelir (`data-wipe` varsa tarama ile).
   Sahneler `data-from`/`data-to`, etiketler ayrıca `data-at="u,v"` (görselin genişlik/yüksekliğine oranla nokta) kullanır.
-- Film boyunca görüntü %7 yavaşça yakınlaşır; etiketler görsele kilitli kalır. Dikey ekranlarda görsel üstte, yazı altta durur.
+- Film boyunca görüntü %7 yavaşça yakınlaşır; etiketler görsele kilitli kalır.
+- Dikey ekranlarda (`max-aspect-ratio: 4/5`) `-m` ekli 1080 × 1920 kareler tam ekran gösterilir, yazı alttaki zeminin
+  üzerinde durur; etiketlerin dikey konumu `data-m`. `1-olcu` şimdilik yalnızca dikey var: geniş ekranda o yuvada `2-tasarim` görünür.
+- Gemini dikey karelerde kadrajı çok değiştirdi (akşam karesi gündüzden ~%23 daha yakın); `keyframes.py` bunları oda
+  kabuğuna (tavan kornişi, duvar köşeleri, pencere) göre geniş aralıkta eşleştirip hepsini en sıkı kadraja büyütür.
 - `python3 tools/keyframes.py`: `gemini/` klasöründeki kareleri birbirine hizalar, EDSR ile 2 kat netleştirir ve
   1920 × 1080 (varsa `-m` için 1080 × 1920) WebP'ye çevirir; paylaşım görseli `img/og.jpg` akşam karesinden üretilir.
 - "Hareketi azalt" açıksa ya da adrese `?still` eklenirse film yerine sabit hero görünür. `?capture` ile `__film.seek(t)`.
