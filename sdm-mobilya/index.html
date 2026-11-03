@@ -296,7 +296,15 @@ html.live-film .nav{background:rgba(20,17,15,.82);backdrop-filter:blur(14px);-we
 .cfg-range{display:grid;grid-template-columns:20px 1fr 64px;gap:12px;align-items:center;margin-bottom:10px;font-size:14px;font-weight:700}
 .cfg-range[hidden]{display:none}
 .cfg-range output{font-family:var(--mono);font-size:13px;font-weight:400;color:var(--cream);text-align:right}
-.rng{width:100%;accent-color:var(--brass);height:28px;margin:0}
+.rng{-webkit-appearance:none;appearance:none;width:100%;height:28px;margin:0;background:transparent;cursor:pointer;--p:50%}
+.rng::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--brass) var(--p),rgba(240,225,200,.16) var(--p))}
+.rng::-moz-range-track{height:4px;border-radius:4px;background:rgba(240,225,200,.16)}
+.rng::-moz-range-progress{height:4px;border-radius:4px;background:var(--brass)}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:-8px;border-radius:50%;background:var(--cream);border:3px solid var(--brass);box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.rng::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--cream);border:3px solid var(--brass);box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.rng:focus-visible{outline:none}
+.rng:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(201,164,106,.35)}
+.rng:focus-visible::-moz-range-thumb{box-shadow:0 0 0 4px rgba(201,164,106,.35)}
 .cfg-colors{display:flex;gap:10px;flex-wrap:wrap}
 .cfg-colors label{position:relative;cursor:pointer}
 .cfg-colors input{position:absolute;opacity:0;pointer-events:none}
@@ -304,7 +312,20 @@ html.live-film .nav{background:rgba(20,17,15,.82);backdrop-filter:blur(14px);-we
 .cfg-colors input:checked+span{border-color:var(--cream)}
 .cfg-colors input:focus-visible+span{outline:2px solid var(--brass);outline-offset:2px}
 .cfg-out{padding:20px}
-.cfg-plan{display:block;width:100%;height:auto;max-height:520px;background:#100e0c;border-radius:12px;border:1px solid var(--line)}
+.cfg-view{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#100e0c}
+.cfg-plan{display:block;width:100%;height:auto;max-height:520px}
+.cfg-view canvas,.k3d-tags,.k3d-hint,.k3d-load{display:none}
+.cfg-view.wait3d .k3d-load{display:block;position:absolute;right:10px;top:10px;padding:5px 9px;border-radius:99px;background:rgba(20,17,15,.8);font:500 10.5px/1 var(--mono);letter-spacing:.08em;color:var(--cream2)}
+.cfg-view.is3d{aspect-ratio:4/3}
+.cfg-view.is3d .cfg-plan{display:none}
+.cfg-view.is3d canvas{display:block;position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:pan-y;outline:none}
+.cfg-view.is3d canvas:active{cursor:grabbing}
+.cfg-view.is3d canvas:focus-visible{box-shadow:inset 0 0 0 2px var(--brass)}
+.cfg-view.is3d .k3d-tags{display:block;position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.k3d-tags span{position:absolute;left:0;top:0;padding:5px 9px;border-radius:6px;background:rgba(20,17,15,.84);border:1px solid rgba(201,164,106,.5);color:var(--cream);font:500 11px/1 var(--mono);white-space:nowrap}
+.cfg-view.is3d .k3d-hint{display:flex;align-items:center;gap:6px;position:absolute;left:10px;bottom:10px;padding:6px 10px;border-radius:99px;background:rgba(20,17,15,.8);font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--cream2);pointer-events:none}
+.k3d-hint svg{width:14px;height:14px}
+.cfg-view.is3d+.cfg-key--plan{display:none}
 .cfg-t{font-family:var(--mono);font-size:15px;fill:#e9dcc6}
 .cfg-t--in{fill:#fff;font-size:14px;paint-order:stroke;stroke:rgba(0,0,0,.55);stroke-width:3px}
 .cfg-t--brass{fill:#c9a46a;font-size:13px}
@@ -470,6 +491,16 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px}
   .brand small{display:none}
 }
 </style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "./js/vendor/three.module.min.js",
+    "three/addons/environments/RoomEnvironment.js": "./js/vendor/RoomEnvironment.js",
+    "three/addons/geometries/RoundedBoxGeometry.js": "./js/vendor/RoundedBoxGeometry.js",
+    "three/addons/": "./js/vendor/addons/"
+  }
+}
+</script>
 <script>
 /* The scroll film needs motion; with reduced motion or ?still the hero stays a still page (film--static). */
 if (!matchMedia("(prefers-reduced-motion: reduce)").matches && !/[?&]still\b/.test(location.search))
@@ -775,8 +806,14 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches && !/[?&]still\b/.te
         </fieldset>
       </form>
       <div class="card cfg-out rv">
-        <svg class="cfg-plan" id="cfg-plan" role="img" aria-label="Seçilen mutfağın kuşbakışı planı"></svg>
-        <p class="cfg-key"><span><i class="k-base"></i>Alt dolap</span><span><i class="k-up"></i>Üst dolap</span><span><i class="k-led"></i>LED</span><span><i class="k-dim"></i>Ölçü / koridor (cm)</span></p>
+        <div class="cfg-view" id="cfg-view">
+          <svg class="cfg-plan" id="cfg-plan" role="img" aria-label="Seçilen mutfağın kuşbakışı planı"></svg>
+          <canvas id="k3d" tabindex="0" role="img" aria-label="Seçilen mutfağın 3D görünümü; sürükleyerek ya da ok tuşlarıyla çevirin"></canvas>
+          <div class="k3d-tags" aria-hidden="true"></div>
+          <span class="k3d-load" aria-hidden="true">3D mutfak hazırlanıyor…</span>
+          <span class="k3d-hint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg>Sürükleyerek çevirin</span>
+        </div>
+        <p class="cfg-key cfg-key--plan"><span><i class="k-base"></i>Alt dolap</span><span><i class="k-up"></i>Üst dolap</span><span><i class="k-led"></i>LED</span><span><i class="k-dim"></i>Ölçü / koridor (cm)</span></p>
         <p class="cfg-warn" id="cfg-warn" hidden></p>
         <dl class="cfg-sum" id="cfg-sum"></dl>
         <a class="btn btn-wa" id="cfg-send" href="#" target="_blank" rel="noopener"><svg style="fill:currentColor;width:20px;height:20px"><use href="#wa"/></svg> Taslağı WhatsApp'tan gönder</a>

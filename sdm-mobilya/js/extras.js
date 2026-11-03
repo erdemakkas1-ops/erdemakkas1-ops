@@ -1,11 +1,12 @@
 // Two interactive sections:
 //  #isik   day / evening compare: a range input over two stacked pictures; it sweeps once when it
 //          first comes into view so visitors see that it moves (not with reduced motion).
-//  #tasarla "Mutfağını tasarla": plan type, wall lengths, island, door, colour, worktop and LED give a
-//          top-down SVG plan in cm with module counts and worktop length, and a WhatsApp message.
-//          Rules of thumb: 60 cm base units and modules, 35 cm wall units on wall A with a 60 cm hood gap,
-//          a 110 cm aisle between the run and the island, at least 100 cm between a side run and the
-//          island. The figures are a first idea, not a quote.
+//  #tasarla "Mutfağını tasarla": plan type, wall lengths, island, door, colour, worktop and LED give one
+//          layout in cm (the D&M Mutfak demo's rules: 60 cm base runs, 35 cm wall units, a fridge column
+//          closing the run, a 110 cm aisle in front of the island and 100 cm from a side run). From it:
+//          the 3D kitchen (js/kitchen3d.js, three.js, loaded when the section is near and WebGL2 works),
+//          a top-down SVG plan (shown until then, or instead of it), the module counts and the WhatsApp
+//          message. The figures are a first idea, not a quote.
 (function () {
   const WHATSAPP = "905358784749";
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -41,6 +42,7 @@
   // ---------- Mutfağını tasarla ----------
   const form = document.getElementById("cfg");
   if (!form) return;
+  const view = document.getElementById("cfg-view");
   const svg = document.getElementById("cfg-plan");
   const sum = document.getElementById("cfg-sum");
   const warn = document.getElementById("cfg-warn");
@@ -50,129 +52,165 @@
   const COLORS = { antrasit: ["Antrasit", "#34312e"], krem: ["Krem", "#e6dcc8"], gri: ["Gri", "#9a948b"], ceviz: ["Ceviz", "#8a5f40"], yesil: ["Zeytin yeşili", "#5b6150"] };
   const TOPS = { siyah: ["Siyah mermer", "#1b1a19", "#c9a46a"], beyaz: ["Beyaz mermer", "#efece6", "#b8b2a8"], ahsap: ["Ahşap", "#a9774c", "#6f4b2e"] };
   const TYPES = { duz: "Düz", l: "L", u: "U" };
-  const DOORS = { shaker: "Shaker (çerçeveli)", duz: "Düz kulpsuz", lake: "Parlak lake" };
-  const D = 60, AISLE = 110, SIDE = 100, ISL_D = 90;
+  const DOORS = { klasik: "Shaker (çerçeveli)", kulpsuz: "Düz kulpsuz", lake: "Parlak lake" };
+  const DEPTH = 60, WALL_CAB = 35, AISLE = 110, ISLAND_D = 100, CLEAR = 100, OPEN = 30;
 
   const read = () => {
     const f = new FormData(form);
     return {
-      type: f.get("type"), a: +f.get("a"), b: +f.get("b"), c: +f.get("c"),
-      ada: f.get("ada") === "1", door: f.get("door"), color: f.get("color"), top: f.get("top"), led: f.get("led") === "1",
+      tip: f.get("type"), a: +f.get("a"), b: +f.get("b"), c: +f.get("c"), ada: f.get("ada") === "1",
+      kapak: f.get("door"), renk: f.get("color"), tezgah: f.get("top"), led: f.get("led") === "1",
     };
   };
 
-  function island(o) {
-    const xs = o.type === "duz" ? 40 : D + SIDE, xe = o.type === "u" ? o.a - D - SIDE : o.a - 40;
-    const len = Math.min(220, Math.floor((xe - xs) / 10) * 10);
-    if (len < 120) return { fail: o.type === "u" ? "U planda ada için A duvarı en az 440 cm olmalı." : "Ada için A duvarı biraz kısa; en az 120 cm ada gerekir." };
-    return { x: xs + (xe - xs - len) / 2, y: D + AISLE, len, d: ISL_D };
+  // the plan in cm: runs along the walls, the fridge column, sink, hob and the island if it fits
+  function layout(o) {
+    const L = o.tip !== "duz", U = o.tip === "u";
+    const runs = [{ x: 0, y: 0, w: o.a, h: DEPTH }];
+    if (L) runs.push({ x: 0, y: DEPTH, w: DEPTH, h: o.b - DEPTH });
+    if (U) runs.push({ x: o.a - DEPTH, y: DEPTH, w: DEPTH, h: o.c - DEPTH });
+    const tall = o.tip === "duz" ? { x: 0, y: 0 } : { x: 0, y: o.b - DEPTH };
+    let island = null, islandNote = "";
+    if (o.ada) {
+      const left = L ? DEPTH + CLEAR : OPEN, right = U ? DEPTH + CLEAR : OPEN;
+      const x0 = left, x1 = o.a - right, span = x1 - x0;
+      if (span >= 120) {
+        const len = Math.min(300, Math.max(120, Math.round(o.a * .55 / 10) * 10), Math.floor(span / 10) * 10);
+        island = { x: x0 + (span - len) / 2, y: DEPTH + AISLE, w: len, h: ISLAND_D };
+      } else islandNote = `Ada için ana duvar en az ${left + right + 120} cm olmalı`;
+    }
+    const depthRoom = Math.max(L ? o.b : 0, U ? o.c : 0, island ? island.y + ISLAND_D + 90 : DEPTH + 200);
+    const run = o.a + (L ? o.b - DEPTH : 0) + (U ? o.c - DEPTH : 0);
+    const top = run - DEPTH;
+    const sink = { x: (U ? o.a * .5 : o.a * .62) - 40, y: 8, w: 80, h: 44 };
+    const hob = island ? { x: island.x + island.w / 2 - 30, y: island.y + 20, w: 60, h: 52 }
+      : o.tip === "duz" ? { x: Math.max(DEPTH + 30, o.a * .3) - 30, y: 4, w: 60, h: 52 }
+      : U ? { x: o.a - DEPTH + 4, y: DEPTH + (o.c - DEPTH) / 2 - 30, w: 52, h: 60 }
+      : { x: 4, y: DEPTH + (o.b - 2 * DEPTH) / 2 - 30, w: 52, h: 60 };
+    // counts, the way the 3D view builds them: one front stack per ~60 cm
+    const n = len => len > 20 ? Math.max(1, Math.round(len / 60)) : 0;
+    const base = n((U ? o.a - DEPTH : o.a) - (L || o.tip === "duz" ? DEPTH : 0)) + (L ? n(o.b - 2 * DEPTH) : 0) + (U ? n(o.c - DEPTH) : 0) + (island ? n(island.w - 8) : 0);
+    const wallA = (U ? o.a - WALL_CAB : o.a) - (o.tip === "duz" ? DEPTH : L ? WALL_CAB : 0);
+    const upper = n(wallA) + (L && o.b - DEPTH > WALL_CAB + 30 ? n(o.b - DEPTH - WALL_CAB) : 0) + (U ? n(o.c - WALL_CAB) : 0);
+    return { L, U, runs, tall, island, islandNote, depthRoom, run, top, sink, hob, base, upper };
   }
 
   const el = (name, attrs, text) => {
-    const n = document.createElementNS(NS, name);
-    for (const k in attrs) n.setAttribute(k, attrs[k]);
-    if (text != null) n.textContent = text;
-    svg.appendChild(n);
-    return n;
+    const node = document.createElementNS(NS, name);
+    for (const k in attrs) node.setAttribute(k, attrs[k]);
+    if (text != null) node.textContent = text;
+    svg.appendChild(node);
+    return node;
   };
   const fmt = cm => (cm / 100).toFixed(1).replace(".", ",");
 
-  function draw() {
-    const o = read();
-    form.querySelector('[data-for="b"]').hidden = o.type === "duz";
-    form.querySelector('[data-for="c"]').hidden = o.type !== "u";
-    for (const k of ["a", "b", "c"]) form.querySelector(`output[for="cfg-${k}"]`).textContent = o[k] + " cm";
-
-    const B = o.type !== "duz" ? o.b : 0, C = o.type === "u" ? o.c : 0;
-    const isl = o.ada ? island(o) : null;
-    const ok = isl && !isl.fail;
-    const depth = Math.max(o.type === "duz" ? 300 : 0, B + 60, C + 60, ok ? isl.y + isl.d + 90 : 0);
-    const pad = 64;
+  // top-down plan: shown until the 3D view is ready, and instead of it without WebGL2
+  function plan(o, p) {
+    const pad = 64, depth = p.depthRoom;
     svg.setAttribute("viewBox", `${-pad} ${-pad} ${o.a + 2 * pad} ${depth + pad + 24}`);
     svg.textContent = "";
-    const [, front] = COLORS[o.color], [, topFill, topLine] = TOPS[o.top];
-
+    const front = COLORS[o.renk][1], [, topFill, topLine] = TOPS[o.tezgah];
     el("rect", { x: 0, y: 0, width: o.a, height: depth, fill: "#1b1714" });
-    // floor grid every 50 cm
     for (let x = 50; x < o.a; x += 50) el("line", { x1: x, y1: 0, x2: x, y2: depth, stroke: "rgba(240,225,200,.05)" });
     for (let y = 50; y < depth; y += 50) el("line", { x1: 0, y1: y, x2: o.a, y2: y, stroke: "rgba(240,225,200,.05)" });
-
-    // runs: [x, y, w, h, along x?]
-    const runs = [[0, 0, o.a, D, true]];
-    if (B) runs.push([0, D, D, B - D, false]);
-    if (C) runs.push([o.a - D, D, D, C - D, false]);
-    for (const [x, y, w, h, horiz] of runs) {
-      el("rect", { x, y, width: w, height: h, fill: front, stroke: topLine, "stroke-width": 2.5 });
-      const len = horiz ? w : h;
+    p.runs.forEach((r, k) => {
+      el("rect", { x: r.x, y: r.y, width: r.w, height: r.h, fill: front, stroke: topLine, "stroke-width": 2.5 });
+      const horiz = k === 0, len = horiz ? r.w : r.h;
       for (let m = 60; m < len - 1; m += 60)
-        horiz ? el("line", { x1: x + m, y1: y, x2: x + m, y2: y + h, stroke: "rgba(0,0,0,.35)", "stroke-width": 1.2 })
-              : el("line", { x1: x, y1: y + m, x2: x + w, y2: y + m, stroke: "rgba(0,0,0,.35)", "stroke-width": 1.2 });
+        horiz ? el("line", { x1: r.x + m, y1: r.y, x2: r.x + m, y2: r.y + r.h, stroke: "rgba(0,0,0,.35)", "stroke-width": 1.2 })
+              : el("line", { x1: r.x, y1: r.y + m, x2: r.x + r.w, y2: r.y + m, stroke: "rgba(0,0,0,.35)", "stroke-width": 1.2 });
+    });
+    el("rect", { x: p.tall.x, y: p.tall.y, width: DEPTH, height: DEPTH, fill: front, stroke: "#efe4d2", "stroke-width": 2 });
+    el("line", { x1: p.tall.x, y1: p.tall.y, x2: p.tall.x + DEPTH, y2: p.tall.y + DEPTH, stroke: "rgba(239,228,210,.5)" });
+    el("line", { x1: p.tall.x + DEPTH, y1: p.tall.y, x2: p.tall.x, y2: p.tall.y + DEPTH, stroke: "rgba(239,228,210,.5)" });
+    el("rect", { x: 4, y: 4, width: o.a - 8, height: WALL_CAB - 4, fill: "none", stroke: "rgba(240,225,200,.45)", "stroke-dasharray": "6 5", "stroke-width": 1.2 });
+    el("rect", { x: p.sink.x, y: p.sink.y, width: p.sink.w, height: p.sink.h, rx: 5, fill: "rgba(0,0,0,.35)", stroke: "rgba(255,255,255,.55)", "stroke-width": 1.2 });
+    const hx = p.hob.x + p.hob.w / 2, hy = p.hob.y + p.hob.h / 2;
+    for (const [dx, dy] of [[-13, -12], [13, -12], [-13, 12], [13, 12]]) el("circle", { cx: hx + dx, cy: hy + dy, r: 8, fill: "none", stroke: "rgba(255,255,255,.6)", "stroke-width": 1.2 });
+    if (o.led) el("line", { x1: 6, y1: WALL_CAB + 3, x2: o.a - 6, y2: WALL_CAB + 3, stroke: "#ffcf8a", "stroke-width": 2.2, opacity: .85 });
+    const is = p.island;
+    if (is) {
+      el("rect", { x: is.x, y: is.y, width: is.w, height: is.h, fill: topFill, stroke: topLine, "stroke-width": 2.5, rx: 2 });
+      el("rect", { x: is.x + 6, y: is.y + 6, width: is.w - 12, height: 54, fill: front, opacity: .9 });
+      for (let k = 0; k < Math.max(1, Math.min(4, Math.floor(is.w / 60))); k++) el("circle", { cx: is.x + is.w * (k + .5) / Math.max(1, Math.min(4, Math.floor(is.w / 60))), cy: is.y + is.h + 22, r: 16, fill: "none", stroke: "rgba(240,225,200,.5)", "stroke-width": 1.4 });
+      el("text", { x: is.x + is.w / 2, y: is.y + is.h - 16, "text-anchor": "middle", class: "cfg-t cfg-t--in" }, `Ada ${is.w} × ${is.h}`);
+      const ax = is.x + 18;
+      el("line", { x1: ax, y1: DEPTH, x2: ax, y2: is.y, stroke: "#c9a46a", "stroke-width": 1.2 });
+      el("text", { x: ax + 7, y: (DEPTH + is.y) / 2 + 5, class: "cfg-t cfg-t--brass" }, `${AISLE} cm`);
     }
-    // worktop front edge
-    el("line", { x1: B ? D : 0, y1: D, x2: C ? o.a - D : o.a, y2: D, stroke: topLine, "stroke-width": 3 });
-    // wall units on wall A (dashed), hood gap over the hob
-    const hob = Math.round(o.a * .62 / 10) * 10, sink = Math.max(B ? 90 : 40, Math.round(o.a * .28 / 10) * 10);
-    el("rect", { x: 4, y: 4, width: o.a - 8, height: 31, fill: "none", stroke: "rgba(240,225,200,.45)", "stroke-dasharray": "6 5", "stroke-width": 1.2 });
-    el("rect", { x: hob - 30, y: 2, width: 60, height: 35, fill: "#1b1714", stroke: "rgba(240,225,200,.45)", "stroke-width": 1.2 });
-    // sink and hob
-    el("rect", { x: sink - 25, y: 14, width: 50, height: 36, rx: 5, fill: "rgba(0,0,0,.35)", stroke: "rgba(255,255,255,.55)", "stroke-width": 1.2 });
-    for (const [dx, dy] of [[-13, -9], [13, -9], [-13, 9], [13, 9]]) el("circle", { cx: hob + dx, cy: 32 + dy, r: 7, fill: "none", stroke: "rgba(255,255,255,.55)", "stroke-width": 1.2 });
-    if (o.led) el("line", { x1: 6, y1: 38, x2: o.a - 6, y2: 38, stroke: "#ffcf8a", "stroke-width": 2.2, opacity: .85 });
-
-    // island and its aisle
-    if (ok) {
-      el("rect", { x: isl.x, y: isl.y, width: isl.len, height: isl.d, fill: topFill, stroke: topLine, "stroke-width": 2.5, rx: 2 });
-      el("rect", { x: isl.x + 6, y: isl.y + 6, width: isl.len - 12, height: isl.d - 12, fill: front, opacity: .9 });
-      for (let i = 0; i < Math.floor(isl.len / 70); i++) el("circle", { cx: isl.x + 35 + i * 70, cy: isl.y + isl.d + 24, r: 16, fill: "none", stroke: "rgba(240,225,200,.5)", "stroke-width": 1.4 });
-      el("text", { x: isl.x + isl.len / 2, y: isl.y + isl.d / 2 + 5, "text-anchor": "middle", class: "cfg-t cfg-t--in" }, `Ada ${isl.len} × ${isl.d}`);
-      // the aisle between the run and the island, on the island's left
-      const ax = isl.x + 18;
-      el("line", { x1: ax, y1: D, x2: ax, y2: isl.y, stroke: "#c9a46a", "stroke-width": 1.2 });
-      el("text", { x: ax + 7, y: (D + isl.y) / 2 + 5, class: "cfg-t cfg-t--brass" }, `${AISLE} cm`);
-    }
-    // walls
-    const wall = d => el("path", { d, fill: "none", stroke: "#efe4d2", "stroke-width": 6, "stroke-linecap": "square" });
-    wall(`M0 ${depth} V0 H${o.a} V${depth}`);
-    // dimensions
+    el("path", { d: `M0 ${depth} V0 H${o.a} V${depth}`, fill: "none", stroke: "#efe4d2", "stroke-width": 6 });
     const dim = (x1, y1, x2, y2, label, vert) => {
       el("line", { x1, y1, x2, y2, stroke: "#c9a46a", "stroke-width": 1.2 });
-      for (const [x, y] of [[x1, y1], [x2, y2]]) el("line", vert ? { x1: x - 7, y1: y, x2: x + 7, y2: y } : { x1: x, y1: y - 7, x2: x, y2: y + 7 }, null).setAttribute("stroke", "#c9a46a");
-      const t = el("text", { x: (x1 + x2) / 2, y: (y1 + y2) / 2 - (vert ? 0 : 8), "text-anchor": "middle", class: "cfg-t" }, label);
-      if (vert) t.setAttribute("transform", `rotate(-90 ${(x1 + x2) / 2 - 8} ${(y1 + y2) / 2})`), t.setAttribute("x", (x1 + x2) / 2 - 8);
+      const t = el("text", { x: (x1 + x2) / 2 - (vert ? 8 : 0), y: (y1 + y2) / 2 - (vert ? 0 : 8), "text-anchor": "middle", class: "cfg-t" }, label);
+      if (vert) t.setAttribute("transform", `rotate(-90 ${(x1 + x2) / 2 - 8} ${(y1 + y2) / 2})`);
     };
     dim(0, -26, o.a, -26, `A · ${o.a} cm`);
-    if (B) dim(-26, 0, -26, B, `B · ${B} cm`, true);
-    if (C) dim(o.a + 26, 0, o.a + 26, C, `C · ${C} cm`, true);
+    if (p.L) dim(-26, 0, -26, o.b, `B · ${o.b} cm`, true);
+    if (p.U) dim(o.a + 26, 0, o.a + 26, o.c, `C · ${o.c} cm`, true);
+  }
 
-    // figures
-    const base = Math.floor(o.a / 60) + (B ? Math.floor((B - D) / 60) : 0) + (C ? Math.floor((C - D) / 60) : 0);
-    const upper = Math.max(0, Math.floor((o.a - 60) / 60));
-    const worktop = o.a + (B ? B - D : 0) + (C ? C - D : 0) + (ok ? isl.len : 0);
+  let view3d = null;
+  function update() {
+    const o = read();
+    form.querySelector('[data-for="b"]').hidden = o.tip === "duz";
+    form.querySelector('[data-for="c"]').hidden = o.tip !== "u";
+    for (const k of ["a", "b", "c"]) {
+      form.querySelector(`output[for="cfg-${k}"]`).textContent = o[k] + " cm";
+      const r = form.elements[k];
+      r.style.setProperty("--p", ((r.value - r.min) / (r.max - r.min) * 100) + "%");  // filled part of the track
+    }
+    const p = layout(o);
+    plan(o, p);
+    if (view3d) view3d.update(o, p);
+
+    const worktop = p.top + (p.island ? p.island.w : 0);
     const rows = [
-      ["Plan", `${TYPES[o.type]} mutfak${ok ? " + ada" : ""}`],
-      ["Alt modül", `${base} adet`],
-      ["Üst dolap", `${upper} adet`],
+      ["Plan", `${TYPES[o.tip]} mutfak${p.island ? " + ada" : ""}`],
+      ["Alt modül", `${p.base} adet`],
+      ["Üst dolap", `${p.upper} adet`],
       ["Tezgah", `~${fmt(worktop)} m`],
     ];
     sum.innerHTML = rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
-    warn.hidden = !(isl && isl.fail);
-    warn.textContent = isl && isl.fail ? isl.fail : "";
+    warn.hidden = !p.islandNote;
+    warn.textContent = p.islandNote ? p.islandNote + "." : "";
 
     const msg = [
       "Merhaba SDM Mobilya, sitenizdeki tasarım aracıyla bir mutfak taslağı hazırladım:",
-      `• Plan: ${TYPES[o.type]}${o.ada ? (ok ? " + ada" : " (ada sığmadı)") : ""}`,
-      `• Duvar A: ${o.a} cm${B ? `, B: ${B} cm` : ""}${C ? `, C: ${C} cm` : ""}`,
-      ok ? `• Ada: ${isl.len} × ${isl.d} cm` : null,
-      `• Kapak: ${DOORS[o.door]}, ${COLORS[o.color][0]}`,
-      `• Tezgah: ${TOPS[o.top][0]}`,
+      `• Plan: ${TYPES[o.tip]}${o.ada ? (p.island ? " + ada" : " (ada sığmadı)") : ""}`,
+      `• Duvar A: ${o.a} cm${p.L ? `, B: ${o.b} cm` : ""}${p.U ? `, C: ${o.c} cm` : ""}`,
+      p.island ? `• Ada: ${p.island.w} × ${p.island.h} cm` : null,
+      `• Kapak: ${DOORS[o.kapak]}, ${COLORS[o.renk][0]}`,
+      `• Tezgah: ${TOPS[o.tezgah][0]}`,
       `• Gizli LED: ${o.led ? "Evet" : "Hayır"}`,
-      `• Tahmini: ${base} alt modül, ${upper} üst dolap, ~${fmt(worktop)} m tezgah`,
+      `• Tahmini: ${p.base} alt modül, ${p.upper} üst dolap, ~${fmt(worktop)} m tezgah`,
       "Ücretsiz keşif için randevu almak istiyorum.",
     ].filter(Boolean).join("\n");
     send.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
   }
 
-  form.addEventListener("input", draw);
-  form.addEventListener("change", draw);
-  draw();
+  form.addEventListener("input", update);
+  form.addEventListener("change", update);
+  update();
+
+  // 3D: three.js loads once the page has loaded, or earlier if the section comes within ~600 px.
+  // The plan stays until the kitchen is ready, and for good without WebGL2 or if loading fails.
+  const hasGL = (() => { try { return !!document.createElement("canvas").getContext("webgl2"); } catch (e) { return false; } })();
+  if (hasGL) {
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true; io.disconnect();
+      view.classList.add("wait3d");
+      import("./kitchen3d.js").then(m => {
+        view3d = m.mount(view);
+        view.classList.remove("wait3d");
+        view.classList.add("is3d");
+        update();
+      }).catch(err => { view.classList.remove("wait3d", "is3d"); console.warn("3D view unavailable, showing the plan", err); });
+    };
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) start(); }, { rootMargin: "600px 0px" });
+    io.observe(view);
+    if (document.readyState === "complete") setTimeout(start, 600);
+    else addEventListener("load", () => setTimeout(start, 600), { once: true });
+  }
 })();

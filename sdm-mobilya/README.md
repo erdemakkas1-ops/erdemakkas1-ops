@@ -37,10 +37,14 @@ Açılış filmi · Projeler (filtreli, yatay kaydırmalı) · Hizmetler (telefo
 
 - **Işık** (`#isik`, `js/extras.js`): gündüz ve akşam kareleri üst üste; çizgi bir `range` girdisi (klavye ve dokunmayla çalışır).
   Bölüm ilk göründüğünde çizgi bir kez gidip gelir ki hareket ettiği anlaşılsın ("hareketi azalt" açıksa yapmaz).
-- **Mutfağını tasarla** (`#tasarla`, `js/extras.js`): düz / L / U, ada, A-B-C duvar ölçüleri, kapak, renk, tezgah, LED.
-  Kuşbakışı SVG plan cm cinsinden çizilir; 60 cm alt modüller, A duvarında 35 cm üst dolaplar (davlumbaz için 60 cm boşluk),
-  ada ile dolap arasında 110 cm, yan dolapla ada arasında en az 100 cm koridor. Sonuç (modül sayısı, tezgah metresi)
-  WhatsApp mesajı olarak gönderilir. Rakamlar ilk fikir içindir, teklif değildir.
+- **Mutfağını tasarla** (`#tasarla`, `js/extras.js` + `js/kitchen3d.js`): düz / L / U, ada, A-B-C duvar ölçüleri,
+  kapak (shaker / düz kulpsuz / parlak lake), renk, tezgah (siyah mermer / beyaz mermer / ahşap), LED.
+  Tek bir cm yerleşimi (D&M Mutfak demosunun kuralları: 60 cm alt dolap, 35 cm üst dolap, koşuyu kapatan buzdolabı
+  kolonu, adanın önünde 110 cm, yan dolaptan 100 cm koridor) hem 3D'yi, hem kuşbakışı planı, hem modül sayılarını,
+  hem WhatsApp mesajını üretir. 3D mutfak three.js r180 ile (`js/vendor/`, import map `<head>` içinde), bölüme
+  ~600 px kala ya da sayfa yüklenince yüklenir; sürükleyerek / ok tuşlarıyla döner, masaüstünde GTAO gölgelendirme
+  yapar. WebGL2 yoksa ya da yükleme başarısız olursa plan görünür. `js/kitchen3d.js` D&M'nin modülünden uyarlandı
+  (pirinç bar kulp, shaker çerçeve, mermer / ahşap tezgah, pirinç kubbe sarkıtlar). Rakamlar ilk fikir içindir.
 - Filmde ve karşılaştırmada "Temsili görseldir" notu var: Gemini kareleri SDM'nin gerçek bir işi değil.
 
 ## Paylaşım ve Google
