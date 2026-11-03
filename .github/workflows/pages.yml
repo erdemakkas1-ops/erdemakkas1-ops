@@ -29,6 +29,7 @@ jobs:
           mkdir -p _site
           cp -r halo-store/. _site/
           rsync -a --exclude instagram-raw arqli-interiors/ _site/arqli-interiors/
+          cp -r sdm-mobilya/. _site/sdm-mobilya/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
