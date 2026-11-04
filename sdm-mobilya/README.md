@@ -73,5 +73,13 @@ Açılış filmi · Projeler (filtreli, yatay kaydırmalı) · Hizmetler (telefo
 - Yeni görsel eklemek: dosyayı `img/proje/` içine koyun ve `PROJECTS` içinde ilgili kartın `img`
   alanına yolunu yazın, örn. `img: "img/proje/giyinme-mozaik.webp"`.
 
+## Vercel'de yayınlamak
+Kurulum gerektirmez; `vercel.json` önbellek ve güvenlik başlıklarını ayarlar.
+1. vercel.com → **Add New… → Project** → GitHub'dan `erdemakkas1-ops/erdemakkas1-ops` reposunu içe aktar.
+2. **Root Directory:** `sdm-mobilya` · **Framework Preset:** Other · Build ve Output ayarları boş kalır.
+3. **Deploy.** Sonraki her `main` push'unda Vercel kendiliğinden yeniden yayınlar.
+Alan adı alındığında Vercel'de **Settings → Domains** altından eklenir; ardından `index.html` içindeki
+`og:url`, `og:image`, `twitter:image`, `canonical` ve JSON-LD adresleri yeni adrese çevrilmeli.
+
 ## Yerelde açmak
 `index.html` dosyasına çift tıklayın ya da bu klasörde `python3 -m http.server` çalıştırıp `http://localhost:8000` adresine gidin.
