@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowUpRight, Sofa } from 'lucide-react';
 import { buildFloorTexture, CAMERA, patterns, projectFloor, tones, type PatternId } from '@/lib/floor';
 import { whatsappLink } from '@/lib/site';
+import { asset } from '@/lib/asset';
 
 const thicknesses = ['8 mm', '10 mm', '12 mm', 'Masif / Lamine'];
 
@@ -33,7 +34,7 @@ export default function FloorDesigner() {
 
   useEffect(() => {
     let alive = true;
-    Promise.all([loadImage('/images/designer/shell.webp'), loadImage('/images/designer/light.webp'), loadImage('/images/designer/furniture.webp')])
+    Promise.all([loadImage(asset('/images/designer/shell.webp')), loadImage(asset('/images/designer/light.webp')), loadImage(asset('/images/designer/furniture.webp'))])
       .then(([shell, light, furn]) => { if (alive) { layersRef.current = { shell, light, furniture: furn }; setReady(true); } })
       .catch(() => {});
     return () => { alive = false; };

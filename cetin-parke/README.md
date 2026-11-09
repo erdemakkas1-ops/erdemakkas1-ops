@@ -8,7 +8,8 @@
 - **Parke Rehberi** (`#rehber`, `components/ParkeGuide.tsx`): parke türleri (laminant, lamine, masif, SPC), dizilim örnekleri (canlı çizilen desenler), renk tonları, kalınlık / AC sınıfı, uygulama süreci, SSS.
 - Eski "konsept renk dönüşümü" bölümü ve ilgisiz Unsplash öncesi/sonrası karşılaştırması kaldırıldı (yerini film ve Tasarla aldı). Kullanılmayan `hero/` ve `floor/` kare dizileri silindi.
 - Bilgiler Instagram (@cetin.parke) ile teyit edildi: telefon 0543 457 63 64, adres **Türkocağı Cad. No:56, Pamukova/Sakarya**, ürünler Parke · Duvar Paneli · Kapı · Banyo, Türkiye geneli kargo. (Önceki "Elerek Mah." ibaresi doğrulanamadığı için çıkarıldı.)
-- Vercel: proje kökü olarak `cetin-parke` klasörünü seçin.
+- **GitHub Pages:** https://erdemakkas1-ops.github.io/erdemakkas1-ops/cetin-parke/ (`main`e her push'ta `.github/workflows/pages.yml` statik export alır: `PAGES_BASE_PATH=/erdemakkas1-ops/cetin-parke npm run build` → `out/`).
+- Vercel: proje kökü olarak `cetin-parke` klasörünü seçin (base path gerekmez).
 
 
 Premium Turkish business website demo. Built from scratch in **Next.js App Router + React + TypeScript + GSAP ScrollTrigger + Lenis**.

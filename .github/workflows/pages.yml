@@ -23,6 +23,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Çetin Parke is a Next.js app: export it as a static site under its sub-folder
+      - name: Build Çetin Parke
+        working-directory: cetin-parke
+        env:
+          PAGES_BASE_PATH: /erdemakkas1-ops/cetin-parke
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
       # HALO stays at the site root; each demo gets its own folder next to it
       - name: Assemble site
         run: |
@@ -30,6 +41,8 @@ jobs:
           cp -r halo-store/. _site/
           rsync -a --exclude instagram-raw arqli-interiors/ _site/arqli-interiors/
           cp -r sdm-mobilya/. _site/sdm-mobilya/
+          cp -r cetin-parke/out/. _site/cetin-parke/
+          touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
