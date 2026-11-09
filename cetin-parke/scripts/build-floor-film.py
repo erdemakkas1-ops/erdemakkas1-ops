@@ -55,6 +55,39 @@ shell_mask = ((furniture > 0) & (floor_hard < 1)).astype(np.uint8) * 255
 shell_mask = cv2.dilate(shell_mask, np.ones((7, 7), np.uint8))
 shell = cv2.inpaint(img8, shell_mask, 11, cv2.INPAINT_TELEA).astype(np.float32) / 255
 
+
+def rebuild_back_wall(shell, hole):
+    """Replace the blurry inpaint behind the sofa with reconstructed structure:
+    plain wall, doorway posts, dining-room floor seen through the doorway, curtain."""
+    out = shell.copy()
+    rnd = np.random.default_rng(11)
+    gray_hp = photo[300:360, 1000:1080] - cv2.GaussianBlur(photo[300:360, 1000:1080], (0, 0), 4)
+    floor_px = photo[488:494, 600:930].reshape(-1, 3)
+    floor_px = floor_px[floor_px.mean(1) > np.percentile(floor_px.mean(1), 40)]
+    din = np.median(floor_px, 0)
+    for x in range(470, 1180):
+        rows = np.where(hole[:560, x] > 0)[0]
+        if not len(rows):
+            continue
+        top, bot = rows.min(), rows.max() + 1
+        ys = np.arange(top, bot)
+        if 590 <= x < 935:  # dining room floor through the doorway
+            depth = (ys - top) / max(1, bot - top)
+            col = din[None, :] * (1.0 - 0.06 * depth[:, None])
+            seam = ((ys - top) % 9 == 0) * 0.05
+            col = col * (1 - seam[:, None]) + rnd.normal(0, 0.008, col.shape)
+        elif 579 <= x < 590 or 935 <= x < 949 or x >= 1098:  # door posts, curtain: extend vertically
+            col = np.repeat(photo[top - 2, x][None, :], len(ys), 0) + rnd.normal(0, 0.006, (len(ys), 3))
+        else:  # plain wall
+            base = photo[max(0, top - 30):top - 4, x].mean(0)
+            tex = gray_hp[(ys - top) % gray_hp.shape[0], x % gray_hp.shape[1]]
+            col = base[None, :] + tex * 0.8
+        out[ys, x] = np.clip(col, 0, 1)
+    return out
+
+
+shell = rebuild_back_wall(shell, shell_mask * (yy < 560) * (xx >= 470))
+
 # rug without the furniture standing on it
 rug_hole = (cv2.dilate((furniture > 0).astype(np.uint8) * 255, np.ones((31, 31), np.uint8)) > 0) & (m_rug > 0)
 rug_layer = cv2.inpaint(img8, rug_hole.astype(np.uint8) * 255, 25, cv2.INPAINT_TELEA).astype(np.float32) / 255
