@@ -26,7 +26,8 @@ const filmStages = [
   { no: '03', name: 'Salon', title: 'Mobilya geldiğinde zemin, mekânın karakteri olur.', text: 'Halı, koltuk, sehpa… Doğru ton ve dizilim, salonun tamamını taşır.', from: 0.58, to: 0.86 },
 ];
 const smooth = (a: number, b: number, x: number) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
-const band = (p: number, a: number, b: number, f = 0.03) => smooth(a - f, a + f, p) * (1 - smooth(b - f, b + f, p));
+// captions never overlap: each fades out completely before the next one fades in
+const band = (p: number, a: number, b: number, f = 0.025) => smooth(a, a + f, p) * (1 - smooth(b - f, b, p));
 
 function scrollTo(id: string) { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); }
 

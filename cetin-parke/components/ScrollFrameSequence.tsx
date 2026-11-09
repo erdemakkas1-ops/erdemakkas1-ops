@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { MEDIA_VERSION } from '@/lib/media';
 
 type Props = {
   folder: string;
@@ -60,7 +61,7 @@ export function ScrollFrameSequence({folder, count, poster, progress, className 
       return nearest;
     };
 
-    const framePath = (n: number) => `${folder}/${String(n + 1).padStart(4, '0')}.webp`;
+    const framePath = (n: number) => `${folder}/${String(n + 1).padStart(4, '0')}.webp?v=${MEDIA_VERSION}`;
     const fetchFrame = (n: number) => {
       if (n < 0 || n >= count || cache.has(n)) return;
       const img = new Image();

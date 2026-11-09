@@ -34,7 +34,7 @@ export default function FloorDesigner() {
 
   useEffect(() => {
     let alive = true;
-    Promise.all([loadImage(asset('/images/designer/shell.webp')), loadImage(asset('/images/designer/light.webp')), loadImage(asset('/images/designer/furniture.webp'))])
+    Promise.all([loadImage(asset('/images/designer/shell.webp?v=2')), loadImage(asset('/images/designer/light.webp?v=2')), loadImage(asset('/images/designer/furniture.webp?v=2'))])
       .then(([shell, light, furn]) => { if (alive) { layersRef.current = { shell, light, furniture: furn }; setReady(true); } })
       .catch(() => {});
     return () => { alive = false; };
