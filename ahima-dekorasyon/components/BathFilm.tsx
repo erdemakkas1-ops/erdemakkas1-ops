@@ -111,7 +111,7 @@ export default function BathFilm() {
 
         {/* Scene 2 - the renovation, one caption per stage */}
         {!reduce && STAGES.map((st, i) => (
-          <div key={st.no} ref={el => { caps.current[i] = el; }} className="absolute bottom-[calc(96px+4vh)] left-[var(--gutter)] w-[min(440px,calc(100vw-40px))] bg-paper p-7 text-ink invisible opacity-0 max-[700px]:bottom-[148px] max-[700px]:p-5" aria-hidden="true">
+          <div key={st.no} ref={el => { caps.current[i] = el; }} className="absolute bottom-[calc(96px+4vh)] left-[var(--gutter)] w-[min(440px,calc(100vw-40px))] bg-paper p-7 text-ink invisible opacity-0 max-[700px]:bottom-[112px] max-[700px]:p-5" aria-hidden="true">
             <p className="label text-wood">{st.no} / 06 — {st.name}</p>
             <h2 className="display mt-3 text-[clamp(28px,2.6vw,40px)]">{st.title}</h2>
             <p className="mt-3 text-[15px] leading-relaxed text-ink/75 max-[700px]:text-[14px]">{st.text}</p>
@@ -120,7 +120,7 @@ export default function BathFilm() {
 
         {/* progress HUD */}
         {!reduce && (
-          <div ref={hud} className="gutter pointer-events-none absolute inset-x-0 bottom-0 bg-[linear-gradient(0deg,rgba(20,19,17,.72),rgba(20,19,17,0))] pb-7 pt-24 opacity-0 min-[701px]:pr-[200px] max-[700px]:pb-[84px]" aria-hidden="true">
+          <div ref={hud} className="gutter pointer-events-none absolute inset-x-0 bottom-0 bg-[linear-gradient(0deg,rgba(20,19,17,.72),rgba(20,19,17,0))] pb-7 pt-24 opacity-0 min-[701px]:pr-[150px] max-[700px]:pb-6 max-[700px]:pr-[84px]" aria-hidden="true">
             <div className="mb-4 flex items-end justify-between">
               <p className="label text-paper/80">Aşama <span ref={stepNo} className="text-paper">00</span> / 06</p>
               <p className="display text-[clamp(28px,3vw,46px)]"><span ref={pct}>0</span><span className="text-brass-soft">%</span></p>

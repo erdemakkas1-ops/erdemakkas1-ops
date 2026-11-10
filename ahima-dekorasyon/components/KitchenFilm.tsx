@@ -49,7 +49,7 @@ export default function KitchenFilm() {
       <div className={reduce ? 'relative h-svh overflow-hidden' : 'stage-pin'}>
         <canvas ref={canvasRef} className="film-canvas" aria-hidden="true" />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(20,19,17,.82)_0%,rgba(20,19,17,.45)_34%,rgba(20,19,17,0)_60%)] max-[700px]:bg-[linear-gradient(0deg,rgba(20,19,17,.9)_0%,rgba(20,19,17,.5)_45%,rgba(20,19,17,0)_70%)]" />
-        <div className="gutter absolute inset-y-0 left-0 flex w-[min(560px,100%)] flex-col justify-center max-[700px]:justify-end max-[700px]:pb-[96px]">
+        <div className="gutter absolute inset-y-0 left-0 flex w-[min(560px,100%)] flex-col justify-center max-[700px]:justify-end max-[700px]:pb-[88px]">
           <p className="label text-brass-soft">§ 02 — Mutfak</p>
           <h2 id="mutfak-title" className="display mt-5 text-[clamp(38px,4.6vw,76px)]">Mutfakta da <em className="text-brass-soft">aynı titizlik.</em></h2>
           <ol className="mt-8 space-y-0 border-t border-paper/20 max-[700px]:mt-5">
