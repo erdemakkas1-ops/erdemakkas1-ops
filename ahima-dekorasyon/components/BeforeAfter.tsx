@@ -26,8 +26,9 @@ export default function BeforeAfter() {
         onPointerDown={e => { (e.target as HTMLElement).setPointerCapture?.(e.pointerId); drag(e.clientX); }}
         onPointerMove={e => { if (e.buttons) drag(e.clientX); }}
       >
-        <img src={media.config('marble', 'ceviz')} alt="Yenilenmiş banyo: beyaz mermer seramik, ceviz asma dolap, aydınlatmalı ayna ve walk-in duşakabin" loading="lazy" decoding="async" />
-        <img src={media.before} alt="Yenileme öncesi banyo: küçük beyaz fayans, ayaklı lavabo, küvet ve perde" loading="lazy" decoding="async" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} />
+        <span className="label absolute inset-0 grid place-items-center text-ash">Render hazırlanıyor</span>
+        <img src={media.config('marble', 'ceviz')} alt="Yenilenmiş banyo: beyaz mermer seramik, ceviz asma dolap, aydınlatmalı ayna ve walk-in duşakabin" loading="lazy" decoding="async" onError={e => { e.currentTarget.style.visibility = 'hidden'; }} />
+        <img src={media.before} alt="Yenileme öncesi banyo: küçük beyaz fayans, ayaklı lavabo, küvet ve perde" loading="lazy" decoding="async" onError={e => { e.currentTarget.style.visibility = 'hidden'; }} style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} />
         <div className="ba-handle" style={{ left: `${pos}%` }}>
           <span className="ba-knob label" aria-hidden>⟷</span>
         </div>

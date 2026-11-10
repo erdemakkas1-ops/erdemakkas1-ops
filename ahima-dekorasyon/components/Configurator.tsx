@@ -68,10 +68,11 @@ export default function Configurator() {
       <div className="mt-[clamp(36px,5vw,72px)] grid grid-cols-12 gap-x-[clamp(20px,3vw,48px)] gap-y-8">
         <figure className="col-span-12 lg:col-span-8">
           <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone">
+            <span className="label absolute inset-0 grid place-items-center text-ink/50">Render hazırlanıyor</span>
             {(['a', 'b'] as const).map(k => (
               <img key={k} src={shown[k]} alt={shown.top === k ? `Banyo önizlemesi: ${summary}` : ''} aria-hidden={shown.top !== k}
                 className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out"
-                style={{ opacity: shown.top === k ? 1 : 0 }} decoding="async" loading="lazy" />
+                style={{ opacity: shown.top === k ? 1 : 0 }} decoding="async" loading="lazy" onError={e => { e.currentTarget.style.visibility = 'hidden'; }} />
             ))}
             <span className="label absolute left-4 top-4 bg-paper px-3 py-2 text-[10px] text-ink" aria-live="polite">{summary}</span>
           </div>
