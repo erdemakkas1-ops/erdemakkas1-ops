@@ -1,4 +1,5 @@
 import type { Listing, ListingImage, ListingKind } from "@/types/listing";
+import { media } from "./media";
 
 /*
  * DEMO LISTINGS — every record below is illustrative (demo: true): prices, areas, parcel details
@@ -22,7 +23,7 @@ function illustrations(kind: ListingKind, title: string): ListingImage[] {
 
 const SANLIURFA = "Şanlıurfa";
 
-export const listings: Listing[] = [
+const records: Listing[] = [
   {
     id: "AE-1001", slug: "karakopru-1-5-donum-satilik-arsa", kind: "arsa", status: "satilik",
     title: "Karaköprü'de 1,5 Dönüm Satılık Arsa", price: 3_150_000, area: 1500,
@@ -205,3 +206,12 @@ export const listings: Listing[] = [
     images: illustrations("diger", "Karaköprü depo"), publishedAt: "2026-10-08", demo: true,
   },
 ];
+
+/** Uses the Higgsfield images from media.ts when present, otherwise the built-in illustrations. */
+export const listings: Listing[] = records.map(listing => {
+  const entry = media.listings[listing.id];
+  const photos = entry?.images.filter(Boolean) ?? [];
+  if (photos.length === 0) return listing;
+  const views = listing.images.map(image => image.alt.replace(/ \(temsili görsel\)$/, ""));
+  return { ...listing, images: photos.map((src, i) => ({ src, alt: `${views[i] ?? listing.title} (temsili görsel)`, generated: true })), video: entry?.video };
+});
