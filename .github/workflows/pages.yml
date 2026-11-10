@@ -34,6 +34,13 @@ jobs:
         run: |
           npm install --no-audit --no-fund
           npm run build
+      - name: Build Alagözler Emlak
+        working-directory: alagozler-emlak
+        env:
+          PAGES_BASE_PATH: /erdemakkas1-ops/alagozler-emlak
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
       # HALO stays at the site root; each demo gets its own folder next to it
       - name: Assemble site
         run: |
@@ -42,6 +49,7 @@ jobs:
           rsync -a --exclude instagram-raw arqli-interiors/ _site/arqli-interiors/
           cp -r sdm-mobilya/. _site/sdm-mobilya/
           cp -r cetin-parke/out/. _site/cetin-parke/
+          cp -r alagozler-emlak/out/. _site/alagozler-emlak/
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
