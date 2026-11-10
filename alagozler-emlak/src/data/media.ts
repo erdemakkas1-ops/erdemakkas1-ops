@@ -29,7 +29,11 @@ export const media: {
     "AE-2003": { images: ["/media/ae-2003-siverek-1.webp"] },
     "AE-3001": { images: ["/media/ae-3001-daire-1.webp"] },
     "AE-3002": { images: ["/media/ae-3002-kiralik-1.webp"] },
-    "AE-4001": { images: ["/media/ae-4001-mustakil-1.webp", "/media/ae-4001-mustakil-2.webp", "/media/ae-4001-mustakil-3.webp"], video: "/media/ae-4001-mustakil.mp4" },
+    "AE-3003": { images: ["/media/ae-3003-lux-1.webp"] },
+    "AE-4002": { images: ["/media/ae-4002-avlu-1.webp"] },
+    "AE-5001": { images: ["/media/ae-5001-dukkan-1.webp"] },
+    "AE-5002": { images: ["/media/ae-5002-depo-1.webp"] },
+    "AE-4001": { images: ["/media/ae-4001-mustakil-0.webp", "/media/ae-4001-mustakil-1.webp", "/media/ae-4001-mustakil-2.webp", "/media/ae-4001-mustakil-3.webp"], video: "/media/ae-4001-mustakil.mp4" },
   },
 };
 
