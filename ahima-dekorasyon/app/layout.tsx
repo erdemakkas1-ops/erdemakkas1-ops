@@ -17,9 +17,8 @@ export const metadata: Metadata = {
     title: 'Ahima Dekorasyon — Hayalinizdeki Mekânı Gerçeğe Dönüştürüyoruz',
     description: 'Anahtar teslim tadilat, modern dekorasyon ve kaliteli yapı malzemeleri. Ankara.',
     locale: 'tr_TR', type: 'website', siteName: 'Ahima Dekorasyon',
-    images: [{ url: media.og, width: 1200, height: 630, alt: 'Ahima Dekorasyon — yenilenmiş banyo konsepti' }],
+    images: [{ url: `${SITE}/media/og.jpg`, width: 1200, height: 630, alt: 'Ahima Dekorasyon — yenilenmiş banyo konsepti' }],
   },
-  formatDetection: { telephone: true },
 };
 
 export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#1c1d1c', viewportFit: 'cover' };
