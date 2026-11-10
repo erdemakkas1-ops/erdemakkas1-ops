@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { telLink, whatsappLink, business } from '@/lib/site';
+import { goTo } from './SmoothScroll';
 
 const NAV = [
   { id: 'donusum', label: 'Dönüşüm' },
@@ -16,7 +17,7 @@ export default function Header() {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    const darks = ['donusum', 'mutfak', 'projeler'].map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    const darks = ['donusum', 'mutfak', 'projeler', 'alt'].map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     const check = () => {
       const y = 40;
       const overDark = darks.some(el => { const r = el.getBoundingClientRect(); return r.top <= y && r.bottom > y; });
@@ -47,7 +48,7 @@ export default function Header() {
       </button>
       <div id="mobil-menu" className={`gutter fixed inset-0 -z-0 flex flex-col bg-ink pt-[calc(var(--header-h)+24px)] text-paper transition-[opacity,visibility] duration-300 min-[961px]:hidden ${open ? 'visible opacity-100' : 'invisible opacity-0'}`}>
         {NAV.map(n => (
-          <a key={n.id} href={`#${n.id}`} onClick={() => setOpen(false)} className="display flex items-center justify-between border-b border-paper/15 py-5 text-[34px]">{n.label}<span className="text-[20px] text-brass-soft">→</span></a>
+          <a key={n.id} href={`#${n.id}`} onClick={e => { e.preventDefault(); setOpen(false); document.documentElement.style.overflow = ''; goTo(n.id); }} className="display flex items-center justify-between border-b border-paper/15 py-5 text-[34px]">{n.label}<span className="text-[20px] text-brass-soft">→</span></a>
         ))}
         <div className="mt-auto flex flex-col gap-3 pb-10">
           <a href={whatsappLink()} target="_blank" rel="noreferrer" className="btn btn-solid">WhatsApp’tan yazın <span aria-hidden>↗</span></a>

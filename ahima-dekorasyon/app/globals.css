@@ -28,6 +28,7 @@
 
 :root { color-scheme: light; --gutter: clamp(20px, 5vw, 88px); --header-h: 76px; }
 html { scroll-padding-top: var(--header-h); }
+@media (prefers-reduced-motion: no-preference) { html:not(.lenis) { scroll-behavior: smooth; } }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 body { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }

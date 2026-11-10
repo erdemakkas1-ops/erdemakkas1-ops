@@ -3,11 +3,16 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const pub = join(process.cwd(), 'public');
-const seqs = [['media/bath/d', 96], ['media/bath/m', 60], ['media/kitchen/d', 40], ['media/kitchen/m', 30]];
+const seqs = [['media/bath/d', 96], ['media/kitchen/d', 40]];
+// portrait (phone) sets are optional: the player falls back to the landscape film without them
+const optional = [['media/bath/m', 60], ['media/kitchen/m', 30]];
 const missing = [];
-for (const [dir, n] of seqs) for (let i = 1; i <= n; i++) {
-  const f = join(pub, dir, `${String(i).padStart(4, '0')}.webp`);
-  if (!existsSync(f)) missing.push(f);
+const frame = (dir, i) => join(pub, dir, `${String(i).padStart(4, '0')}.webp`);
+for (const [dir, n] of seqs) for (let i = 1; i <= n; i++) if (!existsSync(frame(dir, i))) missing.push(frame(dir, i));
+for (const [dir, n] of optional) {
+  const have = Array.from({ length: n }, (_, i) => existsSync(frame(dir, i + 1))).filter(Boolean).length;
+  if (have === 0) console.warn(`note: ${dir} not present, phones use the landscape film`);
+  else if (have < n) missing.push(`${dir}: ${n - have} of ${n} frames missing`);
 }
 for (const t of ['marble', 'anthra', 'beige']) for (const c of ['ceviz', 'beyaz', 'antrasit']) {
   const f = join(pub, 'media/config', `${t}-${c}.webp`);

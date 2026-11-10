@@ -28,14 +28,16 @@ export default function Projects() {
         </header>
         <p className="mt-5 max-w-[64ch] text-[16px] leading-relaxed text-paper/70">{batikent.summary}</p>
         <div className="mt-8 grid grid-cols-12 gap-3">
-          <a href={batikent.post} target="_blank" rel="noreferrer" className="photo col-span-12 aspect-[4/5] md:col-span-6 md:row-span-2 md:aspect-auto">
+          <a href={batikent.post} target="_blank" rel="noreferrer" className="photo col-span-12 aspect-[4/5] md:col-span-5">
             <img src={batikent.photos[0].src} alt={batikent.photos[0].alt} loading="lazy" decoding="async" />
           </a>
-          {batikent.photos.slice(1).map(ph => (
-            <a key={ph.src} href={batikent.post} target="_blank" rel="noreferrer" className="photo col-span-4 aspect-[4/5] md:col-span-2">
-              <img src={ph.small} srcSet={`${ph.small} 360w, ${ph.src} 720w`} sizes="(max-width: 768px) 33vw, 16vw" alt={ph.alt} loading="lazy" decoding="async" />
-            </a>
-          ))}
+          <div className="col-span-12 grid grid-cols-3 content-start gap-3 md:col-span-7">
+            {batikent.photos.slice(1).map(ph => (
+              <a key={ph.src} href={batikent.post} target="_blank" rel="noreferrer" className="photo aspect-[4/5]">
+                <img src={ph.small} srcSet={`${ph.small} 360w, ${ph.src} 720w`} sizes="(max-width: 768px) 33vw, 20vw" alt={ph.alt} loading="lazy" decoding="async" />
+              </a>
+            ))}
+          </div>
         </div>
       </article>
 
