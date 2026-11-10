@@ -6,7 +6,6 @@ R=${1:?render dir}
 cd "$(dirname "$0")/.."
 enc() { [ -d "$R/$1" ] && python3 scripts/encode_frames.py "$R/$1" "public/media/$2" --quality "${3:-84}" || echo "skip $1"; }
 enc film bath/d
-enc film_m bath/m 82
 enc kfilm kitchen/d
 enc kfilm_m kitchen/m 82
 if [ -d "$R/config" ]; then

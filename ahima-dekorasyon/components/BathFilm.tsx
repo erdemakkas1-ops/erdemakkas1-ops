@@ -146,7 +146,7 @@ export default function BathFilm() {
           </div>
         </div>
 
-        <p className="label absolute right-[var(--gutter)] top-[calc(var(--header-h)+12px)] text-[10px] text-paper/55 max-[700px]:hidden">Konsept görselleştirme · 3D render</p>
+        <p className="label absolute right-[var(--gutter)] top-[calc(var(--header-h)+12px)] text-[10px] text-paper/55 max-[700px]:top-[calc(var(--header-h)-6px)] max-[700px]:text-[9px]">Konsept görselleştirme</p>
       </div>
     </section>
   );

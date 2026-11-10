@@ -5,7 +5,7 @@ import { join } from 'node:path';
 const pub = join(process.cwd(), 'public');
 const seqs = [['media/bath/d', 96], ['media/kitchen/d', 40]];
 // portrait (phone) sets are optional: the player falls back to the landscape film without them
-const optional = [['media/bath/m', 60], ['media/kitchen/m', 30]];
+const optional = [['media/bath/m', 108], ['media/kitchen/m', 30]];
 const missing = [];
 const frame = (dir, i) => join(pub, dir, `${String(i).padStart(4, '0')}.webp`);
 for (const [dir, n] of seqs) for (let i = 1; i <= n; i++) if (!existsSync(frame(dir, i))) missing.push(frame(dir, i));

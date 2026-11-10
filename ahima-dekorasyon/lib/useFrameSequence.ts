@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef } from 'react';
-import { frameUrl, type Sequence } from './media';
+import { framePos, frameUrl, type Sequence } from './media';
 
 /**
  * Scroll-scrubbed image sequence on a <canvas>. There is no playback clock: the frame is a pure
@@ -36,7 +36,7 @@ export function useFrameSequence(desktop: Sequence, mobile: Sequence, opts: { fo
     const ctx = c.getContext('2d', { alpha: false });
     if (!ctx) return;
     const n = s.seq.frames;
-    const pos = s.head * (n - 1);
+    const pos = framePos(s.seq, s.head);
     const i0 = Math.floor(pos);
     const frac = pos - i0;
     const nearest = (i: number) => {
@@ -96,7 +96,7 @@ export function useFrameSequence(desktop: Sequence, mobile: Sequence, opts: { fo
       const done = () => {
         inflight--;
         if (disposed) return;
-        const pos = s.head * (s.seq.frames - 1);
+        const pos = framePos(s.seq, s.head);
         if (Math.abs(i - pos) < 2 || !c.dataset.ready) draw();
         pump();
       };
