@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-display: var(--font-syne), "Arial Narrow", sans-serif;
+  --font-serif: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-manrope), "Segoe UI", Arial, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+:root { color-scheme: light; }
+/* The 3D project experience keeps its original dark, dusk-lit look. */
+.experience-dark { color-scheme: dark; background: #0e0d0c; color: #e9e4da; min-height: 100svh; }
+html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+@media (max-width: 1023px) { html { scroll-padding-top: 7rem; } }
+html, body { margin: 0; width: 100%; overflow-x: clip; }
+body { background: #f6f3ee; color: #1c1b19; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+canvas { display: block; touch-action: none; }
+@media (pointer: coarse) {
+  /* Touch: vertical swipes scroll the page, horizontal swipes turn the 3D view.
+     OrbitControls writes touch-action: none on R3F's event wrapper div, not on the canvas,
+     and the browser applies the strictest value up the chain — so override both. */
+  .scrollable-canvas canvas,
+  .scrollable-canvas div { touch-action: pan-y !important; }
+}
+[data-room-shape]:focus-visible > path { stroke: #b7862f; stroke-width: 6; }
+[data-poi-marker]:focus-visible > circle:first-child { stroke: #f0d7a4; stroke-width: 2; }
+
+@keyframes soft-reveal { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes quiet-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes number-update { from { opacity: .82; transform: translateY(2px); } to { opacity: 1; transform: none; } }
+
+/* Transform only: the headline is the LCP element and must not start invisible. */
+@keyframes rise { from { transform: translateY(14px); } to { transform: none; } }
+.motion-hero-copy > * { animation: rise 700ms cubic-bezier(.22,1,.36,1) both; }
+.motion-hero-copy > :nth-child(2) { animation-delay: 80ms; }
+.motion-hero-copy > :nth-child(3) { animation-delay: 160ms; }
+.motion-hero-copy > :nth-child(4) { animation-delay: 240ms; }
+.motion-canvas { animation: quiet-fade 1100ms 150ms ease-out both; }
+.motion-panel { animation: soft-reveal 360ms cubic-bezier(.22,1,.36,1) both; }
+.motion-panel li { animation: soft-reveal 300ms cubic-bezier(.22,1,.36,1) both; }
+.motion-panel li:nth-child(2) { animation-delay: 50ms; }
+.motion-panel li:nth-child(3) { animation-delay: 100ms; }
+.motion-label { animation: soft-reveal 180ms ease-out both; }
+.motion-number { animation: number-update 130ms ease-out; }
+.motion-plan-layer { transition: opacity 250ms ease; }
+.motion-form { animation: soft-reveal 240ms cubic-bezier(.22,1,.36,1) both; }
+
+/* Section headings rise in as they scroll into view, where the browser supports it. */
+@supports (animation-timeline: view()) {
+  .motion-in-view { animation: soft-reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 45%; }
+}
+
+[data-location-active="true"] [data-project-marker] { animation: quiet-fade 280ms both; }
+[data-location-active="true"] [data-poi-marker] { animation: quiet-fade 260ms both; }
+
+.leaflet-container { font-family: var(--font-sans); background: #e9e4dc; }
+.map-pin { background: none; border: 0; }
+.hero-copy { animation: rise 900ms cubic-bezier(.22,1,.36,1) both; }
+.hero-copy + .hero-copy { animation-delay: 140ms; }
+@media (hover: none) { .listing-card:hover { transform: none; } }
+
+dialog::backdrop { background: rgba(3, 6, 12, 0.72); backdrop-filter: blur(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [class*="motion-"], .hero-copy, .gallery-slide, .motion-panel li, .motion-hero-copy > *, [data-project-marker], [data-poi-marker] { animation: none !important; transition-duration: 0.01ms !important; }
+}

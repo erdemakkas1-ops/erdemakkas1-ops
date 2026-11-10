@@ -1,0 +1,18 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Secrets (vercel link writes an OIDC token to .env.local)
+.env*
+!.env.example
+.vercel
+
+# Local agent / QA artefacts
+.claude/backup/
+.claude/*.png
+.playwright-mcp/
+
+# Local QA reports and screenshots
+verification/
