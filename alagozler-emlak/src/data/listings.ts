@@ -209,8 +209,9 @@ const records: Listing[] = [
 
 /** Uses the Higgsfield images from media.ts when present, otherwise the built-in illustrations. */
 export const listings: Listing[] = records.map(listing => {
-  const photos = media.listings[listing.id]?.filter(Boolean) ?? [];
+  const entry = media.listings[listing.id];
+  const photos = entry?.images.filter(Boolean) ?? [];
   if (photos.length === 0) return listing;
   const views = listing.images.map(image => image.alt.replace(/ \(temsili görsel\)$/, ""));
-  return { ...listing, images: photos.map((src, i) => ({ src, alt: `${views[i] ?? listing.title} (temsili görsel)`, generated: true })) };
+  return { ...listing, images: photos.map((src, i) => ({ src, alt: `${views[i] ?? listing.title} (temsili görsel)`, generated: true })), video: entry?.video };
 });

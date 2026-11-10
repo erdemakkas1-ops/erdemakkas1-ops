@@ -4,10 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import type { Listing } from "@/types/listing";
 import { IconArrow, IconClose } from "../site/icons";
 import ListingVisual, { isIllustration } from "./ListingVisual";
+import { mediaSrc } from "@/data/media";
+import AmbientVideo from "../motion/AmbientVideo";
 
 /** Large gallery with crossfading slides, thumbnails, swipe, keyboard and a full-screen view. */
 export default function ListingGallery({ listing }: { listing: Listing }) {
-  const count = listing.images.length;
+  // Gallery items: optional video tour first, then the images.
+  const items: ({ type: "video" } | { type: "image"; image: number })[] = [
+    ...(listing.video ? [{ type: "video" as const }] : []),
+    ...listing.images.map((_, image) => ({ type: "image" as const, image })),
+  ];
+  const count = items.length;
+  const photoFit = listing.images[0]?.src ? "contain" : "cover";
   const [index, setIndex] = useState(0);
   const [full, setFull] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -35,9 +43,15 @@ export default function ListingGallery({ listing }: { listing: Listing }) {
     if (event.key === "ArrowLeft") go(-1);
   };
 
-  const slides = (sizing: string) => listing.images.map((image, i) =>
+  const slides = (sizing: string) => items.map((item, i) =>
     <div key={i} aria-hidden={i !== index} className={`gallery-slide absolute inset-0 transition-[opacity,transform] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${i === index ? "scale-100 opacity-100" : "pointer-events-none scale-[1.03] opacity-0"}`}>
-      <ListingVisual listing={listing} index={i} sizes={sizing} priority={i === 0} />
+      {item.type === "video"
+        ? <span className="relative block h-full w-full overflow-hidden bg-[#1c1b19]">
+            {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
+            {listing.images[0]?.src && <img src={mediaSrc(listing.images[0].src)} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-70 blur-2xl" />}
+            {i === index && <AmbientVideo src={listing.video!} poster={listing.images[0]?.src ?? ""} fit="contain" label={`${listing.title} — temsili video`} className="relative" />}
+          </span>
+        : <ListingVisual listing={listing} index={item.image} sizes={sizing} priority={i === 0} fit={photoFit} />}
     </div>);
 
   const arrows = (dark: boolean) => count > 1 && <>
@@ -51,13 +65,14 @@ export default function ListingGallery({ listing }: { listing: Listing }) {
       <button type="button" onClick={() => setFull(true)} className="absolute inset-0 cursor-zoom-in" aria-label="Görseli tam ekran aç" />
       {arrows(false)}
       <p className="pointer-events-none absolute bottom-3 left-3 rounded-full bg-[#1c1b19]/60 px-3 py-1 text-xs text-white backdrop-blur" aria-live="polite">
-        {index + 1} / {count}{isIllustration(listing, index) && " · Temsili görsel"}
+        {index + 1} / {count}{items[index]?.type === "video" ? " · Video · Temsili" : isIllustration(listing, (items[index] as { image: number }).image) && " · Temsili görsel"}
       </p>
     </div>
-    {count > 1 && <ul className="mt-3 grid grid-cols-4 gap-2 sm:gap-3">
-      {listing.images.map((image, i) => <li key={i}>
-        <button type="button" onClick={() => setIndex(i)} aria-label={`${i + 1}. görsel: ${image.alt}`} aria-current={i === index} className={`block aspect-[4/3] w-full cursor-pointer overflow-hidden rounded-xl ring-offset-2 ring-offset-[#f6f3ee] transition-[opacity,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a86a] ${i === index ? "ring-2 ring-[#1c1b19]" : "opacity-60 hover:opacity-100"}`}>
-          <ListingVisual listing={listing} index={i} sizes="20vw" />
+    {count > 1 && <ul className="mt-3 grid grid-cols-4 gap-2 sm:gap-3 lg:grid-cols-5">
+      {items.map((item, i) => <li key={i}>
+        <button type="button" onClick={() => setIndex(i)} aria-label={item.type === "video" ? "Video" : `${i + 1}. görsel: ${listing.images[item.image].alt}`} aria-current={i === index} className={`relative block aspect-[4/3] w-full cursor-pointer overflow-hidden rounded-xl ring-offset-2 ring-offset-[#f6f3ee] transition-[opacity,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a86a] ${i === index ? "ring-2 ring-[#1c1b19]" : "opacity-60 hover:opacity-100"}`}>
+          <ListingVisual listing={listing} index={item.type === "video" ? 0 : item.image} sizes="20vw" />
+          {item.type === "video" && <span className="absolute inset-0 flex items-center justify-center bg-black/30 text-white"><span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-[#1c1b19]">▶</span></span>}
         </button>
       </li>)}
     </ul>}

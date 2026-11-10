@@ -73,7 +73,9 @@ export function listingSpecs(listing: Listing): { label: string; value: string }
 export const getListing = (slug: string) => listings.find(listing => listing.slug === slug);
 export const byNewest = (a: Listing, b: Listing) => b.publishedAt.localeCompare(a.publishedAt);
 export const newestListings = (count: number) => [...listings].sort(byNewest).slice(0, count);
-export const featuredListings = () => listings.filter(listing => listing.featured).sort(byNewest);
+const hasPhoto = (listing: Listing) => (listing.images[0]?.src ? 1 : 0);
+/** Featured first by photo availability (keeps the home page visually consistent), then newest. */
+export const featuredListings = () => listings.filter(listing => listing.featured).sort((a, b) => hasPhoto(b) - hasPhoto(a) || byNewest(a, b));
 
 const group = (kind: ListingKind) => (kind === "arsa" || kind === "tarla" ? "arazi" : kind === "diger" ? "ticari" : "konut");
 

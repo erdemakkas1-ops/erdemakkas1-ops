@@ -27,6 +27,8 @@ type ListingBase = {
   description: string[];
   highlights: string[];
   images: ListingImage[];
+  /** Optional short video tour shown first in the gallery. */
+  video?: string;
   /** ISO date. */
   publishedAt: string;
   featured?: boolean;
