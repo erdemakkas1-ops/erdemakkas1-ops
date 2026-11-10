@@ -1,0 +1,10 @@
+node_modules
+.next
+.vercel
+.env*
+.DS_Store
+*.log
+out
+tsconfig.tsbuildinfo
+next-env.d.ts
+scripts/__pycache__

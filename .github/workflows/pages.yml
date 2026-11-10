@@ -41,6 +41,14 @@ jobs:
         run: |
           npm ci --no-audit --no-fund
           npm run build
+      # Ahima Dekorasyon: Next.js, exported the same way under its own sub-folder
+      - name: Build Ahima Dekorasyon
+        working-directory: ahima-dekorasyon
+        env:
+          PAGES_BASE_PATH: /erdemakkas1-ops/ahima-dekorasyon
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
       # HALO stays at the site root; each demo gets its own folder next to it
       - name: Assemble site
         run: |
@@ -50,6 +58,7 @@ jobs:
           cp -r sdm-mobilya/. _site/sdm-mobilya/
           cp -r cetin-parke/out/. _site/cetin-parke/
           cp -r alagozler-emlak/out/. _site/alagozler-emlak/
+          cp -r ahima-dekorasyon/out/. _site/ahima-dekorasyon/
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
