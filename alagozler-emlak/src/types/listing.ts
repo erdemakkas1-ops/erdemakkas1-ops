@@ -2,7 +2,12 @@ export type ListingKind = "arsa" | "tarla" | "daire" | "mustakil" | "diger";
 export type ListingStatus = "satilik" | "kiralik";
 
 /** A real photo (src) or, until photos are supplied, a generated representative illustration. */
-export type ListingImage = { src?: string; alt: string };
+export type ListingImage = {
+  src?: string;
+  alt: string;
+  /** AI-generated stand-in: shown with a "temsili görsel" label, never as the real property. */
+  generated?: boolean;
+};
 
 type ListingBase = {
   id: string;

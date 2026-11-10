@@ -1,13 +1,19 @@
 import { business } from "@/config/business";
+import { media, mediaSrc } from "@/data/media";
 import { HeroHills, HeroPlain, HeroSky } from "./HeroScene";
 import QuickSearch from "./QuickSearch";
 
 export default function HomeHero() {
   return <section aria-labelledby="hero-baslik" className="relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden bg-[#1e1d22] text-white">
     <div aria-hidden="true" className="absolute inset-0 -z-10">
-      <div data-parallax="0.08" data-parallax-top className="absolute inset-0"><HeroSky /></div>
-      <div data-parallax="0.16" data-parallax-top className="absolute inset-0"><HeroHills /></div>
-      <div className="absolute inset-0"><HeroPlain /></div>
+      {media.hero
+        // eslint-disable-next-line @next/next/no-img-element -- LCP image; static export
+        ? <div data-parallax="0.12" data-parallax-top className="absolute -inset-y-[6%] inset-x-0"><img src={mediaSrc(media.hero)} alt="" fetchPriority="high" decoding="async" className="h-full w-full object-cover object-[62%_center]" /></div>
+        : <>
+            <div data-parallax="0.08" data-parallax-top className="absolute inset-0"><HeroSky /></div>
+            <div data-parallax="0.16" data-parallax-top className="absolute inset-0"><HeroHills /></div>
+            <div className="absolute inset-0"><HeroPlain /></div>
+          </>}
       <div className="absolute inset-0 bg-gradient-to-b from-[#121110]/55 via-transparent to-[#121110]/85" />
       <div className="absolute inset-0 bg-gradient-to-r from-[#121110]/70 via-[#121110]/20 to-transparent" />
     </div>

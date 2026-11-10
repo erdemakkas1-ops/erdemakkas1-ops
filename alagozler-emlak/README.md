@@ -29,6 +29,7 @@ GitHub Pages için statik çıktı: `PAGES_BASE_PATH=/erdemakkas1-ops/alagozler-
 - **İşletme bilgileri:** `src/config/business.ts` — telefon/WhatsApp (Instagram biyografisindeki 0541 262 85 03), Instagram, ofis. Ortam değişkeniyle de verilebilir: `NEXT_PUBLIC_PHONE_DISPLAY`, `NEXT_PUBLIC_PHONE_E164`, `NEXT_PUBLIC_WHATSAPP_E164`. Boş bırakılırsa ilgili butonlar gizlenir.
 - **İlanlar:** `src/data/listings.ts` (tipler `src/types/listing.ts`). Arsa/tarla, konut ve diğer için ayrı alanlar; detay tablosu yalnızca türe uygun alanları gösterir. Gerçek ilan eklerken `demo: false` ve `images: [{ src: "/ilanlar/<slug>/1.jpg", alt: "…" }]` kullanın (dosyalar `public/` altına). `src` yoksa temsili SVG görsel çizilir.
 - **Koordinatlar:** `coords.approximate: true` haritada "yaklaşık / demo konum" olarak işaretlenir.
+- **Higgsfield görselleri:** `HIGGSFIELD-PROMPTS.md` içindeki prompt’larla üretilen görseller `src/data/media.ts` dosyasına URL olarak girilir. Boş kalan anahtarlar çizim görsele düşer. Bu görseller sitede “Temsili görsel” etiketiyle gösterilir.
 - **Logo:** `src/components/site/Logo.tsx` geçici bir monogramdır; müşterinin orijinal logo dosyası gelince değiştirilmeli.
 
 ## Hareket ve performans
