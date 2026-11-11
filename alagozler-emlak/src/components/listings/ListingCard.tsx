@@ -4,13 +4,19 @@ import { formatArea, formatPrice, kindLabels, statusLabels } from "@/lib/listing
 import { IconArea, IconPin } from "../site/icons";
 import FavoriteButton from "./FavoriteButton";
 import ListingVisual, { isIllustration } from "./ListingVisual";
+import AmbientVideo from "../motion/AmbientVideo";
 
 export default function ListingCard({ listing, headingLevel = 3 }: { listing: Listing; headingLevel?: 2 | 3 }) {
   const Heading = headingLevel === 2 ? "h2" : "h3";
   const isHome = listing.kind === "daire" || listing.kind === "mustakil";
   return <article className="listing-card group relative flex h-full flex-col overflow-hidden rounded-[1.4rem] bg-white shadow-[0_1px_0_rgba(28,27,25,0.06),0_18px_40px_-28px_rgba(28,27,25,0.35)] ring-1 ring-[#1c1b19]/[0.06] transition-[box-shadow,transform] duration-500 hover:-translate-y-1 hover:shadow-[0_1px_0_rgba(28,27,25,0.06),0_30px_60px_-30px_rgba(28,27,25,0.45)]">
     <div className="relative aspect-[4/3] overflow-hidden bg-[#e9e4dc]">
-      <div className="h-full w-full transition-transform duration-[900ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.04]"><ListingVisual listing={listing} /></div>
+      <div className="h-full w-full transition-transform duration-[900ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.04]">
+        {/* Every listing with media plays its clip on hover (mouse only); otherwise the still. */}
+        {listing.video && listing.images[0]?.src
+          ? <AmbientVideo src={listing.video} poster={listing.images[0].src} mode="hover" />
+          : <ListingVisual listing={listing} />}
+      </div>
       <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start gap-2 p-3.5">
         <span className="rounded-full bg-[#1c1b19]/75 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#f6f2ea] backdrop-blur">{statusLabels[listing.status]}</span>
         <span className="rounded-full bg-[#f6f3ee]/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1c1b19] backdrop-blur">{kindLabels[listing.kind].single}</span>
