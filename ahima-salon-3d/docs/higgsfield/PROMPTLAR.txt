@@ -1,0 +1,86 @@
+AHIMA SALON - SIRAYLA YAPILACAKLAR
+==================================
+
+Her adımda: yükleyeceğin görsel + yapıştıracağın prompt.
+Gemini adımlarının hepsi AYNI sohbette yapılır.
+Her çıkan görseli indir ve adını yaz: K0, K1, K2, K3.
+
+
+------------------------------------------------------------
+ADIM 1 - GEMINI - K0 (boş salon)
+Yükle: referans_bos_salon.jpg
+Yapıştır:
+------------------------------------------------------------
+Turn this 3D render into a real photograph. Keep exactly the same camera position, lens, framing, room proportions and window position. Output 16:9 landscape. A completely empty, unfinished modern living room: raw smooth grey concrete screed floor, plain warm-white plastered walls, flat white ceiling, one wide floor-to-ceiling window in the back wall with thin dark bronze aluminium frames and two vertical mullions, lush green garden and soft sky outside. Late afternoon sunlight enters through the window and casts long soft window-shaped light patches with mullion shadows on the concrete floor. No furniture, no objects, no people, no text. Full-frame camera, 24mm lens, eye level, natural light, realistic materials, real estate photography.
+
+>> Çıkan görseli indir: K0
+
+
+------------------------------------------------------------
+ADIM 2 - GEMINI - K1 (zemin + duvar)
+Yükle: hiçbir şey (aynı sohbette devam)
+Yapıştır:
+------------------------------------------------------------
+Edit the last image. Keep the camera, framing, window, ceiling, sunlight and outside view exactly identical. Change only the finishes: the floor becomes light natural oak herringbone parquet with a satin finish; the left wall is covered with tall vertical walnut wood slats with dark gaps, floor to ceiling; the right wall is clad with large honed beige travertine stone panels with thin vertical joints; the ceiling gets a slim dropped edge with a recessed cove around the perimeter (lights off). The room stays empty: no furniture, no decor, no lamps, no people, no text. Same 16:9 framing.
+
+>> Çıkan görseli indir: K1
+
+
+------------------------------------------------------------
+ADIM 3 - GEMINI - K2 (mobilya)
+Yükle: referans_dolu_salon_yerlesim.jpg
+Yapıştır:
+------------------------------------------------------------
+Edit the previous photo (the herringbone room), NOT the uploaded 3D render. Use the 3D render only as a layout guide for where the furniture goes. Keep camera, framing, floor, walls, window, ceiling and sunlight exactly identical. Add: a large low cream boucle L-shaped sectional sofa on the left, a round honed travertine coffee table in the centre, two cognac leather lounge chairs with walnut frames near the window, a long low floating walnut TV console on the right wall with a large black wall-mounted TV above it, a small round walnut side table at the far left. No rug, no cushions, no plants, no decor yet. Photorealistic fabrics and wood, soft contact shadows, no people, no text. Same 16:9 framing.
+
+>> Çıkan görseli indir: K2
+
+
+------------------------------------------------------------
+ADIM 4 - GEMINI - K3 (tamamlanmış salon)
+Yükle: hiçbir şey (aynı sohbette devam)
+Yapıştır:
+------------------------------------------------------------
+Edit the last image. Keep the camera, framing, architecture and every piece of furniture exactly in place. Add the finishing touches: a large soft ivory wool rug under the sofa and coffee table, linen and taupe throw pillows and a knitted throw on the sofa, a tall olive tree in a stone planter in the back left corner, sheer ivory linen curtains at both sides of the window, a two-ring brass LED pendant above the coffee table, a vase of white hydrangeas and a stack of books on the coffee table, small ceramic vases on the TV console. Turn on warm 2700K hidden LED strips in the ceiling cove and the pendant, glowing softly, while golden late afternoon sunlight still enters the window. Warm minimal luxury, magazine-quality interior photography, no people, no text. Same 16:9 framing.
+
+>> Çıkan görseli indir: K3
+
+KONTROL: 4 görseli yan yana aç. Pencere ve kamera açısı hepsinde aynı yerde olmalı.
+Kayan olursa o adımı tekrar iste.
+
+
+============================================================
+HIGGSFIELD AYARLARI (3 videoda da aynı)
+Model: Seedance 2.0 | Mode: std | 1080p | 5 sn | 16:9 | Ses: kapalı
+============================================================
+
+
+------------------------------------------------------------
+ADIM 5 - HIGGSFIELD - V1
+Start frame: K0     End frame: K1
+Yapıştır:
+------------------------------------------------------------
+Locked-off static tripod camera, absolutely no camera movement, no zoom. Seamless continuous transformation of the same room: oak herringbone parquet spreads across the concrete floor from the window towards the camera, walnut slats rise one by one along the left wall, travertine panels slide into place on the right wall, the ceiling cove forms. Calm, elegant motion. No people, no tools, no text, no cuts.
+
+
+------------------------------------------------------------
+ADIM 6 - HIGGSFIELD - V2
+Start frame: K1     End frame: K2
+Yapıştır:
+------------------------------------------------------------
+Locked-off static tripod camera, absolutely no camera movement, no zoom. The same room furnishes itself: the walnut TV console and TV settle onto the right wall, the cream sectional sofa glides into place on the left, the travertine coffee table and two leather lounge chairs appear and settle softly with realistic weight. Calm, continuous, physically believable motion. No people, no text, no cuts.
+
+
+------------------------------------------------------------
+ADIM 7 - HIGGSFIELD - V3
+Start frame: K2     End frame: K3
+Yapıştır:
+------------------------------------------------------------
+Locked-off static tripod camera, absolutely no camera movement, no zoom. Final styling of the same room: the ivory rug unrolls across the floor, pillows and a throw land on the sofa, the olive tree, curtains, flowers and decor appear, the brass ring pendant lowers from the ceiling and the warm cove LED lights slowly fade on. Ends on a still, finished luxury living room. No people, no text, no cuts.
+
+
+------------------------------------------------------------
+BİTİNCE
+------------------------------------------------------------
+Claude'a "üretim bitti" yaz ve K0, K1, K2, K3 görsellerini sohbete ekle.
+Videoları Claude Higgsfield geçmişinden kendisi çeker.
