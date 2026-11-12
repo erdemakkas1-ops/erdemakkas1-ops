@@ -1,0 +1,53 @@
+{
+  "coordinate_system": "right_handed_Y_up",
+  "units": "meters",
+  "camera_initial": [
+    0,
+    2.15,
+    7.7
+  ],
+  "camera_target": [
+    0,
+    1.4,
+    -0.35
+  ],
+  "room_dimensions": [
+    8.4,
+    3.15,
+    6.4
+  ],
+  "stages": {
+    "00_shell.glb": {
+      "timeline": [
+        0,
+        1
+      ],
+      "mode": "always_visible",
+      "meaning": "Empty architectural shell with window and concrete floor"
+    },
+    "01_surfaces.glb": {
+      "timeline": [
+        0.12,
+        0.38
+      ],
+      "mode": "sequential_progressive_reveal",
+      "meaning": "Parquet, paneling, stone TV feature, cove"
+    },
+    "02_furniture.glb": {
+      "timeline": [
+        0.34,
+        0.79
+      ],
+      "mode": "objects_from_resting_positions",
+      "meaning": "Sofa, chairs, coffee table, TV cabinet"
+    },
+    "03_details.glb": {
+      "timeline": [
+        0.72,
+        0.94
+      ],
+      "mode": "stagger_reveal",
+      "meaning": "Rug, pillows, plants, books, pendant and lights"
+    }
+  }
+}
