@@ -49,6 +49,14 @@ jobs:
         run: |
           npm install --no-audit --no-fund
           npm run build
+      # Ahima 3D salon: React Three Fiber scroll demo, exported under its own sub-folder
+      - name: Build Ahima 3D Salon
+        working-directory: ahima-salon-3d
+        env:
+          PAGES_BASE_PATH: /erdemakkas1-ops/ahima-salon-3d
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
       # HALO stays at the site root; each demo gets its own folder next to it
       - name: Assemble site
         run: |
@@ -59,6 +67,7 @@ jobs:
           cp -r cetin-parke/out/. _site/cetin-parke/
           cp -r alagozler-emlak/out/. _site/alagozler-emlak/
           cp -r ahima-dekorasyon/out/. _site/ahima-dekorasyon/
+          cp -r ahima-salon-3d/out/. _site/ahima-salon-3d/
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

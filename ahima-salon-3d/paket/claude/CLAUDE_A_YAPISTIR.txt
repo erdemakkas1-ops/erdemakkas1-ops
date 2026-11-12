@@ -1,0 +1,11 @@
+Bu klasor Ahima Dekorasyon projesinin ChatGPT tarafindan hazirlanan teknik on paketidir.
+
+1) Ilk olarak README_ILK_BUNU_OKU.md ve claude/CLAUDE_CODE_ANA_PROMPT.md dosyalarini eksiksiz oku.
+2) claude/CLAUDE.md dosyasini proje kokunde CLAUDE.md olarak kullan.
+3) docs ve 3d/scene_manifest.json belgelerine uy.
+4) 3d/00_shell.glb, 01_surfaces.glb, 02_furniture.glb, 03_details.glb ayni olcek/koordinatta GERCEK 3D sahnelerdir; bunlari kullan. Bunlar blockout, fotogercekcilik icin malzeme ve modelleri gelistir.
+5) Ilk karede SADECE BOS SALON gorunecek. Scroll ilerledikce AYNI ODA parkeli/mobilyali/dekorasyonlu hale gelecek. Geri scroll da tamamen geriye saracak. Bina disi, farkli oda, video, resim slideri YASAK.
+6) Next.js + TypeScript + R3F + GSAP ScrollTrigger ile gercek calisan site olustur. npm run build test et, README ve kaynak kodu teslim et.
+7) Kullanicidan Blender kullanmasini isteme. Resmi logo, hizmetler, telefon ve proje fotografi henuz teyit edilmediyse uydurma; placeholder kullan.
+
+Hazirlik paketindeki dosyalari okuyarak ek soru sormadan kodlamaya basla. Daha detayli tekil kararlar icin claude/CLAUDE_CODE_ANA_PROMPT.md ve docs belgeleri esas.
