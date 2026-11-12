@@ -164,10 +164,7 @@ h3 {
 /* ------------------------------------------------------------------ 3D story */
 .story {
   position: relative;
-  height: 520svh;
-}
-.story--fallback {
-  height: auto;
+  height: 560svh;
 }
 .story__sticky {
   position: sticky;
@@ -177,14 +174,12 @@ h3 {
   overflow: hidden;
   background: var(--espresso);
 }
-.story--fallback .story__sticky {
-  position: relative;
-  height: auto;
-  min-height: 100svh;
-}
-.scene-canvas {
-  position: absolute !important;
+.film-canvas {
+  position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 .overlay {
   position: absolute;
@@ -452,10 +447,18 @@ h3 {
 }
 .loader__bar i {
   display: block;
+  width: 40%;
   height: 100%;
   background: var(--gold);
-  transform-origin: left;
-  transition: transform 0.4s var(--ease);
+  animation: loading 1.2s var(--ease) infinite;
+}
+@keyframes loading {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
 }
 .loader__label {
   margin: 0;
@@ -464,18 +467,6 @@ h3 {
   color: var(--warm-grey);
 }
 
-.fallback {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 140px var(--gutter) 80px;
-  color: var(--stone);
-}
-.fallback ol {
-  padding-left: 1.2em;
-}
-.fallback li {
-  margin: 0.6em 0;
-}
 
 /* ------------------------------------------------------------------ content sections */
 .section {

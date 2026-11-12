@@ -8,7 +8,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Ahima Dekorasyon — Mekân, sizinle anlam kazanır',
   description:
-    'Boş bir salonun kaydırdıkça parke, duvar kaplaması, mobilya ve aydınlatmayla tamamlanan 3D dönüşümü. Demo tasarım.',
+    'Boş bir salonun kaydırdıkça parke, duvar kaplaması, mobilya ve aydınlatmayla tamamlanan dönüşümü. Demo tasarım.',
   robots: { index: false, follow: false },
 };
 

@@ -1,16 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useProgress } from '@react-three/drei';
 import { onReady, story } from '@/lib/story';
 
-/** plain espresso screen until the *empty* room is on screen (never a poster of the finished room) */
+/** plain espresso screen until the first film frame (the *empty* room) is on screen */
 export default function Loader() {
-  const { progress } = useProgress();
-  const [ready, setReady] = useState(story.ready);
+  const [ready, setReady] = useState(false);
   const [gone, setGone] = useState(false);
 
   useEffect(() => {
+    if (story.ready) setReady(true);
     const off = onReady(() => setReady(true));
     return () => {
       off();
@@ -29,9 +28,9 @@ export default function Loader() {
         AHIMA<span>DEKORASYON</span>
       </div>
       <div className="loader__bar">
-        <i style={{ transform: `scaleX(${Math.max(0.04, progress / 100)})` }} />
+        <i />
       </div>
-      <p className="loader__label">Mekân hazırlanıyor · {Math.round(progress)}%</p>
+      <p className="loader__label">Mekân hazırlanıyor</p>
     </div>
   );
 }
