@@ -1,18 +1,12 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { story, STAGES, stageIndex, smoothstep } from '@/lib/story';
+import { story, STAGES, stageIndex, smoothstep, CAPTION_WINDOWS, FILM } from '@/lib/story';
 
 /**
  * DOM layer over the canvas. It never re-renders while scrolling: a rAF loop reads story.p and writes
- * opacity/transform straight to the elements, so the overlay rewinds exactly like the 3D scene.
+ * opacity/transform straight to the elements, so the overlay rewinds exactly like the film.
  */
-const CAPTION_WINDOWS: [number, number][] = [
-  [-1, -1], // stage 0 uses the hero
-  [0.13, 0.33],
-  [0.38, 0.69],
-  [0.75, 0.925],
-];
 
 export default function Overlay({ onStage }: { onStage: (p: number) => void }) {
   const hero = useRef<HTMLDivElement>(null);
@@ -29,7 +23,7 @@ export default function Overlay({ onStage }: { onStage: (p: number) => void }) {
     const loop = () => {
       const p = story.p;
       if (hero.current) {
-        const o = 1 - smoothstep(0.015, 0.075, p);
+        const o = 1 - smoothstep(0.012, 0.055, p);
         hero.current.style.opacity = String(o);
         hero.current.style.transform = `translate3d(0, ${(-30 * (1 - o)).toFixed(1)}px, 0)`;
         hero.current.style.visibility = o < 0.01 ? 'hidden' : 'visible';
@@ -46,7 +40,7 @@ export default function Overlay({ onStage }: { onStage: (p: number) => void }) {
         el.style.visibility = o < 0.01 ? 'hidden' : 'visible';
       });
       if (final.current) {
-        const o = smoothstep(0.945, 0.985, p);
+        const o = smoothstep(FILM.end + 0.005, FILM.end + 0.045, p);
         final.current.style.opacity = String(o);
         final.current.style.transform = `translate3d(0, ${(20 * (1 - o)).toFixed(1)}px, 0)`;
         final.current.style.visibility = o < 0.01 ? 'hidden' : 'visible';
@@ -80,7 +74,7 @@ export default function Overlay({ onStage }: { onStage: (p: number) => void }) {
           anlam kazanır.
         </h1>
         <p className="hero__sub">Boş bir alandan kendinize ait bir dünyaya.</p>
-        <a className="btn btn--gold" href="#donusum" onClick={(e) => (e.preventDefault(), onStage(0.2))}>
+        <a className="btn btn--gold" href="#donusum" onClick={(e) => (e.preventDefault(), onStage(STAGES[1].at))}>
           Dönüşümü keşfet <span aria-hidden>↓</span>
         </a>
       </div>
@@ -150,7 +144,7 @@ export default function Overlay({ onStage }: { onStage: (p: number) => void }) {
         <small>Mekânın dönüşümünü izleyin</small>
       </div>
 
-      <p className="demo-badge">Demo görselleştirme · örnek yaşam alanı</p>
+      <p className="demo-badge">Yapay zekâ görselleştirmesi · örnek yaşam alanı</p>
     </div>
   );
 }

@@ -1,10 +1,10 @@
-# Ahima Dekorasyon — 3D scroll salon demosu
+# Ahima Dekorasyon: scroll ile döşenen salon
 
-Boş bir salon, kaydırdıkça **aynı odada** parke ve duvar kaplamaları, mobilyalar, tekstil, bitki ve aydınlatmayla
-tamamlanır. Yukarı kaydırınca her şey aynı yoldan geri sarılır. Video, görsel slaytı ya da önceden hazırlanmış kare
-kullanılmaz; her karede gerçek WebGL 3D sahne çizilir.
+Boş bir salon, kaydırdıkça **aynı kameradan, aynı odada** parke ve duvar kaplamaları, mobilya ve son dokunuşlarla
+tamamlanır. Yukarı kaydırınca film birebir geri sarılır. Ortada geçiş efekti, kesme ya da birbirine benzemeyen
+fotoğraflar yok: tek, kesintisiz bir film kare kare scroll'a bağlı.
 
-**Next.js 15 (App Router) · TypeScript · Three.js · React Three Fiber · Drei · @react-three/postprocessing · GSAP ScrollTrigger**
+**Next.js 15 (App Router) · TypeScript · GSAP ScrollTrigger · Canvas 2D kare dizisi**
 
 ```bash
 npm install
@@ -13,103 +13,58 @@ npm run typecheck && npm run lint && npm run build
 ```
 
 GitHub Pages (statik export): `PAGES_BASE_PATH=/erdemakkas1-ops/ahima-salon-3d npm run build` → `out/`.
-Vercel'de ek ayara gerek yoktur (`next build`).
 
-| Boş salon (ilk kare) | Tamamlanmış salon | Mobil |
-|---|---|---|
-| ![](docs/onizleme/01_bos_salon.jpg) | ![](docs/onizleme/03_tamamlanmis_salon.jpg) | ![](docs/onizleme/04_mobil.jpg) |
+## Film nasıl üretildi
 
-## Hazırlık paketine nasıl uyuldu
+Plan ve promptlar: `docs/higgsfield/PROMPTLAR.txt`.
 
-Kaynak paket `paket/` klasöründe (talimatlar, docs, manifest, `build_room.py`, AI konsept görselleri). Proje kuralları
-`CLAUDE.md`.
-
-- Dört GLB (`public/models/00_shell … 03_details.glb`) **orijinde**, aynı koordinatta yüklenir. `00_shell` hep
-  görünür; diğer üçündeki her adlandırılmış node ayrıştırılıp scroll ilerlemesine bağlanır.
-- Tek GSAP ScrollTrigger + tek timeline, `story.p` (0–1) değerini scrub eder. Sahnedeki her nesnenin pozu, kamera,
-  ışıklar ve HTML katmanı bu sayının **saf fonksiyonudur**. Sonuç: ileri/geri kaydırmada drift yok, hızlı ya da ters
-  kaydırmada çakışma yok.
-- Açılışta dolu oda (konsept görsel) **gösterilmez**; yükleme ekranı düz espresso renktir.
-- Bina dışı, kat planı, başka odaya uçuş, video yok.
-
-### Zaman çizelgesi (`components/scene/choreography.ts`)
-
-| İlerleme | Aşama | Ne olur |
-|---|---|---|
-| 0.00–0.12 | Boş | Ham beton, sıva, pencereden düşen güneş |
-| 0.12–0.38 | Yüzeyler | Balıksırtı meşe parke pencereden kameraya doğru döşenir; ceviz zemin paneli ve 27 çıta sırayla yerden yükselir; traverten TV duvarı ve derzleri; asma tavan iner |
-| 0.34–0.79 | Mobilyalar | TV ünitesi → TV → L koltuk (tek parça, ~70 cm kayarak) → minderler → sehpa → yan sehpa → iki berjer |
-| 0.72–0.94 | Son dokunuş | Halı açılır, bitki, kırlent, kitaplar, vazo, tül perdeler, sarkıt tavandan iner; gizli LED, spotlar ve sarkıt ışığı yanar |
-| 0.94–1.00 | Final | Küçük kamera düzeltmesi, CTA |
-
-Giriş türleri: kaplamalar **clipping plane** ile açılır (doku gerilmez), mobilyalar metrik kısa mesafeden yerine
-oturur, LED'ler emissive + alan ışığı rampasıyla yanar. Kamera yolu `docs/SAHNE_VE_ANIMASYON.md`'deki
-noktaları izler; masaüstünde çok hafif boşta salınım + fare paralaksı vardır.
-
-## Görsel kalite iyileştirmeleri (GLB'lere göre)
-
-GLB'ler renkli blockout'tur (köşeli kutular, ikosferler, düz renkler). Her node'un **son konumu ve ölçüsü korunarak**:
-
-- Kutular pahlı (`RoundedBoxGeometry`) yapıldı; minder ve kırlentler şişirildi; sehpalar, vazolar, saksı lathe ile
-  yeniden çizildi; sarkıt gerçek torus oldu.
-- Bitki küreleri ~2.100 yapraklık zeytin dokusu + dallarla, çiçek küreleri ortanca kümeleriyle değiştirildi.
-- Tüm yüzeylere PBR malzeme (renk + normal + pürüzlülük, dünya-uzayı UV): balıksırtı meşe (vernik clearcoat'lu),
-  ceviz, traverten, bukle kumaş, keten, deri, halı, sıva, beton.
-- Eklenenler (GLB'de yok, `extra:` adıyla işaretli): pencere camı, pencere dışı bahçe fonu, tül perdeler, tavan
-  spotları, kamera tarafında devam eden zemin/tavan/duvar (kadrajda boşluk görünmesin diye).
-- Işık: pencereden düşük açılı gölgeli güneş, pencere boşluğunda alan ışığı, lightformer ortam haritası (dış HDR
-  indirmeden), 2700K LED alan ışıkları, sarkıt ışığı. Post-process: N8AO ambient occlusion, bloom, ACES tonemapping,
-  vinyet, SMAA.
-
-### Dokular
-
-Bu ortamdan Poly Haven'a erişim engelli olduğu için dokular `scripts/make_textures.py` ile **prosedürel** üretildi
-(gürültü tabanlı, kesintisiz döşenebilir, lisans sorunu yok). Yeniden üretmek için:
+1. **Gemini, 4 anahtar kare** (`docs/higgsfield/kareler/K0–K3.png`). Her kare bir öncekinin düzenlenmiş hâli
+   olduğu için kamera, pencere ve ışık hepsinde aynı:
+   K0 boş salon → K1 zemin ve duvar → K2 mobilya → K3 tamamlanmış salon.
+2. **Higgsfield, 3 video** (`paket/film/v1–v3.mp4`). Her video bir anahtar kareden başlayıp bir sonrakinde
+   bitiyor (V1 K0→K1, V2 K1→K2, V3 K2→K3). Böylece her videonun son karesi bir sonrakinin ilk karesiyle aynı.
+3. **Birleştirme:** `scripts/build_film.sh`. Videolar uç uca eklenir. Video modelinin ek yerinde bıraktığı küçük
+   netlik ve pozlama farkı 0,3 sn'lik harmanlamayla kapatılır (geometri zaten aynı; görünür bir geçiş değil).
+   Çıktı: 20 fps, 288 kare WebP, masaüstü için 1280 px (`public/film/`), telefon için 960 px (`public/film/m/`).
 
 ```bash
-pip install numpy scipy pillow
-npm run textures
+bash scripts/build_film.sh [fps=20] [quality=78]   # ffmpeg gerekir
 ```
 
-Poly Haven (CC0) dokularıyla değiştirmek isterseniz aynı adlarla `public/textures/` içine koymanız yeterli
-(`*_col.jpg`, `*_nrm.jpg` OpenGL normal, `*_rgh.jpg`). Önerilen sayfalar `paket/docs/MALZEME_KAYNAKLARI.md`'de.
+## Scroll
 
-## Mobil, erişilebilirlik, yedekler
+- Tek GSAP ScrollTrigger, `story.p` (0–1) değerini scrub eder. Kare, telefon kaydırması ve yazılar bu sayının
+  saf fonksiyonudur; ileri ve geri kaydırma her zaman aynı kareyi gösterir.
+- Akış: 0–0.06 boş salon bekler · 0.06–0.94 film · 0.94–1 tamamlanmış salon ve CTA.
+- Kareler kademeli yüklenir. Önce boş salon, sonra filmin tamamına seyrek bir geçiş, ardından aradaki kareler
+  gelir. Henüz inmemiş bir kare yerine en yakın inmiş kare gösterilir.
+- Telefonda film, header'ın altında geniş bir bant olarak gösterilir. Bant, o an değişen bölgeye yumuşakça kayar:
+  sol duvar → TV duvarı → koltuk → halı ve dekor.
+- Sağdaki aşama göstergesi tıklanabilir; finalde "Başa sar" düğmesi var. `prefers-reduced-motion` açıkken scrub
+  yumuşatması kapanır.
 
-- Dokunmatik / dar ekranda: DPR ≤ 1.5, 1024 gölge haritası, yarım çözünürlüklü AO; dikey ekranda daha geniş lens,
-  kamera biraz geride ve o an inşa edilen bölgeye (sol duvar → TV duvarı → koltuk → merkez) yumuşak pan.
-- `PerformanceMonitor` FPS düşerse DPR'ı kademeli azaltır. Hikâye ekran dışındayken render durur.
-- `prefers-reduced-motion`: scrub yumuşatması ve kamera salınımı kapanır, hareket mesafeleri %25'e iner; dönüşüm yine
-  kullanıcının kaydırmasıyla kontrol edilir.
-- WebGL yoksa erişilebilir açıklama metni ve aşama listesi gösterilir.
-- Sağdaki aşama göstergesi tıklanabilir; finalde "Başa sar" düğmesi var.
+## Dürüstlük notları
 
-## Dürüstlük notları / sınırlar
-
-- **Bu bir müşteri demosudur.** Logo (`AHIMA / DEKORASYON` kelime işareti), hizmet kapsamı, projeler ve iletişim
-  bilgileri **yer tutucudur**; hiçbiri uydurulmadı. Kontrol listesi: `paket/docs/MUSTERI_ICERIK_KONTROL.md`.
-- 3D sahne örnek bir yaşam alanıdır, gerçek bir Ahima projesi değildir. Sayfada "Demo görselleştirme" etiketi var.
-- Gerçek zamanlı render fotogerçekçiliğe **yaklaşır** ama mimari görselleştirme (path-traced) kalitesinde değildir.
-  En büyük kalite sıçraması için: lisansı uygun gerçek mobilya modelleri (koltuk, berjer, bitki) ve fotoğraf tabanlı
-  PBR dokular. Sahne ölçüleri ve node adları değişmeden bu modeller aynı aktör yapısına takılabilir.
-- Performans yalnızca headless (yazılımsal WebGL) tarayıcıda doğrulandı; gerçek cihazlarda FPS ölçümü yapılmalı
-  (hedef: masaüstü 60, mobil 30 — garanti değil).
+- Film **yapay zekâ ile üretilmiş örnek bir yaşam alanıdır**, gerçek bir Ahima projesi değildir. Sayfada
+  "Yapay zekâ görselleştirmesi · örnek yaşam alanı" etiketi var.
+- Logo (`AHIMA / DEKORASYON` kelime işareti), hizmet kapsamı, projeler ve iletişim bilgileri **yer tutucudur**,
+  hiçbiri uydurulmadı. Kontrol listesi: `paket/docs/MUSTERI_ICERIK_KONTROL.md`.
+- İlk sürümdeki gerçek zamanlı Three.js / React Three Fiber sahnesi kullanıcı isteğiyle bu filmle değiştirildi;
+  kaynağı git geçmişinde duruyor.
 
 ## Klasör yapısı
 
 ```
 app/                    layout (fontlar, metadata), sayfa, global CSS
-components/Experience   ScrollTrigger + sticky canvas + WebGL yedeği
-components/Overlay      başlık, aşama açıklamaları, ilerleme göstergesi, final CTA (rAF ile, re-render yok)
-components/scene/       SceneCanvas · Room (GLB → aktörler) · choreography · geometry · materials · Lights · CameraRig
+components/Experience   ScrollTrigger + sticky sahne
+components/FilmScrub    kare dizisini canvas'a çizer (kademeli yükleme, telefon kaydırması)
+components/Overlay      başlık, aşama açıklamaları, ilerleme göstergesi, final CTA
 components/sections/    Hizmetler / Projeler / İletişim / Footer (yer tutucular)
-lib/story.ts            ilerleme deposu, aşamalar, easing
-public/models           4 GLB (paketten, değiştirilmeden)
-public/textures         prosedürel PBR dokular
-scripts/make_textures.py
-paket/                  hazırlık paketi (talimatlar, docs, konseptler)
-docs/onizleme           test ekran görüntüleri
+lib/story.ts            ilerleme deposu, aşamalar, zamanlama
+public/film/            kare dizisi (+ m/ telefon seti, manifest.json)
+scripts/build_film.sh   videolar → kare dizisi
+docs/higgsfield/        promptlar, referanslar, anahtar kareler
+paket/                  hazırlık paketi + kaynak videolar
 ```
 
-Ekran görüntüsü testleri için `?shot` parametresi GSAP lag smoothing'i kapatır (yazılımsal WebGL ~1 fps çalıştığında
-scrub'ın gerçek zamanda ilerlemesi için); normal kullanımda etkisi yoktur.
+Ekran görüntüsü testleri için `?shot` parametresi GSAP lag smoothing'i kapatır; normal kullanımda etkisi yoktur.

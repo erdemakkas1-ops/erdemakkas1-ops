@@ -1,5 +1,5 @@
 /**
- * Content below the 3D story. Nothing here is invented: services, projects and contact details are
+ * Content below the scroll film. Nothing here is invented: services, projects and contact details are
  * clearly marked placeholders until Ahima confirms them (see paket/docs/MUSTERI_ICERIK_KONTROL.md).
  */
 
@@ -114,7 +114,7 @@ export function Footer() {
         <span className="wordmark__sub">DEKORASYON</span>
       </div>
       <p>
-        Demo tasarım. 3D sahne örnek bir yaşam alanının görselleştirmesidir; gerçek bir proje fotoğrafı değildir.
+        Demo tasarım. Dönüşüm filmi yapay zekâ ile üretilmiş örnek bir yaşam alanıdır; gerçek bir Ahima projesi değildir.
         Logo ve kurumsal bilgiler geçicidir.
       </p>
     </footer>
