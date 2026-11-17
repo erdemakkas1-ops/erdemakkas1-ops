@@ -57,6 +57,14 @@ jobs:
         run: |
           npm ci --no-audit --no-fund
           npm run build
+      # Endüstriyel teknik servis: Next.js, exported under its own sub-folder
+      - name: Build Endüstriyel Teknik Servis
+        working-directory: endustriyel-teknik-servis
+        env:
+          PAGES_BASE_PATH: /erdemakkas1-ops/endustriyel-teknik-servis
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
       # HALO stays at the site root; each demo gets its own folder next to it
       - name: Assemble site
         run: |
@@ -68,6 +76,7 @@ jobs:
           cp -r alagozler-emlak/out/. _site/alagozler-emlak/
           cp -r ahima-dekorasyon/out/. _site/ahima-dekorasyon/
           cp -r ahima-salon-3d/out/. _site/ahima-salon-3d/
+          cp -r endustriyel-teknik-servis/out/. _site/endustriyel-teknik-servis/
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
