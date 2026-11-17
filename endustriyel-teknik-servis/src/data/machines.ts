@@ -36,20 +36,29 @@ export const machineBrands: MachineBrand[] = [
     name: 'BOBST',
     category: 'Baskı ve ambalaj makineleri',
     description:
-      'Karton ve oluklu mukavva ambalaj üretiminde kullanılan kesim, katlama-yapıştırma ve baskı hatları. Bu makinelerde elektrik, mekanik ve otomasyon kaynaklı arızalar için teknik servis.',
-    machineTypes: ['Platin kesim makineleri', 'Katlama-yapıştırma makineleri', 'Ambalaj baskı hatları'],
+      'Karton ambalaj üretiminde kullanılan platin kesim makineleri. Bu makinelerde elektrik, mekanik ve otomasyon kaynaklı arızalar için teknik servis.',
+    machineTypes: ['Platin kesim makineleri'],
     visual: 'diecutter',
-    models: [],
+    // İşletme sahibi tarafından teyit edildi
+    models: [
+      { name: 'Novacut', type: 'Platin kesim' },
+      { name: 'Expertcut', type: 'Platin kesim' },
+      { name: 'Mastercut', type: 'Platin kesim' },
+    ],
   },
   {
     id: 'manroland',
     name: 'manroland',
     category: 'Endüstriyel ofset baskı makineleri',
     description:
-      'Tabaka ve rotatif ofset baskı makineleri. Baskı üniteleri, besleme ve çıkış grupları ile kumanda sistemlerinde elektrik, mekanik ve otomasyon arızaları için teknik servis.',
-    machineTypes: ['Tabaka ofset baskı makineleri', 'Rotatif ofset baskı makineleri'],
+      'Tabaka ofset baskı makineleri. Baskı üniteleri, besleme ve çıkış grupları ile kumanda sistemlerinde elektrik, mekanik ve otomasyon arızaları için teknik servis.',
+    machineTypes: ['Tabaka ofset baskı makineleri'],
     visual: 'offset',
-    models: [],
+    // İşletme sahibi tarafından teyit edildi
+    models: [
+      { name: 'ROLAND 700', type: 'Tabaka ofset' },
+      { name: 'ROLAND 900', type: 'Tabaka ofset · büyük format' },
+    ],
   },
 ];
 

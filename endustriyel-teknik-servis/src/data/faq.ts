@@ -5,7 +5,7 @@
 export const faqs = [
   {
     q: 'Hangi makinelerde çalışıyorsunuz?',
-    a: 'Endüstriyel baskı ve ambalaj makinelerinde; özellikle BOBST ve manroland grubu makinelerde elektrik, mekanik ve otomasyon arızaları için hizmet verilir. Listede olmayan makineler için de arıza bildirebilirsiniz; uygunluk ön değerlendirmede açıkça söylenir.',
+    a: 'Endüstriyel baskı ve ambalaj makinelerinde; özellikle BOBST platin kesim (Novacut, Expertcut, Mastercut) ve manroland tabaka ofset (ROLAND 700, ROLAND 900) makinelerinde elektrik, mekanik ve otomasyon arızaları için hizmet verilir. Listede olmayan makineler için de arıza bildirebilirsiniz; uygunluk ön değerlendirmede açıkça söylenir.',
   },
   {
     q: 'BOBST veya manroland yetkili servisi misiniz?',

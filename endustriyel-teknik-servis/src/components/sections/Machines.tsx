@@ -39,13 +39,20 @@ export function Machines() {
                 </div>
               </div>
               <div className="flex flex-col gap-5 p-6 sm:flex-row sm:items-end sm:justify-between sm:p-8">
-                <ul className="flex flex-wrap gap-2">
-                  {b.machineTypes.map((t) => (
-                    <li key={t} className="border border-mist/15 px-3 py-1.5 text-xs text-mist/80">
-                      {t}
-                    </li>
-                  ))}
-                </ul>
+                <div>
+                  <ul className="flex flex-wrap gap-2">
+                    {b.machineTypes.map((t) => (
+                      <li key={t} className="border border-mist/15 px-3 py-1.5 text-xs text-mist/80">
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                  {b.models.length > 0 && (
+                    <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.16em] text-mist/55">
+                      Modeller: <span className="text-paper">{b.models.map((m) => m.name).join(' · ')}</span>
+                    </p>
+                  )}
+                </div>
                 <span className="flex shrink-0 items-center gap-2 text-sm font-semibold text-white group-hover:text-accent">
                   Ayrıntılar <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </span>
