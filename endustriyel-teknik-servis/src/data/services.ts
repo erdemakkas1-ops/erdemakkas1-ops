@@ -9,7 +9,7 @@
  */
 
 import type { FaultTypeId } from './form';
-import type { VisualKind } from './visuals';
+import { industrial, type SiteImage, type VisualKind } from './visuals';
 
 export type ServiceIcon = 'zap' | 'cog' | 'cpu' | 'gauge' | 'wrench';
 
@@ -20,6 +20,8 @@ export type Service = {
   shortTitle: string;
   icon: ServiceIcon;
   visual: VisualKind;
+  /** Gerçek/temsilî fotoğraf – yoksa SVG çizim gösterilir */
+  image?: SiteImage;
   /** Form ön seçimi */
   faultType: FaultTypeId;
   /** Kart açıklaması */
@@ -43,6 +45,7 @@ export type Service = {
 export const services: Service[] = [
   {
     slug: 'elektrik-arizalari',
+    image: industrial.electricalPanel,
     index: '01',
     title: 'Endüstriyel Elektrik Arızaları',
     shortTitle: 'Elektrik Arızaları',
@@ -105,6 +108,7 @@ export const services: Service[] = [
   },
   {
     slug: 'mekanik-bakim',
+    image: industrial.motorGearbox,
     index: '02',
     title: 'Mekanik Arıza ve Onarım',
     shortTitle: 'Mekanik Arıza ve Onarım',
@@ -167,6 +171,7 @@ export const services: Service[] = [
   },
   {
     slug: 'plc-otomasyon',
+    image: industrial.electricalPanel,
     index: '03',
     title: 'PLC ve Otomasyon',
     shortTitle: 'PLC ve Otomasyon',
@@ -291,6 +296,7 @@ export const services: Service[] = [
   },
   {
     slug: 'makine-revizyonu',
+    image: industrial.pressRollers,
     index: '05',
     title: 'Makine Revizyonu ve Periyodik Bakım',
     shortTitle: 'Revizyon ve Periyodik Bakım',

@@ -3,8 +3,9 @@
 BOBST, manroland ve benzeri endüstriyel baskı/ambalaj makinelerine elektrik, mekanik ve otomasyon
 teknik servisi veren **bağımsız bir uzman** için Türkçe, responsive, müşteri kazanmaya odaklı web sitesi.
 
-**Teknolojiler:** Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · GSAP + ScrollTrigger · Lucide React
-Video, Three.js/WebGL veya ağır 3D yoktur. Görseller, gerçek fotoğraflar gelene kadar SVG teknik çizimlerle temsil edilir.
+**Teknolojiler:** Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · GSAP + ScrollTrigger (`@gsap/react` useGSAP) · Lucide React
+Video, Three.js/WebGL veya ağır 3D yoktur. Hero, uzmanlık sahnesi ve 4 hizmette kullanıcı tarafından sağlanan
+3 temsilî fotoğraf (`public/images/industrial`) kullanılır; diğer alanlarda SVG teknik çizim yer tutucuları vardır.
 
 ---
 
@@ -99,6 +100,18 @@ scripts/                  # test-whatsapp.mjs, e2e.mjs
 public/images/            # Gerçek fotoğraflar için klasörler
 ```
 
+## Scroll sahneleri
+
+| Sahne | Dosya | Masaüstü (≥768px) | Mobil / reduced-motion |
+| --- | --- | --- | --- |
+| Hero | `animations/HeroScene.tsx` | Bölüm görünüm yüksekliğinin %70'i kadar pinlenir; scrub'lı timeline: fotoğraf `scale 1→1.12` + hafif x/y, karartma artar, metin y/opacity ile geri çekilir | Pin yok; çok hafif yakınlaşma / reduced-motion'da hiç animasyon yok |
+| Uzmanlık (pano → motor-redüktör) | `animations/StoryScene.tsx`, `sections/ExpertiseStory.tsx` | Bölüm %110 boyunca pinlenir; 2. fotoğraf `clip-path` + `opacity` ile alttan gelir, metin blokları yer değiştirir, ilerleme çizgisi dolar | Ayrı, normal akışlı düzen + hafif reveal |
+| Genel reveal'lar | `animations/ScrollEffects.tsx` | `data-*` öznitelikleri | Hafifletilmiş / kapalı |
+
+Tüm sahneler `scrub` ile tersinirdir; `useGSAP` + `gsap.matchMedia` ile kurulur ve temizlenir. Pinli sahneler
+sayfa bileşenlerinde global efektlerden önce oluşturulur, ardından `ScrollTrigger.sort()` + `refresh()` çağrılır.
+Lenis kullanılmıyor (gereksiz bağımlılık eklenmedi).
+
 ## Teknik notlar
 
 - **Animasyon:** Tek bir `ScrollEffects` bileşeni `data-reveal`, `data-stagger`, `data-clip`, `data-zoom`,
@@ -154,6 +167,7 @@ Bu bilgiler olmadan site yayınlanabilir, ancak ilgili alanlar gizli kalır veya
 11. **Marka ürün grupları** (`machineTypes`) – hangi makine türlerinde çalışıldığının teyidi
 12. **Hizmet kapsamı maddeleri** (`services.ts`) – taslak olarak yazıldı; ustanın onayı gerekir (ör. PLC programına müdahale, atölye onarımı, yüksek gerilim işleri gibi sınırlar)
 13. **Gerçek çalışma fotoğrafları ve iş kayıtları** – müşteri izni alınmış olarak (`projects.ts`)
-14. **Usta fotoğrafı** ve gerçek makine/saha fotoğrafları (hero dahil)
-15. **Gizlilik/KVKK metni** – bir hukukçu tarafından gözden geçirilmesi önerilir
-16. Sosyal medya hesapları (varsa)
+14. **Usta fotoğrafı** ve gerçek makine/saha fotoğrafları
+15. **`public/images/industrial` altındaki 3 fotoğrafın kullanım hakları** – kullanıcı tarafından sağlandı; sitede "Temsilî görsel" notuyla, marka/model ya da gerçek servis vakası iddiası olmadan kullanılıyor
+16. **Gizlilik/KVKK metni** – bir hukukçu tarafından gözden geçirilmesi önerilir
+17. Sosyal medya hesapları (varsa)

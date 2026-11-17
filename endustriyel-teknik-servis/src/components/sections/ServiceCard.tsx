@@ -12,9 +12,10 @@ export function ServiceCard({ service, large = false }: { service: Service; larg
     >
       <div className={`relative overflow-hidden ${large ? 'aspect-[16/9]' : 'aspect-[16/10]'}`}>
         <div className="absolute inset-0 transition-transform duration-[1.2s] ease-out group-hover:scale-[1.06]">
-          <Visual kind={service.visual} className="h-full w-full" sizes="(min-width:1024px) 50vw, 100vw" />
+          <Visual kind={service.visual} image={service.image} note={false} className="h-full w-full" sizes="(min-width:1024px) 50vw, (min-width:768px) 50vw, 100vw" />
         </div>
-        <span className="absolute left-4 top-4 font-mono text-xs tracking-[0.2em] text-white/80">{service.index}</span>
+        <span className="absolute inset-0 bg-gradient-to-b from-ink/45 via-transparent to-transparent" aria-hidden="true" />
+        <span className="absolute left-4 top-4 font-mono text-xs tracking-[0.2em] text-white/90">{service.index}</span>
         <span className="absolute right-4 top-4 grid h-10 w-10 place-items-center bg-ink/70 text-accent backdrop-blur">
           <ServiceIconView name={service.icon} className="h-5 w-5" strokeWidth={1.6} />
         </span>

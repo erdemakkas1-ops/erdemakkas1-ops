@@ -1,4 +1,5 @@
 import { Hero } from '@/components/sections/Hero';
+import { ExpertiseStory } from '@/components/sections/ExpertiseStory';
 import { Expertise } from '@/components/sections/Expertise';
 import { Machines } from '@/components/sections/Machines';
 import { Process } from '@/components/sections/Process';
@@ -10,6 +11,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <ExpertiseStory />
       <Expertise />
       <Machines />
       <Process />

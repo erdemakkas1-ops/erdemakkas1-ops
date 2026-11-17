@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, MQ, ScrollTrigger, useGSAP } from './gsap';
 
 /**
  * Tek noktadan yönetilen, veri-özniteliği tabanlı scroll animasyonları.
@@ -14,25 +12,23 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
  *  data-clip                   → görsel aşağıdan yukarı klip ile açılır
  *  data-zoom                   → görsel kaydırmayla hafifçe uzaklaşır (masaüstü)
  *  data-parallax="0.12"        → hafif parallax (masaüstü)
- *  data-hero / -media / -content → hero yakınlaşma + metin geri çekilmesi
  *  data-timeline / data-timeline-progress → süreç çizgisi ilerlemesi
  *
  * prefers-reduced-motion: reduce → hiçbir animasyon kurulmaz, içerik olduğu gibi görünür.
  * Mobilde mesafeler ve süreler küçültülür, scrub efektleri kapatılır.
- * Tüm tetikleyiciler gsap.matchMedia ile kurulur ve rota değişiminde/unmount'ta revert edilir.
+ * Tüm tetikleyiciler useGSAP + gsap.matchMedia ile kurulur ve rota değişiminde/unmount'ta revert edilir.
+ * Pinlenen sahneler (HeroScene, StoryScene) sayfa bileşenlerinde, bu bileşenden ÖNCE oluşturulur;
+ * böylece aşağıdaki tetikleyiciler pin boşluklarını hesaba katar. Sonda refresh yapılır.
  */
 export function ScrollEffects() {
   const pathname = usePathname();
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+  useGSAP(
+    () => {
     const mm = gsap.matchMedia();
 
     mm.add(
-      {
-        desktop: '(min-width: 768px) and (prefers-reduced-motion: no-preference)',
-        mobile: '(max-width: 767.98px) and (prefers-reduced-motion: no-preference)',
-      },
+      { desktop: MQ.desktop, mobile: MQ.mobile },
       (ctx) => {
         const { desktop } = ctx.conditions as { desktop: boolean; mobile: boolean };
         const dist = desktop ? 44 : 22;
@@ -111,16 +107,6 @@ export function ScrollEffects() {
           });
         }
 
-        // Hero: görsel hafif yakınlaşır, metin geri çekilir. Sabitleme (pin) yok.
-        q('[data-hero]').forEach((hero) => {
-          const media = hero.querySelector('[data-hero-media]');
-          const content = hero.querySelector('[data-hero-content]');
-          const st = { trigger: hero, start: 'top top', end: 'bottom top', scrub: desktop ? 0.6 : true };
-          if (media) gsap.to(media, { scale: desktop ? 1.14 : 1.06, yPercent: desktop ? 6 : 3, ease: 'none', scrollTrigger: st });
-          if (content)
-            gsap.to(content, { y: desktop ? -120 : -50, autoAlpha: 0.15, ease: 'none', scrollTrigger: { ...st, end: '80% top' } });
-        });
-
         q('[data-timeline]').forEach((tl) => {
           const bar = tl.querySelector<HTMLElement>('[data-timeline-progress]');
           if (!bar) return;
@@ -139,6 +125,8 @@ export function ScrollEffects() {
       },
     );
 
+    ScrollTrigger.sort();
+    ScrollTrigger.refresh();
     // Web fontları yüklenince ölçüleri tazele
     let cancelled = false;
     document.fonts?.ready.then(() => {
@@ -149,7 +137,9 @@ export function ScrollEffects() {
       cancelled = true;
       mm.revert();
     };
-  }, [pathname]);
+    },
+    { dependencies: [pathname], revertOnUpdate: true },
+  );
 
   return null;
 }

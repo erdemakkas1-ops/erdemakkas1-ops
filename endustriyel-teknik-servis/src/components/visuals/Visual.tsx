@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import type { SiteImage, VisualKind } from '@/data/visuals';
+import { assetPath, type SiteImage, type VisualKind } from '@/data/visuals';
 import {
   DieCutterIllustration,
   DriveIllustration,
@@ -33,17 +33,29 @@ type Props = {
   /** Sol üst köşede küçük teknik etiket */
   caption?: string;
   tone?: 'dark' | 'steel';
+  /** Temsilî fotoğraflarda küçük not (varsayılan: açık) */
+  note?: boolean;
+  imgClassName?: string;
 };
 
 /**
  * Gerçek fotoğraf varsa next/image ile gösterir; yoksa teknik çizim yer tutucusu.
  * Kapsayıcı boyutu dışarıdan (aspect / h-*) verilmelidir – CLS oluşmaz.
  */
-export function Visual({ kind, image, className = '', priority, sizes = '100vw', caption, tone = 'dark' }: Props) {
+export function Visual({ kind, image, className = '', priority, sizes = '100vw', caption, tone = 'dark', note = true, imgClassName = '' }: Props) {
   if (image) {
     return (
-      <div className={`relative overflow-hidden ${className}`}>
-        <Image src={image.src} alt={image.alt} fill priority={priority} sizes={sizes} className="object-cover" />
+      <div className={`relative overflow-hidden bg-steel ${className}`}>
+        <Image
+          src={assetPath(image.src)}
+          alt={image.alt}
+          fill
+          priority={priority}
+          sizes={sizes}
+          className={`object-cover ${imgClassName}`}
+          style={{ objectPosition: image.position ?? '50% 50%' }}
+        />
+        {note && image.representative && <RepresentativeNote />}
       </div>
     );
   }
@@ -79,5 +91,13 @@ export function Visual({ kind, image, className = '', priority, sizes = '100vw',
         </span>
       )}
     </div>
+  );
+}
+
+export function RepresentativeNote({ className = 'bottom-3 right-3' }: { className?: string }) {
+  return (
+    <span className={`pointer-events-none absolute z-10 bg-ink/70 px-2 py-1 font-mono text-[9.5px] uppercase tracking-[0.16em] text-mist/75 backdrop-blur-sm ${className}`}>
+      Temsilî görsel
+    </span>
   );
 }

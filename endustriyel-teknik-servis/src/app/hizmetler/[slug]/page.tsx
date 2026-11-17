@@ -43,6 +43,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<Pa
         title={s.title}
         lead={s.lead}
         visual={s.visual}
+        image={s.image}
       >
         <div className="flex flex-col gap-3 sm:flex-row">
           <Link href={formHref} className="btn btn-primary">
