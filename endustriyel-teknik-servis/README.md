@@ -3,9 +3,14 @@
 BOBST, manroland ve benzeri endüstriyel baskı/ambalaj makinelerine elektrik, mekanik ve otomasyon
 teknik servisi veren **bağımsız bir uzman** için Türkçe, responsive, müşteri kazanmaya odaklı web sitesi.
 
-**Teknolojiler:** Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · GSAP + ScrollTrigger (`@gsap/react` useGSAP) · Lucide React
-Video, Three.js/WebGL veya ağır 3D yoktur. Hero, uzmanlık sahnesi ve 4 hizmette kullanıcı tarafından sağlanan
-3 temsilî fotoğraf (`public/images/industrial`) kullanılır; diğer alanlarda SVG teknik çizim yer tutucuları vardır.
+**Teknolojiler:** Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · three.js 0.180 (yalnızca açılış filmi,
+dinamik import) · GSAP + ScrollTrigger (`@gsap/react` useGSAP) · Lucide React. Video yoktur.
+
+**Tasarım dili:** Maviron Çelik demosuyla aynı aile — lacivert/bakır/kâğıt paleti, Archivo %125 geniş büyük harf
+başlıklar (konturlu `<em>`), Instrument Sans metin, JetBrains Mono etiketler; açılışta scroll'a bağlı canlı three.js
+"blueprint" filmi; fotoğraflı hizmet kolonları, film karelerinden süreç, SSS, bilgi tablosu + form, sağ altta hızlı
+iletişim, footer'da dev konturlu yazı. 4 hizmette kullanıcı tarafından sağlanan 3 temsilî fotoğraf
+(`public/images/industrial`) kullanılır.
 
 ---
 
@@ -58,6 +63,8 @@ npm run dev          # http://localhost:3000
 | `about.ts` | Deneyim yılı, belgeler, geçmiş, usta fotoğrafı, çalışma prensipleri |
 | `process.ts` | Servis süreci adımları |
 | `form.ts` | Form marka ve arıza türü seçenekleri |
+| `film.ts` | Açılış filminin sahne metinleri ve 3D etiketleri |
+| `faq.ts` | Sıkça sorulan sorular (FAQPage JSON-LD de buradan üretilir) |
 | `visuals.ts` | Sayfa görselleri (hero vb.) |
 
 `null` bırakılan alanlar sitede gösterilmez veya açıkça "eklenecek" olarak işaretlenir. Hiçbir alanda uydurma veri yoktur.
@@ -88,33 +95,45 @@ src/
     hizmetler/[slug]/     # 5 hizmet detay sayfası (generateStaticParams)
     makineler/ calismalarimiz/ hakkimizda/ iletisim/ gizlilik/
   components/
-    layout/               # Header (mobil menü), Footer, MobileCta, Logo
-    sections/             # Hero, Expertise, Machines, Process, Projects, About, ServiceCta, PageHero…
+    film/                 # Film (scroll → film saniyesi, etiketler), scene.ts (three.js sahnesi)
+    layout/               # Header (mobil menü), Footer (dev konturlu yazı), QuickContact, Logo
+    sections/             # Expertise, Process, Machines, Projects, About, Faq, ContactSection, ServiceCta, PageHero…
     forms/                # ServiceRequestForm (doğrulama + WhatsApp mesajı)
     animations/           # ScrollEffects (GSAP ScrollTrigger, data-* öznitelikleri)
     visuals/              # SVG teknik çizimler + Visual (foto/çizim seçici)
     ui/                   # ButtonLink, SectionHeading, Breadcrumbs, JsonLd, ContactActions, Icon
   data/                   # Tüm içerik ve işletme ayarları
   lib/                    # whatsapp.ts (saf fonksiyonlar), contact.ts, seo.ts
-scripts/                  # test-whatsapp.mjs, e2e.mjs
+scripts/                  # test-whatsapp.mjs, e2e.mjs, capture-film.mjs, png-to-webp.py
 public/images/            # Gerçek fotoğraflar için klasörler
 ```
 
-## Scroll sahneleri
+## Açılış filmi (`src/components/film/`)
 
-| Sahne | Dosya | Masaüstü (≥768px) | Mobil / reduced-motion |
-| --- | --- | --- | --- |
-| Hero | `animations/HeroScene.tsx` | Bölüm görünüm yüksekliğinin %70'i kadar pinlenir; scrub'lı timeline: fotoğraf `scale 1→1.12` + hafif x/y, karartma artar, metin y/opacity ile geri çekilir | Pin yok; çok hafif yakınlaşma / reduced-motion'da hiç animasyon yok |
-| Uzmanlık (pano → motor-redüktör) | `animations/StoryScene.tsx`, `sections/ExpertiseStory.tsx` | Bölüm %110 boyunca pinlenir; 2. fotoğraf `clip-path` + `opacity` ile alttan gelir, metin blokları yer değiştirir, ilerleme çizgisi dolar | Ayrı, normal akışlı düzen + hafif reveal |
-| Genel reveal'lar | `animations/ScrollEffects.tsx` | `data-*` öznitelikleri | Hafifletilmiş / kapalı |
+Maviron Çelik filmindeki yaklaşım: kod içinde kurulan bir baskı makinesi modeli (4 baskı ünitesi, besleme, çıkış,
+kumanda panosu, servo motor + redüktör), sayfa kaydırmasıyla oynatılır.
 
-Tüm sahneler `scrub` ile tersinirdir; `useGSAP` + `gsap.matchMedia` ile kurulur ve temizlenir. Pinli sahneler
-sayfa bileşenlerinde global efektlerden önce oluşturulur, ardından `ScrollTrigger.sort()` + `refresh()` çağrılır.
-Lenis kullanılmıyor (gereksiz bağımlılık eklenmedi).
+| Film saniyesi | Ne olur | Metin |
+| --- | --- | --- |
+| yükleme | plan çizgileri ve tüm parçaların blueprint'i plotter gibi çizilir | Hero: "Üretiminiz durmasın." |
+| 1.2–3.4 | taban, yan plakalar (öndekiler yarı saydam kesit), silindirler, besleme, çıkış yerine oturur | 01 Teşhis |
+| 3.6–6.0 | kumanda panosu gelir, bakır renkte vurgulanır; PLC / servo sürücü / kumanda etiketleri | 02 Elektrik ve otomasyon |
+| 5.8–8.0 | servo motor + redüktör gelir, silindirler döner; rulman yatağı etiketleri | 03 Mekanik ve hareket |
+| 8.0–10 | geniş kapanış planı + CTA | 04 Kontrol ve teslim |
+
+- Bölüm masaüstünde 520vh; sahne `position: sticky` (pin-spacer yok). Scroll ilerlemesi → film saniyesi; oynatma
+  kafası yumuşatılarak takip eder, her şey `t`'nin fonksiyonu olduğu için geri kaydırma geri sarar.
+- Düzen CSS medya sorgusuyla belirlenir (hidrasyonda kayma yok). **Mobil (<768 px), `prefers-reduced-motion`, WebGL2
+  yok veya `?still`**: durağan poster (`public/images/film/poster*.webp`) + hero metni, pin yok, three.js yüklenmez.
+- three.js yalnızca film başlarken dinamik import ile ayrı parça olarak yüklenir (ana sayfa ilk JS ≈ 122 kB).
+- Sahne zamanlaması/kamera: `components/film/scene.ts`; metinler ve 3D etiketler: `data/film.ts`.
+- Poster ve süreç görselleri filmden çekilir: `npm run build && npm start`, sonra
+  `node scripts/capture-film.mjs && python3 scripts/png-to-webp.py` (`?capture` + `__film.seek(t, ortalanmış)`).
+  Model veya kamera değişince yeniden çekin.
 
 ## Teknik notlar
 
-- **Animasyon:** Tek bir `ScrollEffects` bileşeni `data-reveal`, `data-stagger`, `data-clip`, `data-zoom`,
+- **Animasyon (film dışı):** Tek bir `ScrollEffects` bileşeni `data-reveal`, `data-stagger`, `data-clip`, `data-zoom`,
   `data-parallax`, `data-line`, `data-hero`, `data-timeline` özniteliklerini `gsap.matchMedia` ile kurar; rota
   değişiminde ve unmount'ta `revert()` edilir. Pin (sayfa kilitleme) yoktur. Mobilde mesafeler küçülür, parallax/zoom
   kapanır. `prefers-reduced-motion: reduce` durumunda hiçbir animasyon kurulmaz. Hero giriş animasyonu CSS ile

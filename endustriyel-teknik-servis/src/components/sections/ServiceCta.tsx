@@ -3,7 +3,7 @@ import { Wrench } from 'lucide-react';
 import { serviceRequestHref } from '@/data/navigation';
 import { PhoneButton } from '@/components/ui/ContactActions';
 
-export function ServiceCta({ index = '07' }: { index?: string }) {
+export function ServiceCta({ index = '' }: { index?: string }) {
   return (
     <section className="relative isolate overflow-hidden bg-[#0b1218] py-24 sm:py-36" aria-labelledby="cta-baslik">
       <div className="tech-grid absolute inset-0 -z-10 opacity-80" aria-hidden="true" />
@@ -18,8 +18,10 @@ export function ServiceCta({ index = '07' }: { index?: string }) {
             <p className="eyebrow" data-reveal>
               {index && <span className="text-mist/50">{index}</span>}Servis Talebi
             </p>
-            <h2 id="cta-baslik" className="display-xl mt-6 text-white" data-reveal>
-              Makinenizde <span className="text-accent">arıza</span> mı var?
+            <h2 id="cta-baslik" className="display-lg mt-6 text-paper" data-reveal>
+              Makinenizde
+              <br />
+              <em>arıza mı var?</em>
             </h2>
             <p className="mt-8 max-w-xl text-lg leading-relaxed text-mist/85" data-reveal>
               Makineniz ve arızanız hakkında bilgi paylaşın. Teknik değerlendirme için iletişime geçin.

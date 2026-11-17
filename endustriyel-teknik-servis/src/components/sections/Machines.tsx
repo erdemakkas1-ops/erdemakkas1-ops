@@ -6,12 +6,17 @@ import { Visual } from '@/components/visuals/Visual';
 
 export function Machines() {
   return (
-    <section className="relative overflow-hidden bg-ink py-24 sm:py-32" aria-labelledby="makine-baslik">
+    <section className="relative overflow-hidden bg-ink-2 py-24 sm:py-32" aria-labelledby="makine-baslik">
       <div className="container-x">
         <SectionHeading
-          index="03"
           eyebrow="Çalışılan Makine Grupları"
-          title={<span id="makine-baslik">Endüstriyel Makine Sistemleri</span>}
+          title={
+            <span id="makine-baslik">
+              Endüstriyel makine
+              <br />
+              <em>sistemleri.</em>
+            </span>
+          }
           lead="Karton ambalaj ve ofset baskı hatlarında karşılaşılan elektrik, mekanik ve otomasyon arızaları için teknik servis."
         />
         <div className="mt-14 grid gap-6 lg:mt-20 lg:grid-cols-2">
@@ -19,7 +24,7 @@ export function Machines() {
             <Link
               key={b.id}
               href={`/makineler#${b.id}`}
-              className="group relative block overflow-hidden border border-mist/10 bg-ink-2 transition-colors duration-500 hover:border-accent/50"
+              className="group relative block overflow-hidden border border-mist/10 bg-ink transition-colors duration-500 hover:border-accent/50"
               data-reveal
               data-reveal-delay={i * 0.12}
             >
@@ -27,10 +32,10 @@ export function Machines() {
                 <div className="absolute inset-0" data-zoom>
                   <Visual kind={b.visual} image={b.image} className="h-full w-full transition-transform duration-[1.2s] group-hover:scale-[1.04]" sizes="(min-width:1024px) 50vw, 100vw" />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-2 via-ink-2/30 to-transparent" aria-hidden="true" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" aria-hidden="true" />
                 <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
                   <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">{b.category}</p>
-                  <h3 className="mt-2 font-display text-5xl font-bold text-white sm:text-6xl">{b.name}</h3>
+                  <h3 className="mt-2 font-display text-[clamp(2.1rem,8vw,3.6rem)] text-paper">{b.name}</h3>
                 </div>
               </div>
               <div className="flex flex-col gap-5 p-6 sm:flex-row sm:items-end sm:justify-between sm:p-8">

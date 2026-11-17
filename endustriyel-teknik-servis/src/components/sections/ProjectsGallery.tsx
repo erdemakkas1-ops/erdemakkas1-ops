@@ -65,9 +65,12 @@ function ProjectCard({ p }: { p: Project }) {
   );
 }
 
-function PlaceholderCard({ category, visual, tall }: { category: string; visual: (typeof projectPlaceholders)[number]['visual']; tall: boolean }) {
+function PlaceholderCard({ category, visual, tall, light }: { category: string; visual: (typeof projectPlaceholders)[number]['visual']; tall: boolean; light?: boolean }) {
+  const t = light
+    ? { card: 'border-ink/25 bg-white/45', k: 'text-ink/45', title: 'text-ink/75', dl: 'text-ink/60', dt: 'text-ink/40', dd: 'text-ink/75' }
+    : { card: 'border-mist/20 bg-ink-2/60', k: 'text-mist/45', title: 'text-mist/70', dl: 'text-mist/55', dt: 'text-mist/40', dd: 'text-mist/70' };
   return (
-    <article className="relative overflow-hidden border border-dashed border-mist/20 bg-ink-2/60" aria-label="Örnek içerik – gerçek çalışma değildir">
+    <article className={`relative overflow-hidden border border-dashed ${t.card}`} aria-label="Örnek içerik – gerçek çalışma değildir">
       <div className={`relative overflow-hidden ${tall ? 'aspect-[4/5]' : 'aspect-[4/3]'}`}>
         <Visual kind={visual} className="h-full w-full opacity-70" tone="steel" />
         <span className="absolute left-4 top-4 bg-accent px-2.5 py-1 font-mono text-[10.5px] font-medium uppercase tracking-[0.16em] text-ink">
@@ -75,19 +78,19 @@ function PlaceholderCard({ category, visual, tall }: { category: string; visual:
         </span>
       </div>
       <div className="p-6">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-mist/45">Makine markası · Modeli</p>
-        <p className="mt-1.5 font-display text-xl font-semibold uppercase text-mist/70">Çalışma fotoğrafı eklenecek</p>
-        <dl className="mt-4 grid grid-cols-2 gap-3 text-xs text-mist/55">
+        <p className={`font-mono text-[11px] uppercase tracking-[0.18em] ${t.k}`}>Makine markası · Modeli</p>
+        <p className={`mt-1.5 font-display text-base uppercase ${t.title}`}>Çalışma fotoğrafı eklenecek</p>
+        <dl className={`mt-4 grid grid-cols-2 gap-3 text-xs ${t.dl}`}>
           <div>
-            <dt className="text-mist/40">Arıza kategorisi</dt>
-            <dd className="mt-0.5 text-mist/70">{category}</dd>
+            <dt className={t.dt}>Arıza kategorisi</dt>
+            <dd className={`mt-0.5 ${t.dd}`}>{category}</dd>
           </div>
           <div>
-            <dt className="text-mist/40">Tarih</dt>
+            <dt className={t.dt}>Tarih</dt>
             <dd className="mt-0.5">İsteğe bağlı</dd>
           </div>
           <div className="col-span-2">
-            <dt className="text-mist/40">Müdahale açıklaması · Yapılan işlem</dt>
+            <dt className={t.dt}>Müdahale açıklaması · Yapılan işlem</dt>
             <dd className="mt-0.5">Gerçek iş kaydı girildiğinde burada gösterilir.</dd>
           </div>
         </dl>
@@ -96,7 +99,7 @@ function PlaceholderCard({ category, visual, tall }: { category: string; visual:
   );
 }
 
-export function ProjectsGallery({ limit }: { limit?: number }) {
+export function ProjectsGallery({ limit, light }: { limit?: number; light?: boolean }) {
   if (projects.length > 0) {
     const list = limit ? projects.slice(0, limit) : projects;
     return (
@@ -111,16 +114,16 @@ export function ProjectsGallery({ limit }: { limit?: number }) {
   const list = limit ? projectPlaceholders.slice(0, limit) : projectPlaceholders;
   return (
     <div>
-      <p className="mb-8 flex max-w-3xl gap-3 border-l-2 border-accent bg-ink-2/70 p-4 text-sm leading-relaxed text-mist/80">
+      <p className={`mb-8 flex max-w-3xl gap-3 border-l-2 border-accent p-4 text-sm leading-relaxed ${light ? 'bg-white/50 text-ink/75' : 'bg-ink-2/70 text-mist/80'}`}>
         <Info className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
         <span>
-          Bu alandaki kartlar <strong className="text-white">örnek içeriktir</strong> ve gerçek bir müşteri ya da tamamlanmış
+          Bu alandaki kartlar <strong className={light ? 'text-ink' : 'text-white'}>örnek içeriktir</strong> ve gerçek bir müşteri ya da tamamlanmış
           iş anlatmaz. Gerçek servis çalışmaları, fotoğrafları ve açıklamalarıyla birlikte eklendiğinde burada yayınlanacaktır.
         </span>
       </p>
       <div className={limit ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3" : "columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:mb-6 [&>*]:break-inside-avoid"} data-stagger>
         {list.map((p, i) => (
-          <PlaceholderCard key={p.category} category={p.category} visual={p.visual} tall={!limit && i % 3 === 1} />
+          <PlaceholderCard key={p.category} category={p.category} visual={p.visual} tall={!limit && i % 3 === 1} light={light} />
         ))}
       </div>
     </div>

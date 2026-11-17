@@ -15,7 +15,7 @@ export function Footer() {
   ].filter(Boolean);
 
   return (
-    <footer className="relative border-t border-mist/10 bg-[#0c131a] pb-28 pt-16 md:pb-10 lg:pt-24">
+    <footer className="relative overflow-hidden border-t border-mist/10 bg-ink pb-24 pt-16 sm:pb-12 lg:pt-24">
       <div className="container-x">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
@@ -71,7 +71,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="hairline mt-14" />
+        <p className="outline-word mt-16 select-none text-[7.1vw] 2xl:text-[6.4rem]" aria-hidden="true">
+          Teknik servis
+        </p>
+
+        <div className="hairline mt-10" />
 
         <div className="mt-8 grid gap-6 text-xs leading-relaxed text-mist/55 lg:grid-cols-2">
           <p>

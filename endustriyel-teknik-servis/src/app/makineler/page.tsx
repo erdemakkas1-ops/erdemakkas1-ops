@@ -43,7 +43,7 @@ export default function MachinesPage() {
               <p className="eyebrow" data-reveal>
                 {b.category}
               </p>
-              <h2 id={`${b.id}-baslik`} className="mt-4 font-display text-6xl font-bold text-white sm:text-7xl" data-reveal>
+              <h2 id={`${b.id}-baslik`} className="mt-4 font-display text-[clamp(2.2rem,10vw,4.5rem)] text-paper" data-reveal>
                 {b.name}
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-mist/80" data-reveal>

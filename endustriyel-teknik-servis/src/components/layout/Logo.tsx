@@ -9,7 +9,7 @@ export function Logo({ onClick }: { onClick?: () => void }) {
         <span className="absolute -bottom-px -right-px h-2 w-2 bg-accent" aria-hidden="true" />
       </span>
       <span className="flex flex-col leading-none">
-        <span className="whitespace-nowrap font-display text-[1.05rem] font-bold uppercase tracking-wide text-white">{displayName}</span>
+        <span className="whitespace-nowrap font-display text-[0.74rem] uppercase tracking-[0.08em] text-paper min-[400px]:text-[0.82rem] sm:text-[0.95rem] sm:tracking-[0.12em]">{displayName}</span>
         <span className="mt-1 hidden font-mono text-[9.5px] uppercase tracking-[0.2em] text-mist/55 sm:block">{business.tagline}</span>
       </span>
     </Link>
