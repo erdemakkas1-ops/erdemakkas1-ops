@@ -30,7 +30,7 @@ export function Expertise({ headingAs = 'h2' }: { headingAs?: 'h1' | 'h2' }) {
         </div>
         <p className="mt-8 max-w-3xl text-sm leading-relaxed text-ink-text/60">
           Hizmet kapsamı makineye ve arızanın niteliğine göre değişir; her talep için uygunluk ön teknik değerlendirmede
-          netleştirilir.
+          netleştirilir. Fotoğraflar temsilîdir; belirli bir müşteri işini veya makine modelini göstermez.
         </p>
       </div>
     </section>
