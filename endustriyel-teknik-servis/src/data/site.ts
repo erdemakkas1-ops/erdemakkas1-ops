@@ -81,3 +81,37 @@ export const site = {
 
 /** JSON-LD yalnızca doğrulanmış temel işletme verileri varken üretilir. */
 export const hasVerifiedBusinessData = Boolean(business.name && (business.phone || business.email));
+
+/**
+ * USTA PROFİLİ – ŞABLON DEĞERLER
+ * ------------------------------------------------------------------
+ * Usta onay verene kadar site bu bilgiler "varmış gibi" kurgulanır; değerler açıkça şablondur
+ * (Usta Adı Soyadı, XX yıl, 0 5XX…). Sitede kesik çizgili altçizgi ve ipucuyla işaretlenir.
+ * Gerçek bilgi girildiğinde ilgili `value` doldurulur, işaret kendiliğinden kalkar.
+ * Uydurma isim, yorum veya rakam girmeyin.
+ */
+export type ProfileField = { value: string | null; template: string };
+
+const field = (value: string | null, template: string): ProfileField => ({ value, template });
+
+export const profile = {
+  /** Ustanın adı soyadı */
+  name: field(business.ownerName, 'Usta Adı Soyadı'),
+  /** Ünvan satırı */
+  role: field('Elektrik · Mekanik · Otomasyon', ''),
+  /** Sahadaki deneyim süresi, örn. "22 yıl" */
+  experience: field(null, 'XX yıl'),
+  /** Önceki çalışılan servis / firma geçmişi, örn. "12 yıl bir ambalaj fabrikasında bakım şefi" */
+  background: field(null, 'Önceki servis / fabrika geçmişi'),
+  /** Merkez şehir */
+  base: field(null, 'Şehir'),
+  /** Gidilen bölgeler */
+  region: field(business.serviceArea, 'Hizmet verilen bölgeler'),
+  /** Çalışma saatleri */
+  hours: field(business.workingHours, 'Çalışma saatleri'),
+  /** Görünen telefon */
+  phone: field(business.phone, '0 5XX XXX XX XX'),
+};
+
+export const fieldText = (f: ProfileField) => f.value ?? f.template;
+export const isTemplate = (f: ProfileField) => !f.value;

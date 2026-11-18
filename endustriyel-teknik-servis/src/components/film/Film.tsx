@@ -6,7 +6,9 @@ import { ArrowRight } from 'lucide-react';
 import { FILM_DURATION, filmFinale, filmLabels, filmScenes } from '@/data/film';
 import { serviceRequestHref } from '@/data/navigation';
 import { assetPath } from '@/data/visuals';
-import { PhoneButton } from '@/components/ui/ContactActions';
+import { CallButton, WhatsappCta } from '@/components/ui/CallButtons';
+import { Ph } from '@/components/ui/Ph';
+import { profile } from '@/data/site';
 import type { FilmHandle } from './scene';
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -136,6 +138,9 @@ export function Film() {
       raf = requestAnimationFrame(loop);
       if (capture) {
         (window as unknown as { __film: unknown }).__film = {
+          part(tags: string[], dir: [number, number, number], highlight: string[] = []) {
+            film!.capturePart(tags, dir, highlight);
+          },
           seek(s: number, centered = false) {
             t = target = s;
             film!.setCentered(centered ? 1 : 0);
@@ -183,16 +188,17 @@ export function Film() {
             <br />
             <em>durmasın.</em>
           </h1>
-          <p className="film__lede">Endüstriyel baskı ve ambalaj makinelerinde elektrik, mekanik ve otomasyon bakım çözümleri.</p>
+          <p className="film__lede">
+            Ben <Ph f={profile.name} />. BOBST platin kesim ve manroland ofset makinelerinde elektrik, mekanik ve otomasyon
+            arızalarına bakıyorum.
+          </p>
           <div className="film__actions">
-            <Link href={serviceRequestHref} className="btn btn-primary">
-              Servis Talebi Oluştur <ArrowRight className="btn-arrow h-4 w-4" aria-hidden="true" />
-            </Link>
-            <Link href="/hizmetler" className="btn btn-ghost">
-              Hizmetleri İncele
-            </Link>
+            <CallButton fallbackHref="#servis-talebi" />
+            <WhatsappCta fallbackHref="#servis-talebi" />
           </div>
-          <p className="film__bio">Elektrik · Mekanik · PLC / Otomasyon · Servo</p>
+          <p className="film__bio">
+            <Ph f={profile.experience} /> saha deneyimi · <Ph f={profile.base} /> · Elektrik · Mekanik · Otomasyon
+          </p>
         </div>
 
         {filmScenes.map((s) => (
@@ -221,12 +227,12 @@ export function Film() {
             <br />
             <em>devam etsin.</em>
           </p>
-          <p className="film__lede">Makineniz ve arızanız hakkında bilgi paylaşın; ön teknik değerlendirme için iletişime geçin.</p>
+          <p className="film__lede">Makinenizi ve arızayı anlatın; telefonda ön değerlendirmeyle başlayalım.</p>
           <div className="film__actions">
-            <Link href={serviceRequestHref} className="btn btn-primary">
-              Arıza Bildir <ArrowRight className="btn-arrow h-4 w-4" aria-hidden="true" />
+            <CallButton fallbackHref="#servis-talebi" />
+            <Link href={serviceRequestHref} className="btn btn-ghost">
+              Arıza bildir <ArrowRight className="btn-arrow h-4 w-4" aria-hidden="true" />
             </Link>
-            <PhoneButton />
           </div>
         </div>
 

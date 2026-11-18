@@ -79,7 +79,7 @@ export function About({ full = false }: { full?: boolean }) {
         <div className="lg:col-span-7">
           <SectionHeading
             index={undefined}
-            eyebrow="Hakkımızda"
+            eyebrow="Hakkımda"
             title={
               <span id="hakkimizda-baslik">
                 Doğrudan

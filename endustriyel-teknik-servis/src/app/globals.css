@@ -225,6 +225,14 @@
     border-color: var(--color-accent);
     color: var(--color-accent);
   }
+  .btn-outline-dark {
+    border: 1px solid rgb(20 27 37 / 0.35);
+    color: var(--color-ink);
+  }
+  .btn-outline-dark:hover {
+    border-color: var(--color-accent-strong);
+    color: var(--color-accent-strong);
+  }
   .btn-dark {
     background: var(--color-ink);
     color: #fff;
@@ -529,6 +537,143 @@
 .film-capture header,
 .film-capture [data-quick-contact] {
   display: none !important;
+}
+
+/* ---------- HALO tarzı yörünge (Neye bakıyorum?) ---------- */
+.orbit__stage {
+  display: none;
+}
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .orbit {
+    height: 380vh;
+  }
+  .orbit__stage {
+    display: block;
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .orbit__list {
+    display: none;
+  }
+}
+.orbit__glow {
+  position: absolute;
+  left: 62%;
+  top: 52%;
+  width: 46vw;
+  height: 46vw;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(156, 195, 234, 0.1), transparent 62%);
+  pointer-events: none;
+}
+.orbit__copy {
+  position: absolute;
+  z-index: 20;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(30rem, 40%);
+}
+.orbit__item {
+  position: absolute;
+  left: 66%;
+  top: 54%;
+  width: min(27vw, 50vh);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  will-change: transform, opacity, filter;
+  transform: translate(-50%, -50%);
+}
+.orbit__bob {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+.orbit__bob img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.45));
+  user-select: none;
+}
+.orbit__shadow {
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  width: 54%;
+  height: 7%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.5), transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .orbit__bob {
+    animation: bob 6s ease-in-out infinite;
+  }
+  .orbit__shadow {
+    animation: bob-shadow 6s ease-in-out infinite;
+  }
+  .orbit__item:nth-child(2n) .orbit__bob,
+  .orbit__item:nth-child(2n) .orbit__shadow {
+    animation-delay: -2.4s;
+  }
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(-10px) rotate(-1.2deg);
+  }
+  50% {
+    transform: translateY(10px) rotate(1.2deg);
+  }
+}
+@keyframes bob-shadow {
+  0%,
+  100% {
+    transform: translateX(-50%) scaleX(0.82);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 1;
+  }
+}
+.orbit__wheel {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.orbit__wheel small {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.orbit__track {
+  position: relative;
+  width: 180px;
+  height: 14px;
+  background: repeating-linear-gradient(90deg, rgba(201, 207, 215, 0.35) 0 1px, transparent 1px 6px);
+  overflow: hidden;
+}
+.orbit__fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: repeating-linear-gradient(90deg, var(--color-accent) 0 1px, transparent 1px 6px);
 }
 
 /* Footer: dev konturlu yazı */

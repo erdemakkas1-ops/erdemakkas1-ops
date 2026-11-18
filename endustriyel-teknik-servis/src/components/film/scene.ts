@@ -36,6 +36,7 @@ type Part = {
   baseY: number;
   spin?: number; // dönen silindirler: +1 / -1
   ghost?: boolean; // ön plakalar: yarı saydam, arkadaki silindirleri kapatmaz
+  tag: string; // parça grubu: unit0..3, feed, delivery, console, panel, plc, drive, base
 };
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -47,6 +48,8 @@ const smooth = (a: number, b: number, t: number) => {
 const bell = (a: number, b: number, c: number, d: number, t: number) => smooth(a, b, t) * (1 - smooth(c, d, t));
 
 export type FilmHandle = {
+  /** Yalnızca verilen gruplardaki parçaları şeffaf arka planla, nesneyi kadrajlayarak çizer (görsel üretimi). */
+  capturePart: (tags: string[], dir: [number, number, number], highlight?: string[]) => void;
   setTime: (t: number) => void;
   setCentered: (k: number) => void;
   resize: (w: number, h: number) => void;
@@ -56,9 +59,10 @@ export type FilmHandle = {
 };
 
 export function createFilm(canvas: HTMLCanvasElement): FilmHandle {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, premultipliedAlpha: false, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.setClearColor(C.bg, 1);
+  let curTag = 'base';
 
   const scene = new THREE.Scene();
   scene.fog = new THREE.Fog(C.bg, 30, 72);
@@ -114,7 +118,7 @@ export function createFilm(canvas: HTMLCanvasElement): FilmHandle {
       tmpV.set(arr[i], arr[i + 1], arr[i + 2]).applyMatrix4(group.matrixWorld);
       blueVerts.push(tmpV.x, tmpV.y, tmpV.z);
     }
-    parts.push({ group, fillMat, edgeMat, cat, t0, baseY: pos[1], spin: opts.spin, ghost: opts.ghost });
+    parts.push({ group, fillMat, edgeMat, cat, t0, baseY: pos[1], spin: opts.spin, ghost: opts.ghost, tag: curTag });
     return group;
   }
 
@@ -151,6 +155,7 @@ export function createFilm(canvas: HTMLCanvasElement): FilmHandle {
   planRect(0, 0, 9.8, 1.9);
 
   unitX.forEach((x, i) => {
+    curTag = `unit${i}`;
     const t = 1.35 + i * 0.28;
     // yan plakalar (öndeki yarı saydam: kesit görünüş)
     for (const z of [-plateZ, plateZ]) addPart(box(1.34, 2.3, 0.09), [x, 1.37, z], 'frame', t, { ghost: z > 0 });
@@ -186,12 +191,14 @@ export function createFilm(canvas: HTMLCanvasElement): FilmHandle {
   });
 
   // besleme (feeder)
+  curTag = 'feed';
   addPart(box(1.5, 1.7, 1.66), [-4.15, 1.07, 0], 'feed', 1.25, { ghost: true });
   addPart(box(1.1, 0.5, 1.2), [-4.2, 0.47, 0.0], 'feed', 1.35);
   addPart(box(0.7, 0.24, 1.3), [-3.75, 2.04, 0], 'feed', 1.45);
   planRect(-4.15, 0, 1.5, 1.66);
 
   // çıkış (delivery)
+  curTag = 'delivery';
   addPart(box(1.9, 0.12, 1.66), [4.25, 2.3, 0], 'feed', 2.5);
   for (const z of [-0.8, 0.8]) addPart(box(1.9, 2.2, 0.08), [4.25, 1.32, z], 'feed', 2.55, { ghost: z > 0 });
   addPart(box(1.2, 0.55, 1.2), [4.45, 0.5, 0], 'feed', 2.65);
@@ -200,20 +207,24 @@ export function createFilm(canvas: HTMLCanvasElement): FilmHandle {
   planRect(4.25, 0, 1.9, 1.66);
 
   // operatör konsolu
+  curTag = 'console';
   addPart(box(0.9, 1.0, 0.6), [5.9, 0.5, 1.5], 'feed', 2.85);
   addPart(box(0.9, 0.06, 0.7), [5.9, 1.06, 1.48], 'feed', 2.9, { rot: [-0.45, 0, 0] });
   planRect(5.9, 1.5, 0.9, 0.6);
 
   /* ---- kumanda panosu ---- */
+  curTag = 'panel';
   const cab = { x: -6.3, z: 0.5 };
   addPart(box(1.2, 2.05, 0.5), [cab.x, 1.03, cab.z], 'panel', 3.7);
   const face = cab.z + 0.27;
   // DIN rayları ve kablo kanalları
   for (const y of [1.7, 1.25, 0.8, 0.42]) addPart(box(1.02, 0.05, 0.03), [cab.x, y, face], 'panel', 3.85);
   // PLC
+  curTag = 'plc';
   addPart(box(0.42, 0.22, 0.08), [cab.x - 0.24, 1.7, face + 0.05], 'panel', 3.95);
   for (let k = 0; k < 4; k++) addPart(box(0.07, 0.22, 0.08), [cab.x + 0.02 + k * 0.08, 1.7, face + 0.05], 'panel', 4.0 + k * 0.03);
   // servo sürücüler
+  curTag = 'panel';
   for (let k = 0; k < 2; k++) addPart(box(0.13, 0.36, 0.14), [cab.x + 0.3 + k * 0.16, 1.63, face + 0.07], 'panel', 4.1 + k * 0.05);
   // kontaktörler
   for (let k = 0; k < 6; k++) addPart(box(0.1, 0.14, 0.08), [cab.x - 0.42 + k * 0.165, 1.25, face + 0.05], 'panel', 4.18 + k * 0.03);
@@ -222,10 +233,12 @@ export function createFilm(canvas: HTMLCanvasElement): FilmHandle {
   // klemensler
   addPart(box(0.86, 0.1, 0.05), [cab.x, 0.42, face + 0.03], 'panel', 4.42);
   // kablo kanalı (makineye)
+  curTag = 'cable';
   addPart(box(1.3, 0.08, 0.12), [-5.05, 0.04, cab.z], 'panel', 4.5);
   planRect(cab.x, cab.z, 1.2, 0.5);
 
   /* ---- servo motor + redüktör (3. ünitenin ön tarafı) ---- */
+  curTag = 'drive';
   const dr = { x: 0.8, y: 0.78 };
   addPart(box(0.36, 0.34, 0.3), [dr.x, dr.y, plateZ + 0.24], 'drive', 5.95);
   addPart(new THREE.CylinderGeometry(0.11, 0.11, 0.09, 28).rotateX(Math.PI / 2), [dr.x, dr.y, plateZ + 0.43], 'drive', 6.05);
@@ -233,6 +246,7 @@ export function createFilm(canvas: HTMLCanvasElement): FilmHandle {
   addPart(cylZ(0.11, 0.42, 28), [dr.x - 0.32, dr.y + 0.02, plateZ + 0.26], 'drive', 6.15, { extraEdges: cylCross(0.11, 0.42) });
   addPart(box(0.12, 0.1, 0.1), [dr.x - 0.32, dr.y + 0.17, plateZ + 0.12], 'drive', 6.25);
   // motor kablosu kanalı
+  curTag = 'cable';
   addPart(box(0.06, 0.06, 1.3), [dr.x - 0.32, 0.08, plateZ + 0.95], 'drive', 6.3);
 
   /* ---------------- blueprint ve plan çizgileri ---------------- */
@@ -374,10 +388,38 @@ export function createFilm(canvas: HTMLCanvasElement): FilmHandle {
     renderer.dispose();
   }
 
+  function capturePart(tags: string[], dir: [number, number, number], highlight: string[] = []) {
+    setTime(10);
+    grid.visible = false;
+    blueprint.visible = false;
+    plan.visible = false;
+    const bbox = new THREE.Box3();
+    for (const p of parts) {
+      const on = tags.includes(p.tag);
+      p.group.visible = on;
+      if (!on) continue;
+      p.group.position.y = p.baseY;
+      p.group.rotation.z = 0;
+      const hi = highlight.includes(p.tag);
+      p.edgeMat.color.copy(hi ? C.oak : C.blue);
+      p.edgeMat.opacity = 0.95;
+      p.fillMat.color.copy(hi ? C.fillHi : C.fill);
+      p.fillMat.opacity = p.ghost ? 0.25 : 0.94;
+      bbox.expandByObject(p.group);
+    }
+    const center = bbox.getCenter(new THREE.Vector3());
+    const radius = bbox.getBoundingSphere(new THREE.Sphere()).radius;
+    const dist = (radius / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.02;
+    camera.position.copy(center).add(new THREE.Vector3(...dir).normalize().multiplyScalar(dist));
+    camera.lookAt(center);
+    renderer.setClearColor(C.bg, 0);
+    renderer.render(scene, camera);
+  }
+
   const setCentered = (k: number) => {
     centerK = k;
     setTime(lastT);
   };
 
-  return { setTime, setCentered, resize, project, intro, dispose };
+  return { setTime, setCentered, capturePart, resize, project, intro, dispose };
 }

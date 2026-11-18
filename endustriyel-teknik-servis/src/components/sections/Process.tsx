@@ -11,7 +11,7 @@ export function Process({ index }: { index?: string } = {}) {
         <SectionHead
           id="surec-baslik"
           tone="light"
-          eyebrow="Nasıl çalışıyoruz"
+          eyebrow="Nasıl çalışıyorum"
           title={
             <>
               Bildirimden
@@ -19,7 +19,7 @@ export function Process({ index }: { index?: string } = {}) {
               <em>teslime.</em>
             </>
           }
-          note="Dört adımın her birinde muhatabınız aynı teknik kişidir. Süre ve kapsam, arızanın niteliğine göre sizinle birlikte netleştirilir."
+          note="Dört adımın her birinde muhatabınız benim. Süreyi ve kapsamı, arızayı gördükten sonra sizinle birlikte netleştiririz."
         />
         <ol data-timeline className="relative grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {processSteps.map((step) => (
