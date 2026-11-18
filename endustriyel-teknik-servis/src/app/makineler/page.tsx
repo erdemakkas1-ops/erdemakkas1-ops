@@ -43,7 +43,7 @@ export default function MachinesPage() {
               <p className="eyebrow" data-reveal>
                 {b.category}
               </p>
-              <h2 id={`${b.id}-baslik`} className="mt-4 font-display text-6xl font-bold text-white sm:text-7xl" data-reveal>
+              <h2 id={`${b.id}-baslik`} className="mt-4 font-display text-[clamp(2.2rem,10vw,4.5rem)] text-paper" data-reveal>
                 {b.name}
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-mist/80" data-reveal>
@@ -60,6 +60,9 @@ export default function MachinesPage() {
               </ul>
 
               <h3 className="mt-10 font-mono text-[11px] uppercase tracking-[0.2em] text-mist/50">Çalışılan modeller</h3>
+              <Link href={`/makineler/${b.id}`} className="mt-8 inline-flex items-center gap-2 font-semibold text-accent hover:text-[#d99b5c]">
+                {b.name} sayfası: modeller ve makine grupları <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
               {b.models.length > 0 ? (
                 <ul className="mt-4 divide-y divide-mist/10 border-y border-mist/10">
                   {b.models.map((m) => (

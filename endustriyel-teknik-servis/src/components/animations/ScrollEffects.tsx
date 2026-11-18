@@ -17,8 +17,7 @@ import { gsap, MQ, ScrollTrigger, useGSAP } from './gsap';
  * prefers-reduced-motion: reduce → hiçbir animasyon kurulmaz, içerik olduğu gibi görünür.
  * Mobilde mesafeler ve süreler küçültülür, scrub efektleri kapatılır.
  * Tüm tetikleyiciler useGSAP + gsap.matchMedia ile kurulur ve rota değişiminde/unmount'ta revert edilir.
- * Pinlenen sahneler (HeroScene, StoryScene) sayfa bileşenlerinde, bu bileşenden ÖNCE oluşturulur;
- * böylece aşağıdaki tetikleyiciler pin boşluklarını hesaba katar. Sonda refresh yapılır.
+ * Açılış filmi sticky ile sabitlenir (pin-spacer yok); bu yüzden tetikleyici sırası sorun olmaz.
  */
 export function ScrollEffects() {
   const pathname = usePathname();

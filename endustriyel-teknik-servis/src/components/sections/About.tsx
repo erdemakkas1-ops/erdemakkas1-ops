@@ -78,9 +78,15 @@ export function About({ full = false }: { full?: boolean }) {
 
         <div className="lg:col-span-7">
           <SectionHeading
-            index={full ? undefined : '06'}
+            index={undefined}
             eyebrow="Hakkımızda"
-            title={<span id="hakkimizda-baslik">Fabrikanın diliyle konuşan teknik servis</span>}
+            title={
+              <span id="hakkimizda-baslik">
+                Doğrudan
+                <br />
+                <em>muhatap.</em>
+              </span>
+            }
           />
           <div className="prose-tech mt-8 max-w-2xl text-base leading-relaxed text-mist/80 sm:text-lg" data-reveal>
             <p>

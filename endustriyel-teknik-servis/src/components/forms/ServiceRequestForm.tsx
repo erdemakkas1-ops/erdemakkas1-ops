@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { AlertCircle, Camera, Check, Copy, ExternalLink, MessageCircle, RotateCcw, ShieldCheck } from 'lucide-react';
-import { faultTypes, formBrands } from '@/data/form';
+import { faultTypes, formBrands, urgencyOptions } from '@/data/form';
 import { whatsappNumber } from '@/lib/contact';
 import {
   LIMITS,
@@ -14,6 +14,7 @@ import {
 } from '@/lib/whatsapp';
 
 const empty: ServiceRequest = {
+  urgency: '',
   brand: '',
   otherBrand: '',
   model: '',
@@ -24,7 +25,7 @@ const empty: ServiceRequest = {
   contactName: '',
 };
 
-const fieldOrder: (keyof ServiceRequest)[] = ['brand', 'otherBrand', 'model', 'faultType', 'description', 'city', 'district', 'contactName'];
+const fieldOrder: (keyof ServiceRequest)[] = ['urgency', 'brand', 'otherBrand', 'model', 'faultType', 'description', 'city', 'district', 'contactName'];
 
 type Result = { message: string; url: string | null } | null;
 
@@ -43,9 +44,17 @@ export function ServiceRequestForm() {
 
   // Hizmet sayfasından gelindiyse arıza türünü ön seç (?ariza=elektrik)
   useEffect(() => {
-    const key = new URLSearchParams(window.location.search).get('ariza');
-    const match = faultTypes.find((f) => f.id === key);
-    if (match) setValues((v) => (v.faultType ? v : { ...v, faultType: match.label }));
+    const q = new URLSearchParams(window.location.search);
+    const match = faultTypes.find((f) => f.id === q.get('ariza'));
+    const brand = formBrands.find((b) => b.id === q.get('marka'));
+    const model = (q.get('model') ?? '').slice(0, LIMITS.model);
+    if (match || brand || model)
+      setValues((v) => ({
+        ...v,
+        faultType: v.faultType || match?.label || '',
+        brand: v.brand || brand?.label || '',
+        model: v.model || model,
+      }));
   }, []);
 
   useEffect(() => {
@@ -189,6 +198,31 @@ export function ServiceRequestForm() {
           </ul>
         </div>
       )}
+
+      {/* Durum / aciliyet */}
+      <fieldset data-field="urgency" aria-describedby={errors.urgency ? id('urgency-err') : undefined}>
+        <legend className="mb-3 text-sm font-semibold text-white">
+          Makinenin durumu <Req />
+        </legend>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3" id={id('urgency')}>
+          {urgencyOptions.map((u) => (
+            <Choice
+              key={u.id}
+              name="urgency"
+              value={u.label}
+              checked={values.urgency === u.label}
+              onChange={() => set('urgency', u.label)}
+              invalid={Boolean(errors.urgency)}
+            >
+              <span className="flex flex-col leading-tight">
+                <span>{u.label}</span>
+                <span className="mt-1 text-xs text-mist/55">{u.hint}</span>
+              </span>
+            </Choice>
+          ))}
+        </div>
+        <FieldError id={id('urgency-err')} msg={errors.urgency} />
+      </fieldset>
 
       {/* Marka */}
       <fieldset data-field="brand" aria-describedby={errors.brand ? id('brand-err') : undefined}>

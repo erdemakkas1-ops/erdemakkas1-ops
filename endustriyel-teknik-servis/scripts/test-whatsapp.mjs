@@ -9,6 +9,7 @@ import {
 } from '../src/lib/whatsapp.ts';
 
 const valid = {
+  urgency: 'Makine durdu',
   brand: 'BOBST',
   otherBrand: '',
   model: 'Örnek Model 106',
@@ -20,8 +21,8 @@ const valid = {
 };
 
 test('boş form tüm zorunlu alanlar için hata verir', () => {
-  const e = validateRequest({ ...valid, brand: '', model: '', faultType: '', description: '', city: '' });
-  assert.deepEqual(Object.keys(e).sort(), ['brand', 'city', 'description', 'faultType', 'model']);
+  const e = validateRequest({ ...valid, urgency: '', brand: '', model: '', faultType: '', description: '', city: '' });
+  assert.deepEqual(Object.keys(e).sort(), ['brand', 'city', 'description', 'faultType', 'model', 'urgency']);
 });
 
 test('geçerli form hata vermez; ilçe ve iletişim adı isteğe bağlıdır', () => {
@@ -40,7 +41,7 @@ test('kısa açıklama reddedilir', () => {
 
 test('mesaj tüm alanları Türkçe karakterlerle içerir', () => {
   const m = buildServiceMessage({ ...valid, contactName: 'Üretim Şefi' });
-  for (const s of ['*SERVİS TALEBİ*', 'BOBST', 'Örnek Model 106', 'Servo / Sürücü', 'İstanbul / Esenyurt', 'Üretim Şefi', 'aşırı akım'])
+  for (const s of ['*SERVİS TALEBİ*', '*Durum:* Makine durdu', 'BOBST', 'Örnek Model 106', 'Servo / Sürücü', 'İstanbul / Esenyurt', 'Üretim Şefi', 'aşırı akım'])
     assert.ok(m.includes(s), `eksik: ${s}`);
 });
 

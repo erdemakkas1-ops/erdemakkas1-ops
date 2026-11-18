@@ -18,3 +18,10 @@ export const faultTypes = [
 ] as const;
 
 export type FaultTypeId = (typeof faultTypes)[number]['id'];
+
+/** Talep tipi / aciliyet – yalnızca önceliklendirme içindir, müdahale süresi vaadi değildir. */
+export const urgencyOptions = [
+  { id: 'durdu', label: 'Makine durdu', hint: 'Üretim yapılamıyor' },
+  { id: 'sorunlu', label: 'Çalışıyor, sorun var', hint: 'Aralıklı arıza, ses, kalite sorunu' },
+  { id: 'planli', label: 'Planlı bakım / değerlendirme', hint: 'Acil olmayan talep' },
+] as const;
