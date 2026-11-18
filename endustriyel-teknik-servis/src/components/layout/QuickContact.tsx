@@ -50,7 +50,7 @@ export function QuickContact() {
         aria-expanded={open}
         aria-controls="hizli-iletisim"
         aria-label={open ? 'Hızlı iletişimi kapat' : 'Hızlı iletişim'}
-        className="grid h-14 w-14 place-items-center rounded-full bg-accent text-ink shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:bg-[#d99b5c]"
+        className="grid h-14 w-14 place-items-center rounded-full bg-accent text-ink shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:bg-[#ff9a5c]"
       >
         {open ? <X className="h-5 w-5" aria-hidden="true" /> : <MessageSquareMore className="h-5 w-5" aria-hidden="true" />}
       </button>

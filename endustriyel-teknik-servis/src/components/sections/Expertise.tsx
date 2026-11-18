@@ -27,7 +27,7 @@ export function Expertise({ headingAs = 'h2' }: { headingAs?: 'h1' | 'h2' }) {
           ))}
         </div>
         <div className="mt-14 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <Link href="/hizmetler" className="inline-flex items-center gap-2 font-semibold text-accent hover:text-[#d99b5c]">
+          <Link href="/hizmetler" className="inline-flex items-center gap-2 font-semibold text-accent hover:text-[#ff9a5c]">
             Tüm hizmetler <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
           <p className="max-w-xl text-xs leading-relaxed text-mist/50">

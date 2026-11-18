@@ -2,19 +2,19 @@
 
 @theme {
   /* Maviron Çelik paleti */
-  --color-ink: #141b25;
-  --color-ink-2: #1f2a39;
-  --color-steel: #2a3749;
-  --color-steel-2: #3a4a60;
-  --color-accent: #c88a4a;
-  --color-accent-strong: #9a5f2b;
-  --color-surface: #eeece7;
-  --color-surface-2: #dedad2;
-  --color-mist: #c9cfd7;
-  --color-paper: #eeece7;
-  --color-blue: #9cc3ea;
-  --color-muted: #8a95a3;
-  --color-ink-text: #141b25;
+  --color-ink: #0d1726;
+  --color-ink-2: #13233a;
+  --color-steel: #1c3352;
+  --color-steel-2: #284870;
+  --color-accent: #ff7a2f;
+  --color-accent-strong: #e55a10;
+  --color-surface: #f5f2ec;
+  --color-surface-2: #e9e1d3;
+  --color-mist: #cdd8e6;
+  --color-paper: #f5f2ec;
+  --color-blue: #6cb8ff;
+  --color-muted: #8ea0b8;
+  --color-ink-text: #0d1726;
 
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
@@ -150,10 +150,10 @@
 
   .tech-grid {
     background-image:
-      linear-gradient(to right, rgb(156 195 234 / 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(156 195 234 / 0.06) 1px, transparent 1px),
-      linear-gradient(to right, rgb(156 195 234 / 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(156 195 234 / 0.03) 1px, transparent 1px);
+      linear-gradient(to right, rgb(108 184 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(108 184 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(to right, rgb(108 184 255 / 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(108 184 255 / 0.03) 1px, transparent 1px);
     background-size:
       120px 120px,
       120px 120px,
@@ -169,17 +169,17 @@
 
   .visual-frame {
     background:
-      radial-gradient(120% 90% at 70% 30%, rgb(47 64 82 / 0.9), transparent 60%),
+      radial-gradient(120% 90% at 70% 30%, rgb(28 51 82 / 0.9), transparent 60%),
       linear-gradient(160deg, #1a2632 0%, #121b24 60%, #0d141b 100%);
     isolation: isolate;
   }
   .visual-steel {
     background:
-      radial-gradient(120% 90% at 30% 20%, rgb(60 80 100 / 0.8), transparent 60%),
+      radial-gradient(120% 90% at 30% 20%, rgb(40 72 112 / 0.8), transparent 60%),
       linear-gradient(160deg, #253341 0%, #18232e 100%);
   }
   .visual-glow {
-    background: radial-gradient(40% 35% at 62% 58%, rgb(200 138 74 / 0.12), transparent 70%);
+    background: radial-gradient(40% 35% at 62% 58%, rgb(255 122 47 / 0.12), transparent 70%);
   }
   .corner {
     position: absolute;
@@ -215,10 +215,10 @@
     color: var(--color-ink);
   }
   .btn-primary:hover {
-    background: #d99b5c;
+    background: #ff9a5c;
   }
   .btn-ghost {
-    border: 1px solid rgb(201 207 215 / 0.45);
+    border: 1px solid rgb(205 216 230 / 0.45);
     color: var(--color-paper);
   }
   .btn-ghost:hover {
@@ -226,7 +226,7 @@
     color: var(--color-accent);
   }
   .btn-outline-dark {
-    border: 1px solid rgb(20 27 37 / 0.35);
+    border: 1px solid rgb(13 23 38 / 0.35);
     color: var(--color-ink);
   }
   .btn-outline-dark:hover {
@@ -297,7 +297,7 @@
   height: 100svh;
   min-height: 600px;
   overflow: hidden;
-  background: #18212d;
+  background: #0f1b2d;
 }
 @media (prefers-reduced-motion: no-preference) {
   .film:not(.film--static) {
@@ -341,11 +341,11 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(90deg, rgba(20, 27, 37, 0.85) 0%, rgba(20, 27, 37, 0.4) 34%, rgba(20, 27, 37, 0) 56%);
+  background: linear-gradient(90deg, rgba(13, 23, 38, 0.85) 0%, rgba(13, 23, 38, 0.4) 34%, rgba(13, 23, 38, 0) 56%);
 }
 @media (max-width: 767.98px) {
   .film__stage::after {
-    background: linear-gradient(180deg, rgba(20, 27, 37, 0.2) 0%, rgba(20, 27, 37, 0.35) 35%, rgba(20, 27, 37, 0.92) 70%);
+    background: linear-gradient(180deg, rgba(13, 23, 38, 0.2) 0%, rgba(13, 23, 38, 0.35) 35%, rgba(13, 23, 38, 0.92) 70%);
   }
 }
 .film__scene {
@@ -387,7 +387,7 @@
 }
 .film__lede {
   max-width: 42ch;
-  color: #c9cfd7;
+  color: #cdd8e6;
   font-size: clamp(1rem, 1.25vw, 1.15rem);
   line-height: 1.55;
 }
@@ -403,7 +403,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #b8c0ca;
+  color: #b5c3d6;
 }
 .film__link {
   display: inline-flex;
@@ -414,7 +414,7 @@
   color: var(--color-accent);
 }
 .film__link:hover {
-  color: #d99b5c;
+  color: #ff9a5c;
 }
 .film__hint {
   position: absolute;
@@ -425,7 +425,7 @@
   font: 500 0.68rem/1 var(--font-mono);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #b8c0ca;
+  color: #b5c3d6;
 }
 .film__hint::after {
   content: '';
@@ -471,7 +471,7 @@
   height: 10px;
   border-radius: 50%;
   background: var(--color-accent);
-  box-shadow: 0 0 0 4px rgba(200, 138, 74, 0.28);
+  box-shadow: 0 0 0 4px rgba(255, 122, 47, 0.28);
 }
 .film__label::after {
   content: '';
@@ -490,7 +490,7 @@
   transform: translateY(-50%);
   white-space: nowrap;
   padding: 7px 10px;
-  background: rgba(238, 236, 231, 0.94);
+  background: rgba(245, 242, 236, 0.94);
   color: var(--color-ink);
 }
 .film__tag b {
@@ -575,7 +575,7 @@
   height: 46vw;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(156, 195, 234, 0.1), transparent 62%);
+  background: radial-gradient(circle, rgba(108, 184, 255, 0.1), transparent 62%);
   pointer-events: none;
 }
 .orbit__copy {
@@ -674,7 +674,7 @@
   position: relative;
   width: 180px;
   height: 14px;
-  background: repeating-linear-gradient(90deg, rgba(201, 207, 215, 0.35) 0 1px, transparent 1px 6px);
+  background: repeating-linear-gradient(90deg, rgba(205, 216, 230, 0.35) 0 1px, transparent 1px 6px);
   overflow: hidden;
 }
 .orbit__fill {
@@ -726,7 +726,7 @@
   text-transform: uppercase;
   line-height: 0.85;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(201, 207, 215, 0.55);
+  -webkit-text-stroke: 1px rgba(205, 216, 230, 0.55);
   white-space: nowrap;
 }
 

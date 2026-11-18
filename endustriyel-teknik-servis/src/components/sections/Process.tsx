@@ -68,17 +68,17 @@ export function Process({ index }: { index?: string } = {}) {
             {xs.map((x, i) => (
               <g key={x}>
                 {/* düğüm */}
-                <circle cx={x} cy={110} r={54} fill="#eeece7" stroke="currentColor" strokeWidth="1.4" />
-                <circle cx={x} cy={110} r={62} fill="none" stroke="#9a5f2b" strokeWidth="1.2" strokeDasharray="2 5" />
+                <circle cx={x} cy={110} r={54} fill="#f5f2ec" stroke="currentColor" strokeWidth="1.4" />
+                <circle cx={x} cy={110} r={62} fill="none" stroke="#e55a10" strokeWidth="1.2" strokeDasharray="2 5" />
                 <g transform={`translate(${x - 30} ${80})`}>
                   <Pictogram i={i} />
                 </g>
                 {/* ok */}
-                {i < xs.length - 1 && <path d={`M${x + 150 - 8} 104l8 6-8 6`} stroke="#9a5f2b" strokeWidth="1.6" fill="none" />}
-                <text x={x} y={28} textAnchor="middle" fontFamily="var(--font-mono)" fontSize="13" letterSpacing="2" fill="#9a5f2b">
+                {i < xs.length - 1 && <path d={`M${x + 150 - 8} 104l8 6-8 6`} stroke="#e55a10" strokeWidth="1.6" fill="none" />}
+                <text x={x} y={28} textAnchor="middle" fontFamily="var(--font-mono)" fontSize="13" letterSpacing="2" fill="#e55a10">
                   {processSteps[i].index}
                 </text>
-                <path d={`M${x} 36v12`} stroke="#9a5f2b" strokeWidth="1.2" fill="none" />
+                <path d={`M${x} 36v12`} stroke="#e55a10" strokeWidth="1.2" fill="none" />
               </g>
             ))}
             <text x={40} y={150} fontFamily="var(--font-mono)" fontSize="11" letterSpacing="2" fill="currentColor" opacity="0.5">
@@ -103,7 +103,7 @@ export function Process({ index }: { index?: string } = {}) {
           {processSteps.map((s, i) => (
             <li key={s.index} className="grid grid-cols-[4.5rem_1fr] gap-4" data-draw>
               <svg viewBox="0 0 72 200" className="h-full min-h-48 w-[4.5rem] text-ink" preserveAspectRatio="xMidYMin meet" aria-hidden="true">
-                <circle cx={36} cy={36} r={32} fill="#eeece7" stroke="currentColor" strokeWidth="1.4" />
+                <circle cx={36} cy={36} r={32} fill="#f5f2ec" stroke="currentColor" strokeWidth="1.4" />
                 <g transform="translate(9 9) scale(0.9)">
                   <Pictogram i={i} />
                 </g>
