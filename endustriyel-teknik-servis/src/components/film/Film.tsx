@@ -16,7 +16,7 @@ const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const weight = (from: number, to: number, t: number, fade = 0.35) =>
   clamp01((t - from) / fade) * clamp01((to - t) / fade);
 
-const FILM_MQ = '(min-width: 768px) and (prefers-reduced-motion: no-preference)';
+const FILM_MQ = '(prefers-reduced-motion: no-preference)';
 
 /**
  * Maviron tarzı açılış filmi.

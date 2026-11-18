@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import { services } from '@/data/services';
 import { assetPath } from '@/data/visuals';
 
-const ORBIT_MQ = '(min-width: 768px) and (prefers-reduced-motion: no-preference)';
+const ORBIT_MQ = '(prefers-reduced-motion: no-preference)';
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const orbitImage = (slug: string) => assetPath(`/images/orbit/${slug}.webp`);
 
@@ -46,8 +46,9 @@ export function OrbitServices() {
         const hidden = a > 2.4;
         el.style.visibility = hidden ? 'hidden' : 'visible';
         if (hidden) return;
-        const x = d * 25; // vw
-        const y = -d * 19; // vh
+        const narrow = window.innerWidth < 768;
+        const x = d * (narrow ? 52 : 25); // vw
+        const y = -d * (narrow ? 9 : 19); // vh
         const s = 1 - Math.min(a, 2) * 0.34;
         el.style.transform = `translate(-50%, -50%) translate(${x}vw, ${y}vh) scale(${s})`;
         el.style.opacity = String(Math.max(0, 1 - Math.min(a, 2.4) * 0.45));

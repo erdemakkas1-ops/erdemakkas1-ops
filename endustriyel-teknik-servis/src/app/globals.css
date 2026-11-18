@@ -299,7 +299,7 @@
   overflow: hidden;
   background: #18212d;
 }
-@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) {
   .film:not(.film--static) {
     height: 520vh;
   }
@@ -522,7 +522,16 @@
 .film--static .film__canvas {
   display: none;
 }
-@media (max-width: 767.98px), (prefers-reduced-motion: reduce) {
+@media (max-width: 767.98px) and (prefers-reduced-motion: no-preference) {
+  .film:not(.film--static) {
+    height: 420vh;
+  }
+  /* 3D etiketler dar ekranda kalabalık yapar */
+  .film__notes {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
   .film__scene:not(.film__scene--hero),
   .film__notes,
   .film__hint,
@@ -543,7 +552,7 @@
 .orbit__stage {
   display: none;
 }
-@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) {
   .orbit {
     height: 380vh;
   }
@@ -674,6 +683,39 @@
   transform-origin: left;
   transform: scaleX(0);
   background: repeating-linear-gradient(90deg, var(--color-accent) 0 1px, transparent 1px 6px);
+}
+
+@media (max-width: 767.98px) {
+  .orbit__copy {
+    top: auto;
+    bottom: 6.5rem;
+    transform: none;
+    width: calc(100% - 2.5rem);
+  }
+  .orbit__copy h3 {
+    font-size: 1.9rem;
+  }
+  .orbit__copy p.mt-6 {
+    font-size: 0.97rem;
+    margin-top: 0.9rem;
+  }
+  .orbit__copy ul {
+    display: none;
+  }
+  .orbit__item {
+    left: 50%;
+    top: 32%;
+    width: min(64vw, 38vh);
+  }
+  .orbit__glow {
+    left: 50%;
+    top: 32%;
+    width: 110vw;
+    height: 110vw;
+  }
+  .orbit__wheel {
+    bottom: 18px;
+  }
 }
 
 /* Footer: dev konturlu yazı */

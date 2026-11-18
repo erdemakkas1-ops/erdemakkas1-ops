@@ -30,8 +30,8 @@ export function ScrollEffects() {
       { desktop: MQ.desktop, mobile: MQ.mobile },
       (ctx) => {
         const { desktop } = ctx.conditions as { desktop: boolean; mobile: boolean };
-        const dist = desktop ? 44 : 22;
-        const dur = desktop ? 1 : 0.7;
+        const dist = desktop ? 70 : 42;
+        const dur = desktop ? 1.15 : 0.85;
         const q = <T extends Element = HTMLElement>(sel: string) => gsap.utils.toArray<T>(sel);
 
         q('[data-reveal]').forEach((el) => {
@@ -79,11 +79,11 @@ export function ScrollEffects() {
           );
         });
 
-        if (desktop) {
+        {
           q('[data-zoom]').forEach((el) => {
             gsap.fromTo(
               el,
-              { scale: 1.14 },
+              { scale: desktop ? 1.14 : 1.08 },
               {
                 scale: 1,
                 ease: 'none',
