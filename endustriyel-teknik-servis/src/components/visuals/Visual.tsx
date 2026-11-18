@@ -36,13 +36,15 @@ type Props = {
   /** Temsilî fotoğraflarda küçük not (varsayılan: açık) */
   note?: boolean;
   imgClassName?: string;
+  /** Çizim yer tutucusunda çizgiler kaydırmayla ('scroll') veya açılışta ('load') çizilsin */
+  draw?: 'scroll' | 'load';
 };
 
 /**
  * Gerçek fotoğraf varsa next/image ile gösterir; yoksa teknik çizim yer tutucusu.
  * Kapsayıcı boyutu dışarıdan (aspect / h-*) verilmelidir – CLS oluşmaz.
  */
-export function Visual({ kind, image, className = '', priority, sizes = '100vw', caption, tone = 'dark', note = true, imgClassName = '' }: Props) {
+export function Visual({ kind, image, className = '', priority, sizes = '100vw', caption, tone = 'dark', note = true, imgClassName = '', draw }: Props) {
   if (image) {
     return (
       <div className={`relative overflow-hidden bg-steel ${className}`}>
@@ -73,7 +75,10 @@ export function Visual({ kind, image, className = '', priority, sizes = '100vw',
   }[kind];
 
   return (
-    <div className={`visual-frame relative overflow-hidden ${tone === 'steel' ? 'visual-steel' : ''} ${className}`}>
+    <div
+      className={`visual-frame relative overflow-hidden ${tone === 'steel' ? 'visual-steel' : ''} ${className}`}
+      {...(draw ? { 'data-draw': draw === 'load' ? 'load' : '' } : {})}
+    >
       <div className="tech-grid absolute inset-0" aria-hidden="true" />
       <div className="visual-glow absolute inset-0" aria-hidden="true" />
       {kind === 'offset' ? (

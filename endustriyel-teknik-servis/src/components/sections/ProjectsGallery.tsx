@@ -72,7 +72,7 @@ function PlaceholderCard({ category, visual, tall, light }: { category: string; 
   return (
     <article className={`relative overflow-hidden border border-dashed ${t.card}`} aria-label="Örnek içerik – gerçek çalışma değildir">
       <div className={`relative overflow-hidden ${tall ? 'aspect-[4/5]' : 'aspect-[4/3]'}`}>
-        <Visual kind={visual} className="h-full w-full opacity-70" tone="steel" />
+        <Visual kind={visual} className="h-full w-full opacity-70" tone="steel" draw="scroll" />
         <span className="absolute left-4 top-4 bg-accent px-2.5 py-1 font-mono text-[10.5px] font-medium uppercase tracking-[0.16em] text-ink">
           Örnek içerik
         </span>

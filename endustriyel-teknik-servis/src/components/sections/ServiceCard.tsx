@@ -11,7 +11,7 @@ export function ServiceCard({ service, tone = 'dark' }: { service: Service; tone
     <article className="group flex h-full flex-col">
       <div className="relative aspect-[4/3] overflow-hidden md:aspect-[4/5]">
         <div className="absolute inset-0 transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]">
-          <Visual kind={service.visual} image={service.image} note={false} className="h-full w-full" sizes="(min-width:1280px) 20vw, (min-width:768px) 40vw, 100vw" />
+          <Visual kind={service.visual} image={service.image} note={false} draw="scroll" className="h-full w-full" sizes="(min-width:1280px) 20vw, (min-width:768px) 40vw, 100vw" />
         </div>
       </div>
       <p className={`mt-5 font-mono text-[11px] tracking-[0.18em] ${light ? 'text-ink/50' : 'text-mist/50'}`}>{service.index}</p>

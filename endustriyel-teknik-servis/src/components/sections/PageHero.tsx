@@ -40,7 +40,7 @@ export function PageHero({ crumbs, eyebrow, title, lead, visual, image, children
         {visual && (
           <div className="fade lg:col-span-5" style={{ ['--d' as string]: '200ms' }}>
             <div className="relative aspect-[4/3] overflow-hidden border border-mist/10">
-              <Visual kind={visual} image={image} priority className="h-full w-full" sizes="(min-width:1024px) 40vw, 100vw" />
+              <Visual kind={visual} image={image} priority draw="load" className="h-full w-full" sizes="(min-width:1024px) 40vw, 100vw" />
             </div>
           </div>
         )}
