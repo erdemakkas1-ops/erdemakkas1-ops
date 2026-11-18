@@ -138,8 +138,8 @@ export function Film() {
       raf = requestAnimationFrame(loop);
       if (capture) {
         (window as unknown as { __film: unknown }).__film = {
-          part(tags: string[], dir: [number, number, number], highlight: string[] = []) {
-            film!.capturePart(tags, dir, highlight);
+          part(tags: string[], dir: [number, number, number], highlight: string[] = [], cutaway = false) {
+            film!.capturePart(tags, dir, highlight, cutaway);
           },
           seek(s: number, centered = false) {
             t = target = s;
