@@ -31,7 +31,7 @@ export function ServiceCard({ service, tone = 'dark' }: { service: Service; tone
           </li>
         ))}
       </ul>
-      <Link href={href} className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-accent hover:text-[#d99b5c]">
+      <Link href={href} className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-accent hover:text-[#ff9a5c]">
         İncele <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
         <span className="sr-only">: {service.title}</span>
       </Link>

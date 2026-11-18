@@ -56,7 +56,7 @@ export function Machines() {
                     </li>
                   ))}
                 </ol>
-                <Link href={`/makineler/${b.id}`} className="mt-8 inline-flex items-center gap-2 font-semibold text-accent hover:text-[#d99b5c]">
+                <Link href={`/makineler/${b.id}`} className="mt-8 inline-flex items-center gap-2 font-semibold text-accent hover:text-[#ff9a5c]">
                   {b.name}: modeller ve ayrıntılar <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>

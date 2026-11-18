@@ -146,7 +146,7 @@ export function OrbitServices() {
                     <Link href={`/hizmetler/${s.slug}`} className="inline-flex items-center gap-2 border-b border-paper pb-1 text-sm font-semibold text-paper hover:border-accent hover:text-accent">
                       Detayları gör <ArrowRight className="h-4 w-4" aria-hidden="true" />
                     </Link>
-                    <Link href={`/iletisim?ariza=${s.faultType}#servis-formu`} className="text-sm font-semibold text-accent hover:text-[#d99b5c]">
+                    <Link href={`/iletisim?ariza=${s.faultType}#servis-formu`} className="text-sm font-semibold text-accent hover:text-[#ff9a5c]">
                       Bu konuda arıza bildir
                     </Link>
                   </div>
