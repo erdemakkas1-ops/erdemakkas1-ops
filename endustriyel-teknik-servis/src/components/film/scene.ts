@@ -60,7 +60,8 @@ export type FilmHandle = {
 
 export function createFilm(canvas: HTMLCanvasElement): FilmHandle {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, premultipliedAlpha: false, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  // Telefonlarda (≤ 760 px) daha düşük çözünürlük: akıcılık için
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth <= 760 ? 1.25 : 1.5));
   renderer.setClearColor(C.bg, 1);
   let curTag = 'base';
 

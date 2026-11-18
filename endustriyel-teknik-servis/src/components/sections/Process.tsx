@@ -24,7 +24,7 @@ export function Process({ index }: { index?: string } = {}) {
         <ol data-timeline className="relative grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {processSteps.map((step) => (
             <li key={step.index} className="relative" data-reveal>
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#18212d]">
+              <div className="relative aspect-[4/3] overflow-hidden bg-[#18212d]" data-clip>
                 <Image src={assetPath(step.image)} alt="" fill sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw" className="object-cover" />
               </div>
               <div className="relative mt-6 h-px bg-ink/80" aria-hidden="true">
