@@ -23,7 +23,7 @@ export function Machines() {
           {machineBrands.map((b, i) => (
             <Link
               key={b.id}
-              href={`/makineler#${b.id}`}
+              href={`/makineler/${b.id}`}
               className="group relative block overflow-hidden border border-mist/10 bg-ink transition-colors duration-500 hover:border-accent/50"
               data-reveal
               data-reveal-delay={i * 0.12}

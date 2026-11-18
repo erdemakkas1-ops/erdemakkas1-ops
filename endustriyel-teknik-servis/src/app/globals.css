@@ -179,7 +179,7 @@
       linear-gradient(160deg, #253341 0%, #18232e 100%);
   }
   .visual-glow {
-    background: radial-gradient(40% 35% at 62% 58%, rgb(245 158 64 / 0.12), transparent 70%);
+    background: radial-gradient(40% 35% at 62% 58%, rgb(200 138 74 / 0.12), transparent 70%);
   }
   .corner {
     position: absolute;

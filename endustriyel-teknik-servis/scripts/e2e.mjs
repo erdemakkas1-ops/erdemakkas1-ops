@@ -9,9 +9,10 @@ const BASE = process.env.BASE_URL || 'http://localhost:3000';
 const routes = [
   '/', '/hizmetler', '/hizmetler/elektrik-arizalari', '/hizmetler/mekanik-bakim', '/hizmetler/plc-otomasyon',
   '/hizmetler/surucu-servo-sistemleri', '/hizmetler/makine-revizyonu', '/makineler', '/calismalarimiz',
-  '/hakkimizda', '/iletisim', '/gizlilik',
+  '/hakkimizda', '/iletisim', '/gizlilik', '/makineler/bobst', '/makineler/manroland', '/rehber',
+  '/rehber/ariza-bildirmeden-once', '/rehber/surucu-hata-koduna-ilk-bakis', '/rehber/planli-bakimin-temel-basliklari',
 ];
-const widths = [360, 390, 768, 1024, 1440, 1920];
+const widths = [360, 390, 768, 1024, 1280, 1440, 1920];
 const failures = [];
 const fail = (m) => { failures.push(m); console.log('  ✗', m); };
 
@@ -43,13 +44,18 @@ for (const w of widths) {
       const brokenImgs = [...document.images].filter((i) => i.complete && i.naturalWidth === 0).map((i) => i.src);
       const noAlt = [...document.images].filter((i) => !i.hasAttribute('alt')).length;
       const hrefs = [...document.querySelectorAll('a[href]')].map((a) => a.getAttribute('href'));
+      const headerClip = [...document.querySelectorAll('header a, header button')].filter((el) => {
+        const r = el.getBoundingClientRect();
+        return r.width > 0 && getComputedStyle(el).display !== 'none' && (r.right > window.innerWidth || r.left < 0);
+      }).length;
       const emptyButtons = [...document.querySelectorAll('a, button')].filter((el) => !el.textContent.trim() && !el.getAttribute('aria-label')).length;
-      return { over, wide, h1, brokenImgs, noAlt, hrefs, emptyButtons };
+      return { over, wide, h1, brokenImgs, noAlt, hrefs, emptyButtons, headerClip };
     });
     if (info.over > 0) fail(`${r} @${w}: yatay taşma ${info.over}px ${info.wide.join(' | ')}`);
     if (info.h1 !== 1) fail(`${r} @${w}: h1 sayısı ${info.h1}`);
     if (info.brokenImgs.length) fail(`${r} @${w}: kırık görsel ${info.brokenImgs}`);
     if (info.noAlt) fail(`${r} @${w}: alt metni olmayan ${info.noAlt} görsel`);
+    if (info.headerClip) fail(`${r} @${w}: başlıkta ekran dışına taşan ${info.headerClip} öğe`);
     if (info.emptyButtons) fail(`${r} @${w}: etiketsiz ${info.emptyButtons} buton/bağlantı`);
     if (errors.length) fail(`${r} @${w}: konsol hatası ${errors.join(' / ')}`);
     info.hrefs.forEach((h) => links.add(h));
@@ -90,9 +96,10 @@ const pre = await page.locator('input[type=radio][value="Servo / Sürücü"]').i
 if (!pre) fail('form: ?ariza=servo ön seçimi çalışmadı');
 await page.locator('form button[type=submit]').click();
 const alertText = await page.locator('form [role=alert]').innerText();
-if (!/4 alanı kontrol edin/.test(alertText)) fail(`form: boş gönderim hata özeti beklenmedik: ${alertText}`);
+if (!/5 alanı kontrol edin/.test(alertText)) fail(`form: boş gönderim hata özeti beklenmedik: ${alertText}`);
 const focused = await page.evaluate(() => document.activeElement?.getAttribute('role'));
 if (focused !== 'alert') fail('form: hata özetine odaklanılmadı');
+await page.getByText('Makine durdu', { exact: true }).click();
 await page.getByText('Diğer', { exact: true }).first().click();
 await page.locator('form button[type=submit]').click();
 if (!(await page.getByText('Makinenin markasını yazın.').first().isVisible())) fail('form: Diğer marka doğrulaması yok');
@@ -106,7 +113,7 @@ await page.getByLabel(/Arıza açıklaması/).fill('Makine start komutu almıyor
 await page.locator('form button[type=submit]').click();
 await page.waitForTimeout(500);
 const msg = await page.getByTestId('message-preview').innerText().catch(() => '');
-for (const s of ['SERVİS TALEBİ', 'Örnek Üretici (Diğer)', 'Örnek Model', 'Servo / Sürücü', 'Bursa', 'E-102'])
+for (const s of ['SERVİS TALEBİ', 'Durum:* Makine durdu', 'Örnek Üretici (Diğer)', 'Örnek Model', 'Servo / Sürücü', 'Bursa', 'E-102'])
   if (!msg.includes(s)) fail(`form: mesajda eksik "${s}"`);
 const waConfigured = popups.some((u) => u.includes('wa.me') || u.includes('whatsapp'));
 const copyBtn = page.getByRole('button', { name: /Servis metnini kopyala/ });
@@ -119,6 +126,12 @@ if (clip && !clip.includes('Örnek Model')) fail('form: panodaki metin hatalı')
 console.log(`✓ form doğrulama, ön seçim, mesaj oluşturma, kopyalama (WhatsApp açılışı: ${waConfigured ? 'evet' : 'numara tanımlı değil – kopyalama modu'})`);
 if (!/numarası bu sürümde henüz tanımlanmadığı|WhatsApp’ta hazır/.test(await page.locator('h3, p').allInnerTexts().then((t) => t.join(' '))))
   fail('form: sonuç bilgilendirmesi yok');
+
+// 3b) Marka/model ön doldurma
+await page.goto(BASE + '/iletisim?marka=bobst&model=Expertcut#servis-formu', { waitUntil: 'networkidle' });
+if (!(await page.locator('input[type=radio][value="BOBST"]').isChecked())) fail('form: ?marka=bobst ön seçimi çalışmadı');
+if ((await page.getByLabel(/Makine modeli/).inputValue()) !== 'Expertcut') fail('form: ?model= ön doldurma çalışmadı');
+console.log('✓ marka/model ön doldurma');
 
 // 4) Mobil menü + reduced motion
 await page.goto(BASE + '/', { waitUntil: 'networkidle' });

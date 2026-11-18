@@ -58,12 +58,13 @@ npm run dev          # http://localhost:3000
 | --- | --- |
 | `site.ts` | İşletme adı, usta adı, iletişim, hizmet bölgesi, çalışma saatleri, vergi bilgileri, `showContentPlaceholders` |
 | `services.ts` | 5 hizmet: kart metni, kapsam, detay sayfası içerikleri, SEO. Menü, footer, sitemap ve sayfalar buradan üretilir |
-| `machines.ts` | Marka grupları ve **model bazlı liste** (`models` dizisi) |
+| `machines.ts` | Marka grupları, teyit edilen modeller, makinenin ana grupları – `/makineler/[marka]` sayfaları buradan üretilir |
 | `projects.ts` | Çalışmalar (boşken "Örnek içerik" yer tutucuları görünür) |
 | `about.ts` | Deneyim yılı, belgeler, geçmiş, usta fotoğrafı, çalışma prensipleri |
 | `process.ts` | Servis süreci adımları |
 | `form.ts` | Form marka ve arıza türü seçenekleri |
 | `film.ts` | Açılış filminin sahne metinleri ve 3D etiketleri |
+| `guides.ts` | Teknik rehber yazıları (`/rehber`) |
 | `faq.ts` | Sıkça sorulan sorular (FAQPage JSON-LD de buradan üretilir) |
 | `visuals.ts` | Sayfa görselleri (hero vb.) |
 
@@ -107,6 +108,10 @@ src/
 scripts/                  # test-whatsapp.mjs, e2e.mjs, capture-film.mjs, png-to-webp.py
 public/images/            # Gerçek fotoğraflar için klasörler
 ```
+
+## Sektör araştırması
+
+Bağımsız servis sitelerinin incelemesi ve uygulanan iyileştirmeler: [`RAKIP-ARASTIRMA.md`](./RAKIP-ARASTIRMA.md).
 
 ## Açılış filmi (`src/components/film/`)
 

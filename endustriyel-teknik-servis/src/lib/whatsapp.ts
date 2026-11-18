@@ -4,6 +4,7 @@
  */
 
 export type ServiceRequest = {
+  urgency: string;
   brand: string;
   otherBrand: string;
   model: string;
@@ -29,6 +30,7 @@ const clean = (v: string) => v.replace(/\s+/g, ' ').trim();
 
 export function validateRequest(r: ServiceRequest): FieldErrors {
   const e: FieldErrors = {};
+  if (!r.urgency) e.urgency = 'Makinenin durumunu seçin.';
   if (!r.brand) e.brand = 'Makine markasını seçin.';
   if (r.brand === 'Diğer' && !clean(r.otherBrand)) e.otherBrand = 'Makinenin markasını yazın.';
   else if (clean(r.otherBrand).length > LIMITS.otherBrand) e.otherBrand = `En fazla ${LIMITS.otherBrand} karakter.`;
@@ -52,6 +54,7 @@ export function buildServiceMessage(r: ServiceRequest): string {
   const lines = [
     '*SERVİS TALEBİ*',
     '',
+    `*Durum:* ${r.urgency}`,
     `*Makine markası:* ${brand}`,
     `*Makine modeli:* ${clean(r.model)}`,
     `*Arıza türü:* ${r.faultType}`,

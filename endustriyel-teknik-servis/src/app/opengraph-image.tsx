@@ -17,24 +17,24 @@ export default function OpengraphImage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          background: '#101820',
+          background: '#141B25',
           padding: 72,
           position: 'relative',
           color: '#FFFFFF',
         }}
       >
         {lines.map((i) => (
-          <div key={i} style={{ position: 'absolute', left: i * 100, top: 0, width: 1, height: 630, background: 'rgba(214,222,231,0.07)' }} />
+          <div key={i} style={{ position: 'absolute', left: i * 100, top: 0, width: 1, height: 630, background: 'rgba(156,195,234,0.08)' }} />
         ))}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 24, color: '#F59E40', letterSpacing: 4 }}>
-          <div style={{ width: 48, height: 2, background: '#F59E40' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 24, color: '#C88A4A', letterSpacing: 4 }}>
+          <div style={{ width: 48, height: 2, background: '#C88A4A' }} />
           BASKI &amp; AMBALAJ MAKİNELERİ
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', fontSize: 104, fontWeight: 800, lineHeight: 0.95, letterSpacing: -2 }}>
           <span>ÜRETİMİNİZ</span>
-          <span style={{ color: '#F59E40' }}>DURMASIN.</span>
+          <span style={{ color: '#C88A4A' }}>DURMASIN.</span>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 26, color: '#D6DEE7' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 26, color: '#C9CFD7' }}>
           <span>Elektrik · Mekanik · PLC / Otomasyon · Servo</span>
           <span>{displayName}</span>
         </div>

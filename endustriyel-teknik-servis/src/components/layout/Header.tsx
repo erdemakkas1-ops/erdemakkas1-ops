@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Menu, X } from 'lucide-react';
+import { ArrowRight, Menu, Phone, X } from 'lucide-react';
+import { business } from '@/data/site';
+import { phoneHref } from '@/lib/contact';
 import { mainNav, serviceRequestHref } from '@/data/navigation';
 import { Logo } from './Logo';
 
@@ -50,10 +52,10 @@ export function Header() {
         scrolled || open ? 'border-b border-mist/10 bg-ink/90 backdrop-blur-md' : 'border-b border-transparent bg-transparent'
       }`}
     >
-      <div className="container-x flex h-[4.5rem] items-center justify-between gap-6 lg:h-20">
+      <div className="container-x flex h-[4.5rem] items-center justify-between gap-3 sm:gap-6 lg:h-20">
         <Logo onClick={() => setOpen(false)} />
 
-        <nav aria-label="Ana menü" className="hidden xl:block">
+        <nav aria-label="Ana menü" className="hidden min-[1380px]:block">
           <ul className="flex items-center gap-1 xl:gap-2">
             {mainNav.map((item) => (
               <li key={item.href}>
@@ -72,6 +74,12 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          {phoneHref && business.phone && (
+            <a href={phoneHref} className="hidden items-center gap-2 px-3 py-2 text-sm font-semibold text-paper hover:text-accent 2xl:inline-flex">
+              <Phone className="h-4 w-4 text-accent" aria-hidden="true" />
+              {business.phone}
+            </a>
+          )}
           <Link href={serviceRequestHref} className="btn btn-primary hidden min-h-11 px-5 text-sm sm:inline-flex">
             Servis Talebi
             <ArrowRight className="btn-arrow h-4 w-4" aria-hidden="true" />
@@ -79,7 +87,7 @@ export function Header() {
           <button
             ref={toggleRef}
             type="button"
-            className="grid h-12 w-12 place-items-center border border-mist/20 text-white xl:hidden"
+            className="grid h-12 w-12 place-items-center border border-mist/20 text-white min-[1380px]:hidden"
             aria-expanded={open}
             aria-controls="mobil-menu"
             aria-label={open ? 'Menüyü kapat' : 'Menüyü aç'}
@@ -94,7 +102,7 @@ export function Header() {
         id="mobil-menu"
         ref={panelRef}
         hidden={!open}
-        className="h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-mist/10 bg-ink lg:h-[calc(100dvh-5rem)] xl:hidden"
+        className="h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-mist/10 bg-ink lg:h-[calc(100dvh-5rem)] min-[1380px]:hidden"
       >
         <nav aria-label="Mobil menü" className="container-x flex min-h-full flex-col py-6">
           <ul className="divide-y divide-mist/10 border-y border-mist/10">

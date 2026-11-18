@@ -3,6 +3,7 @@ export const mainNav = [
   { href: '/hizmetler', label: 'Hizmetler' },
   { href: '/makineler', label: 'Makine Grupları' },
   { href: '/calismalarimiz', label: 'Çalışmalarımız' },
+  { href: '/rehber', label: 'Rehber' },
   { href: '/hakkimizda', label: 'Hakkımızda' },
   { href: '/iletisim', label: 'İletişim' },
 ];
