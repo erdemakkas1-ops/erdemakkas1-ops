@@ -13,6 +13,8 @@ import { gsap, MQ, ScrollTrigger, useGSAP } from './gsap';
  *  data-zoom                   → görsel kaydırmayla hafifçe uzaklaşır (masaüstü)
  *  data-parallax="0.12"        → hafif parallax (masaüstü)
  *  data-timeline / data-timeline-progress → süreç çizgisi ilerlemesi
+ *  data-draw                   → içindeki SVG çizgileri kaydırmayla çizilir (pathLength=1 + stroke-dashoffset, scrub)
+ *  data-draw="load"            → aynı çizim, sayfa açılışında zamana bağlı (ekranın üstündeki çizimler için)
  *
  * prefers-reduced-motion: reduce → hiçbir animasyon kurulmaz, içerik olduğu gibi görünür.
  * Mobilde mesafeler ve süreler küçültülür, scrub efektleri kapatılır.
@@ -59,7 +61,7 @@ export function ScrollEffects() {
         q('[data-line]').forEach((el) => {
           gsap.from(el, {
             scaleX: 0,
-            transformOrigin: 'left center',
+            transformOrigin: el.dataset.lineFrom === 'right' ? 'right center' : 'left center',
             duration: desktop ? 1.4 : 0.9,
             ease: 'power2.inOut',
             scrollTrigger: { trigger: el, start: 'top 95%', once: true },
@@ -105,6 +107,31 @@ export function ScrollEffects() {
             );
           });
         }
+
+        // Teknik çizimler: çizgiler plotter gibi çizilir, yazılar ardından belirir
+        q('[data-draw]').forEach((root) => {
+          const shapes = Array.from(root.querySelectorAll<SVGGeometryElement>('path, line, polyline, polygon, rect, circle, ellipse'));
+          const stroked = (el: Element) => {
+            const st = getComputedStyle(el);
+            return st.stroke !== 'none' && st.strokeWidth !== '0px';
+          };
+          // kesik desenli çizgiler çizilmez, belirir (deseni korunur)
+          const dashed = (el: Element) => getComputedStyle(el).strokeDasharray !== 'none';
+          const strokes = shapes.filter((el) => stroked(el) && !dashed(el));
+          const texts = [...Array.from(root.querySelectorAll('text, [data-draw-fade]')), ...shapes.filter((el) => stroked(el) && dashed(el))];
+          if (!strokes.length) return;
+          gsap.set(strokes, { attr: { pathLength: 1 }, strokeDasharray: 1, strokeDashoffset: 1 });
+          if (texts.length) gsap.set(texts, { autoAlpha: 0 });
+          const onLoad = root.dataset.draw === 'load';
+          const tl = gsap.timeline(
+            onLoad
+              ? { delay: 0.3 }
+              : { scrollTrigger: { trigger: root, start: 'top 88%', end: desktop ? 'center 42%' : 'center 50%', scrub: 0.6 } },
+          );
+          const each = Math.min(0.03, 0.9 / strokes.length);
+          tl.to(strokes, { strokeDashoffset: 0, duration: onLoad ? 1.2 : 0.6, ease: onLoad ? 'power2.inOut' : 'none', stagger: { each } }, 0);
+          if (texts.length) tl.to(texts, { autoAlpha: 1, duration: 0.25, stagger: 0.02 }, onLoad ? 0.8 : '>-0.3');
+        });
 
         q('[data-timeline]').forEach((tl) => {
           const bar = tl.querySelector<HTMLElement>('[data-timeline-progress]');

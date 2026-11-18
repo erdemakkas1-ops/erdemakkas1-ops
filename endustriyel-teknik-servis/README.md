@@ -125,6 +125,13 @@ döner ve her hizmete oturur. Parça görselleri (`public/images/orbit/*.webp`) 
 şeffaf arka planla çekilir: `node scripts/capture-parts.mjs && python3 scripts/png-to-webp.py --parts`.
 Mobil ve reduced-motion: sabitlemesiz liste.
 
+## Çizim dili (kaydırmayla çizilen grafikler)
+
+`[data-draw]` içindeki SVG çizgileri `pathLength=1` + `stroke-dashoffset` ile kaydırmaya bağlı çizilir
+(`data-draw="load"`: açılışta, zamana bağlı). Kullanıldığı yerler: makine paftaları (çizim + bölüm listesi + antet),
+süreç devre şeması (`sections/Process.tsx`), hizmet/marka sayfalarının açılış çizimleri, örnek iş kartları.
+Bölümler arası `SchematicDivider` çizgileri uçlardan çizilir. Reduced-motion'da çizimler hazır görünür.
+
 ## Sektör araştırması
 
 Bağımsız servis sitelerinin incelemesi ve uygulanan iyileştirmeler: [`RAKIP-ARASTIRMA.md`](./RAKIP-ARASTIRMA.md).
