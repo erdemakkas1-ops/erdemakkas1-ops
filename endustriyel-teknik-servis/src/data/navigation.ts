@@ -4,7 +4,7 @@ export const mainNav = [
   { href: '/makineler', label: 'Makine Grupları' },
   { href: '/calismalarimiz', label: 'Çalışmalarımız' },
   { href: '/rehber', label: 'Rehber' },
-  { href: '/hakkimizda', label: 'Hakkımızda' },
+  { href: '/hakkimizda', label: 'Hakkımda' },
   { href: '/iletisim', label: 'İletişim' },
 ];
 

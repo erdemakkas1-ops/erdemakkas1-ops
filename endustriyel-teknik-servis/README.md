@@ -109,6 +109,22 @@ scripts/                  # test-whatsapp.mjs, e2e.mjs, capture-film.mjs, png-to
 public/images/            # Gerçek fotoğraflar için klasörler
 ```
 
+## Usta profili (şablon değerler)
+
+Usta onay verene kadar site kişisel bilgiler varmış gibi kurgulanır: `src/data/site.ts` içindeki `profile`
+nesnesi (ad soyad, deneyim, geçmiş, merkez şehir, bölgeler, çalışma saatleri, telefon) şablon değerler taşır
+(`Usta Adı Soyadı`, `XX yıl`, `0 5XX XXX XX XX`…). Sitede kesik çizgili altçizgi ve "Usta onayından sonra
+doldurulacak" ipucuyla görünürler; gerçek değer girildiğinde (`value`) işaret kendiliğinden kalkar.
+Telefon tanımlı değilken "Ara" butonu iletişim bölümüne gider; çalışmayan `tel:` bağlantısı oluşmaz.
+Uydurma isim, yorum veya rakam girilmez.
+
+## "Neye bakıyorum?" yörüngesi (HALO tarzı)
+
+`components/sections/OrbitServices.tsx`: masaüstünde bölüm 380vh, sahne sticky; kaydırma 5 hizmet arasında
+döner ve her hizmete oturur. Parça görselleri (`public/images/orbit/*.webp`) açılış filminin 3D modelinden
+şeffaf arka planla çekilir: `node scripts/capture-parts.mjs && python3 scripts/png-to-webp.py --parts`.
+Mobil ve reduced-motion: sabitlemesiz liste.
+
 ## Sektör araştırması
 
 Bağımsız servis sitelerinin incelemesi ve uygulanan iyileştirmeler: [`RAKIP-ARASTIRMA.md`](./RAKIP-ARASTIRMA.md).

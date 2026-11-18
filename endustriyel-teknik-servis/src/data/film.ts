@@ -11,14 +11,14 @@ export const filmScenes = [
     to: 3.3,
     eyebrow: '01 · Teşhis',
     title: ['Makine', 'çizgi çizgi', 'okunur.'],
-    lede: 'Teşhis, makinenin yapısını anlamakla başlar: ünite ünite, silindir silindir, devre devre.',
+    lede: 'Teşhise makinenin yapısını anlayarak başlarım: ünite ünite, silindir silindir, devre devre.',
   },
   {
     from: 3.9,
     to: 5.7,
     eyebrow: '02 · Elektrik ve otomasyon',
     title: ['Pano,', 'sinyal,', 'sürücü.'],
-    lede: 'Kumanda devreleri, PLC giriş/çıkışları ve motor sürücüleri şema ve ölçümle birlikte okunur.',
+    lede: 'Kumanda devrelerini, PLC giriş/çıkışlarını ve motor sürücülerini şema ve ölçümle birlikte okurum.',
     link: { href: '/hizmetler/elektrik-arizalari', label: 'Elektrik arızaları' },
   },
   {
@@ -26,7 +26,7 @@ export const filmScenes = [
     to: 7.8,
     eyebrow: '03 · Mekanik ve hareket',
     title: ['Hareketin', 'geçtiği', 'her nokta.'],
-    lede: 'Silindirler, rulman yatakları, redüktör ve servo eksenler; ses, titreşim ve boşluk üzerinden değerlendirilir.',
+    lede: 'Silindirleri, rulman yataklarını, redüktör ve servo eksenleri ses, titreşim ve boşluk üzerinden değerlendiririm.',
     link: { href: '/hizmetler/mekanik-bakim', label: 'Mekanik arıza ve onarım' },
   },
 ] as const;

@@ -4,31 +4,31 @@
  */
 export const faqs = [
   {
-    q: 'Hangi makinelerde çalışıyorsunuz?',
-    a: 'Endüstriyel baskı ve ambalaj makinelerinde; özellikle BOBST platin kesim (Novacut, Expertcut, Mastercut) ve manroland tabaka ofset (ROLAND 700, ROLAND 900) makinelerinde elektrik, mekanik ve otomasyon arızaları için hizmet verilir. Listede olmayan makineler için de arıza bildirebilirsiniz; uygunluk ön değerlendirmede açıkça söylenir.',
+    q: 'Hangi makinelere bakıyorsunuz?',
+    a: 'BOBST platin kesim (Novacut, Expertcut, Mastercut) ve manroland tabaka ofset (ROLAND 700, ROLAND 900) makinelerinde elektrik, mekanik ve otomasyon arızalarına bakıyorum. Listede olmayan bir makineniz varsa yine arayın; bakıp bakamayacağımı açıkça söylerim.',
   },
   {
     q: 'BOBST veya manroland yetkili servisi misiniz?',
-    a: 'Hayır. Bu bağımsız bir teknik servis hizmetidir; üreticilerin yetkili servisi, resmî temsilcisi, distribütörü veya iş ortağı değildir. Garanti kapsamındaki işlemler ve üreticiye özel yazılımlar için üreticinin kendi servis kanallarına başvurulmalıdır.',
+    a: 'Hayır. Bağımsız çalışıyorum; üreticilerin yetkili servisi, temsilcisi veya iş ortağı değilim. Garanti kapsamındaki işler ve üreticiye özel yazılımlar için üreticinin kendi servisine başvurmanız gerekir.',
   },
   {
-    q: 'Servis talebi nasıl oluşturulur?',
-    a: 'Arıza bildirim formunu doldurun: makine markası ve modeli, arıza türü, açıklama ve konum. Form bilgilerinizi düzenli bir WhatsApp mesajına dönüştürür; mesajı WhatsApp’ta siz gönderirsiniz. Site bilgilerinizi saklamaz.',
+    q: 'Nasıl ulaşırım?',
+    a: 'En hızlısı telefon ya da WhatsApp. Yazmayı tercih ederseniz sitedeki formu doldurun; form bilgilerinizi düzenli bir WhatsApp mesajına çevirir, mesajı siz gönderirsiniz. Site bilgilerinizi saklamaz.',
   },
   {
-    q: 'Fotoğraf veya video gönderebilir miyim?',
-    a: 'Evet. Alarm ekranı, makine etiketi, sürücü hata kodu veya sesin/hareketin kısa bir videosu teşhisi kolaylaştırır. Bunları WhatsApp konuşmasına ekleyebilirsiniz.',
+    q: 'Fotoğraf veya video göndereyim mi?',
+    a: 'Evet, çok işe yarar. Alarm ekranı, makine etiketi, sürücü hata kodu ya da sesin kısa bir videosu çoğu zaman ilk konuşmada olası nedenleri daraltır.',
   },
   {
-    q: 'Arıza ne kadar sürede giderilir?',
-    a: 'Süre; arızanın türüne, yerinde kontrol sonucuna ve gerekiyorsa parça temin süresine bağlıdır. Bu nedenle önceden kesin bir süre verilmez; ön değerlendirmeden sonra size gerçekçi bir tablo sunulur.',
+    q: 'Arıza ne kadar sürede çözülür?',
+    a: 'Bunu arızayı görmeden söylemem doğru olmaz. Süre arızanın türüne, yerinde kontrolün sonucuna ve parça gerekiyorsa parçanın gelmesine bağlı. Gördükten sonra size gerçekçi bir tablo veririm.',
   },
   {
-    q: 'Hangi bölgelere hizmet veriyorsunuz?',
-    a: 'Makinenin bulunduğu il ve ilçeyi formda belirtin. Yerinde hizmetin mümkün olup olmadığı ön değerlendirmede netleştirilir.',
+    q: 'Hangi bölgelere geliyorsunuz?',
+    a: 'Makinenin bulunduğu il ve ilçeyi söyleyin; gelip gelemeyeceğimi ve ne zaman gelebileceğimi ilk konuşmada netleştiririz.',
   },
   {
-    q: 'PLC programında değişiklik yapıyor musunuz?',
-    a: 'PLC programına müdahale yalnızca makine sahibinin onayı ve mevcut programın yedeği alındıktan sonra değerlendirilir. Üreticiye ait kilitli yazılımlar kapsam dışındadır.',
+    q: 'PLC programına müdahale ediyor musunuz?',
+    a: 'Yalnızca makine sahibinin onayıyla ve mevcut programın yedeğini aldıktan sonra. Üreticiye ait kilitli yazılımlara dokunmam.',
   },
 ];
