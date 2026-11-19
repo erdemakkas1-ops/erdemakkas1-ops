@@ -79,6 +79,7 @@ jobs:
           cp -r ahima-salon-3d/out/. _site/ahima-salon-3d/
           cp -r endustriyel-teknik-servis/out/. _site/endustriyel-teknik-servis/
           cp -r surpriz/. _site/surpriz/
+          cp -r hediye/. _site/hediye/
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
