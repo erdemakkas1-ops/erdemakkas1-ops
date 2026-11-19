@@ -431,15 +431,33 @@
   min-height: 560px;
   overflow: hidden;
 }
+/* Kamera turu: metin hücreleri aynı ızgara hücresinde üst üste (yükseklik en uzun içeriğe göre) */
+.tour-cell {
+  grid-area: 1 / 1;
+}
+.tour-spot {
+  background: radial-gradient(42vmax 34vmax at 66% 50%, transparent 0%, transparent 38%, rgba(15, 17, 18, 0.62) 100%);
+}
+.tour-shade {
+  background: linear-gradient(90deg, rgba(15, 17, 18, 0.9) 0%, rgba(15, 17, 18, 0.62) 30%, rgba(15, 17, 18, 0.06) 55%, transparent 100%);
+}
+@media (max-width: 767.98px) {
+  .tour-spot {
+    background: radial-gradient(70vmax 40vmax at 50% 30%, transparent 0%, transparent 34%, rgba(15, 17, 18, 0.6) 100%);
+  }
+  .tour-shade {
+    background: linear-gradient(180deg, transparent 0%, transparent 48%, rgba(15, 17, 18, 0.88) 66%, rgba(15, 17, 18, 0.97) 100%);
+  }
+}
+.tour-static {
+  display: none;
+}
 @media (prefers-reduced-motion: no-preference) {
   .scene--hero {
-    height: 250vh;
+    height: 230vh;
   }
-  .scene--systems {
-    height: 460vh;
-  }
-  .scene--service {
-    height: 280vh;
+  .scene--tour {
+    height: 470vh;
   }
   .scene .scene__stage {
     position: sticky;
@@ -447,46 +465,30 @@
     min-height: 0;
   }
   /* JS ile açılacak katmanların başlangıç hâli */
-  .scene--hero .hotspot__inner,
-  .scene--systems [data-layer]:not([data-layer='0']),
-  .scene--systems [data-chapter]:not([data-chapter='0']),
-  .scene--systems .hotspot__inner,
-  .scene--service [data-trust] {
+  .scene--tour .tour-step,
+  .scene--tour .hotspot__inner {
     opacity: 0;
     visibility: hidden;
   }
-  .scene--systems [data-layer]:not([data-layer='0']) {
-    visibility: visible;
-    clip-path: inset(0 0 0 100%);
+  .scene--tour .tour-title {
+    opacity: 0.38;
   }
 }
 @media (max-width: 767.98px) and (prefers-reduced-motion: no-preference) {
   .scene--hero {
-    height: 190vh;
+    height: 180vh;
   }
-  .scene--systems {
-    height: 380vh;
-  }
-  .scene--service {
-    height: 220vh;
-  }
-  .scene--systems [data-layer]:not([data-layer='0']) {
-    clip-path: inset(100% 0 0 0);
+  .scene--tour {
+    height: 400vh;
   }
 }
-/* Hareket azaltılmışsa: sahneler sabitlenmez; sistemler bölümü liste olarak görünür */
-.systems-static {
-  display: none;
-}
+/* Hareket azaltılmışsa: turlar sabit görsel + liste olarak görünür */
 @media (prefers-reduced-motion: reduce) {
-  .scene--systems .scene__stage {
+  .scene--tour .tour-stage {
     display: none;
   }
-  .systems-static {
+  .tour-static {
     display: block;
-  }
-  .scene--hero .hotspot {
-    display: none;
   }
 }
 

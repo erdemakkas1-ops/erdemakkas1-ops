@@ -1,108 +1,72 @@
 /**
  * SİNEMATİK SAHNE GÖRSELLERİ (asset slot'ları)
  * ------------------------------------------------------------------
- * Her slot bir fotoğraf alanıdır. `file` uzantısız yoldur; aynı adla hem `.avif` hem `.webp` beklenir.
- * Gemini görselleri hazır olduğunda:
- *   1. Görseli `public/images/cinema/<gemini dosya adı>.webp` ve `.avif` olarak koyun
- *      (en az 2400×1350, 16:9; AVIF/WebP'ye çevirmek için: python3 scripts/optimize-images.py)
- *   2. Aşağıdaki ilgili slotta `file` değerini `/images/cinema/<ad>` yapın, `position` ile odak noktasını ayarlayın.
- * Görsel istemleri (prompt) ve kurallar: GEMINI-GORSELLER.md
- *
- * Şu an elimizdeki 3 gerçek fotoğraf kullanılıyor (temsilî). Aynı fotoğrafın farklı bölgesine
- * `position` + `zoom` ile odaklanılıyor (ör. pano fotoğrafındaki PLC ve servo sürücüler).
+ * Onaylanmış 4 fotogerçekçi görsel (Gemini). Her görsel duyarlı set olarak tutulur:
+ *   public/images/cinema/<ad>-<genişlik>.avif / .webp  (960, 1600, 2400)
+ * Yeni görsel eklemek / değiştirmek:
+ *   python3 scripts/optimize-images.py <kaynak.jpg> public/images/cinema/<ad>
+ * ardından aşağıdaki slotta `file`, `width`, `height`, `widths` değerlerini güncelleyin.
+ * Görseller temsilîdir; gerçek bir müşteri işi gibi sunulmaz. Kurallar ve istemler: GEMINI-GORSELLER.md
  */
 
 export type MediaSlot = {
-  /** Uzantısız yol: /images/... (.avif ve .webp) */
+  /** Uzantısız yol: /images/... */
   file: string;
   alt: string;
   width: number;
   height: number;
-  /** CSS object-position: odak noktası */
+  /** Duyarlı genişlikler (dosya adında -<w> soneki); yoksa tek dosya */
+  widths?: number[];
+  /** CSS object-position: odak noktası (mobil kırpma için önemli) */
   position: string;
-  /** Sahnedeki başlangıç yakınlaşması (1 = yok) */
+  /** Başlangıç yakınlaşması (1 = yok) */
   zoom?: number;
-  /** Gemini ile üretilecek görselin hedef dosya adı (public/images/cinema/) */
-  gemini: string;
-  /** Temsilî görsel mi (gerçek servis işi değil) */
   representative: boolean;
 };
 
-const PRESS = '/images/industrial/printing-press-rollers';
-const PANEL = '/images/industrial/electrical-panel';
-const GEARBOX = '/images/industrial/motor-gearbox';
+const C = '/images/cinema';
 
 export const media = {
-  /** SAHNE 1 – açılış: fabrikada büyük baskı makinesi */
+  /** Görsel 01 – açılış: fabrikada endüstriyel baskı makinesi (makine sağda, sol taraf başlık için boş) */
   heroMachine: {
-    file: PRESS,
-    alt: 'Fabrika ortamında endüstriyel baskı makinesinin silindir grubu ve yan çerçeveleri',
-    width: 1536,
-    height: 857,
-    position: '68% 50%',
-    gemini: 'hero-baski-makinesi',
+    file: `${C}/hero-baski-makinesi`,
+    alt: 'Loş fabrika salonunda çok üniteli endüstriyel ofset baskı makinesi ve kâğıt istifi',
+    width: 2752,
+    height: 1536,
+    widths: [960, 1600, 2400],
+    position: '72% 50%',
     representative: true,
   },
-  /** SAHNE 2 – elektrik ve kontrol panosu */
-  electrical: {
-    file: PANEL,
-    alt: 'Kontaktör, sigorta ve klemens sıraları görünen endüstriyel elektrik panosu',
-    width: 1536,
-    height: 857,
-    position: '74% 60%',
-    gemini: 'sistem-elektrik-pano',
-    representative: true,
-  },
-  /** SAHNE 2 – PLC */
-  plc: {
-    file: PANEL,
-    alt: 'Elektrik panosunda PLC modül rafı ve kablo bağlantıları',
-    width: 1536,
-    height: 857,
-    position: '62% 26%',
-    zoom: 1.9,
-    gemini: 'sistem-plc',
-    representative: true,
-  },
-  /** SAHNE 2 – servo sürücüler */
-  servo: {
-    file: PANEL,
-    alt: 'Panoda yan yana montajlı iki motor sürücüsü ve kabloları',
-    width: 1536,
-    height: 857,
-    position: '82% 28%',
-    zoom: 2.2,
-    gemini: 'sistem-servo-surucu',
-    representative: true,
-  },
-  /** SAHNE 2 – mekanik tahrik */
+  /** Görsel 02 – mekanik: dişliler, miller, yatak ve baskı silindirleri */
   mechanical: {
-    file: GEARBOX,
-    alt: 'Lineer hareket sistemine bağlı motor-redüktör grubu ve kablo zinciri',
-    width: 1536,
-    height: 857,
-    position: '68% 50%',
-    gemini: 'sistem-mekanik-tahrik',
+    file: `${C}/sistem-mekanik-tahrik`,
+    alt: 'Baskı makinesi iç görünümü: dişli çarklar, mil, yatak, kaplin, yağlama hatları ve silindirler',
+    width: 2752,
+    height: 1536,
+    widths: [960, 1600, 2400],
+    position: '55% 50%',
     representative: true,
   },
-  /** SAHNE 3 – servis ve müdahale (Gemini görseli gelene kadar baskı makinesi detayı) */
+  /** Görsel 03 – PLC ve otomasyon: elektrik panosu */
+  electrical: {
+    file: `${C}/sistem-elektrik-pano`,
+    alt: 'Kapağı açık endüstriyel elektrik panosu: PLC rafı, motor sürücüleri, sigortalar, kontaktörler ve klemensler',
+    width: 1672,
+    height: 941,
+    widths: [960, 1600],
+    position: '58% 45%',
+    representative: true,
+  },
+  /** Görsel 04 – saha teknisyeni */
   service: {
-    file: PRESS,
-    alt: 'Baskı makinesinde silindir yatakları ve hidrolik hatların yakın görünümü',
-    width: 1536,
-    height: 857,
-    position: '58% 40%',
-    zoom: 1.35,
-    gemini: 'servis-mudahale',
+    file: `${C}/servis-mudahale`,
+    alt: 'Teknisyen, kapağı açık baskı ünitesinin silindirlerini el feneriyle kontrol ediyor; yerde alet çantası ve multimetre',
+    width: 2752,
+    height: 1536,
+    widths: [960, 1600, 2400],
+    position: '45% 50%',
     representative: true,
   },
 } satisfies Record<string, MediaSlot>;
 
 export type MediaKey = keyof typeof media;
-
-/** Sahne 1'de görselin üzerinde beliren teknik detay etiketleri (yüzde konumlar görsele göre) */
-export const heroHotspots = [
-  { x: 56, y: 26, title: 'Hidrolik ve pnömatik hatlar', note: 'Bağlantı · kaçak kontrolü' },
-  { x: 57, y: 47, title: 'Rulman yatağı', note: 'Ses · ısı · boşluk' },
-  { x: 86, y: 36, title: 'Silindir grubu', note: 'Yüzey · yataklama · tahrik' },
-];

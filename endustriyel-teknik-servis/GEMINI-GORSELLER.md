@@ -1,7 +1,17 @@
 # Gemini görselleri – sinematik sahneler için
 
-Ana sayfadaki üç sahne fotoğraf tabanlıdır. Şu an elimizdeki 3 gerçek fotoğraf (baskı silindirleri, elektrik panosu,
-motor-redüktör) temsilî olarak kullanılıyor. Aşağıdaki görseller Gemini ile üretildiğinde tek satırla değiştirilir.
+**Durum (Aşama 2): 4 onaylı görsel entegre edildi.** Hepsi temsilîdir; sitede gerçek müşteri işi olarak sunulmaz.
+
+| Slot (`media.ts`) | Dosya (`public/images/cinema/`) | Kaynak | Kullanıldığı yer |
+| --- | --- | --- | --- |
+| `heroMachine` | `hero-baski-makinesi-{960,1600,2400}.avif/.webp` | Görsel 01 – Hero | Açılış sahnesi (öncelikli yükleme) |
+| `mechanical` | `sistem-mekanik-tahrik-{960,1600,2400}` | Görsel 02 – Mekanik | Mekanik kamera turu |
+| `electrical` | `sistem-elektrik-pano-{960,1600}` | Görsel 03 – PLC panosu (kaynak 1672 px) | PLC ve otomasyon kamera turu |
+| `service` | `servis-mudahale-{960,1600,2400}` | Görsel 04 – Saha teknisyeni | Sahada müdahale bölümü |
+
+Görsel değiştirilirse: `python3 scripts/optimize-images.py <kaynak> public/images/cinema/<ad>` ve
+`src/data/tours.ts` içindeki odak (`focus`) ve etiket (`hotspots`) koordinatlarını yeni görsele göre güncelleyin.
+Eksik dosya yok.
 
 ## Kurallar (her görsel için)
 
@@ -16,17 +26,17 @@ motor-redüktör) temsilî olarak kullanılıyor. Aşağıdaki görseller Gemini
 
 ## Dosyalar
 
-Dosyaları `public/images/cinema/` klasörüne koyun, sonra `python3 scripts/optimize-images.py public/images/cinema/*.png`
-çalıştırın (aynı adla `.avif` + `.webp` üretir). Ardından `src/data/media.ts` içinde ilgili slotun `file` değerini
+Dosyaları `public/images/cinema/` klasörüne koyun, sonra `python3 scripts/optimize-images.py <kaynak> <hedef-ad>`
+çalıştırın (960/1600/2400 genişlikte `.avif` + `.webp` üretir). Ardından `src/data/media.ts` içinde ilgili slotun `file` değerini
 `/images/cinema/<dosya-adı>` yapın ve `position` (odak noktası) değerini ayarlayın. Görsel üzerindeki etiketlerin
-konumları (`heroHotspots`, `data/systems.ts` → `hotspots`) yeni görsele göre yüzde olarak güncellenmelidir.
+konumları (`data/tours.ts` → `focus`, `hotspots`) yeni görsele göre yüzde olarak güncellenmelidir.
+
+Yeniden üretim gerekirse kullanılabilecek tanımlar ve istemler:
 
 | Slot (`media.ts`) | Dosya adı | Sahne | Ne görünmeli |
 | --- | --- | --- | --- |
 | `heroMachine` | `hero-baski-makinesi` | 1 – Açılış, yakınlaşma | Büyük, çok üniteli tabaka ofset baskı makinesi, fabrika salonunda; yan çerçeveler, silindirler, rulman yatakları |
 | `electrical` | `sistem-elektrik-pano` | 2 – Elektrik ve kontrol | Kapağı açık endüstriyel elektrik panosu: kontaktörler, sigortalar, klemens sıraları, düzenli kablo kanalları |
-| `plc` | `sistem-plc` | 2 – PLC | PLC rafı ve giriş/çıkış modüllerinin yakın planı, LED'ler, numaralı kablolar (okunamaz) |
-| `servo` | `sistem-servo-surucu` | 2 – Sürücü ve servo | Panoda yan yana servo sürücüler ve küçük ekranları; arka planda servo motor kabloları |
 | `mechanical` | `sistem-mekanik-tahrik` | 2 – Mekanik aktarma | Servo motor + redüktör, kaplin, dişli/kayış, rulman yatağı; makine gövdesine bağlı |
 | `service` | `servis-mudahale` | 3 – Servis ve müdahale | Teknisyen elleri: makine yanında multimetre/pens ampermetre ile ölçüm, açık pano veya yatak bölgesi; arkada büyük makine |
 
@@ -43,14 +53,6 @@ konumları (`heroHotspots`, `data/systems.ts` → `hotspots`) yeni görsele gör
 > Photorealistic close photograph of an open industrial electrical control cabinet in a factory, rows of contactors, motor
 > protection breakers, fuses and terminal blocks on DIN rails, neatly routed grey cable ducts, soft daylight from the left,
 > realistic wear, no logos, no readable labels, left 40% calm and dark, 16:9
-
-**sistem-plc**
-> Macro photograph of a PLC rack with input/output modules inside an industrial cabinet, status LEDs glowing green and
-> amber, numbered wire markers (not readable), shallow depth of field, realistic metal and plastic textures, no logos, 16:9
-
-**sistem-servo-surucu**
-> Photorealistic photograph of several servo drives mounted side by side in an industrial control cabinet, small status
-> displays, shielded motor and encoder cables, technician-grade realism, no brand names, no readable text, 16:9
 
 **sistem-mekanik-tahrik**
 > Photorealistic photograph of an industrial servo motor with a gearbox mounted on a machine frame, coupling, bearing

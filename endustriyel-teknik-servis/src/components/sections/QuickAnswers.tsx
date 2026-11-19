@@ -26,7 +26,7 @@ export function QuickAnswers() {
     {
       q: 'Hangi arızalar?',
       a: <span className="text-mist/85">Elektrik · Mekanik · PLC / otomasyon · Servo / sürücü · Revizyon ve periyodik bakım</span>,
-      href: '#sistemler',
+      href: '#mekanik',
       cta: 'Teknik sistemler',
     },
     {
