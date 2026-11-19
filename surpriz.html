@@ -18,7 +18,7 @@
     background: radial-gradient(circle at 50% 35%, var(--bg1), var(--bg2)) fixed;
     font-family: 'Dancing Script', cursive; overflow-x: hidden;
   }
-  .scroller { height: 400vh; }
+  .scroller { height: 550vh; }
   .stage {
     position: sticky; top: 0; height: 100vh; height: 100svh;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -30,7 +30,7 @@
   }
   .hint span { display: inline-block; animation: nudge 1.4s ease-in-out infinite; }
   @keyframes nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
-  .sway { transform-origin: 200px 560px; animation: sway 7s ease-in-out infinite; }
+  .sway { transform-origin: 200px 528px; animation: sway 7s ease-in-out infinite; }
   @keyframes sway { 0%,100% { transform: rotate(-1.2deg); } 50% { transform: rotate(1.2deg); } }
   h1 {
     color: var(--text); text-align: center; margin: 4px 0 0;
@@ -44,7 +44,7 @@
 </head>
 <body>
 <div class="scroller"><div class="stage">
-<svg id="lily" viewBox="0 0 400 560" xmlns="http://www.w3.org/2000/svg" aria-label="Lilyum çiçeği">
+<svg id="lily" viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg" aria-label="Lilyum çiçeği">
   <defs>
     <!-- Stargazer lilyumu renkleri: yeşil boğaz, koyu pembe orta, beyaz kenar -->
     <radialGradient id="petalGrad" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="178">
@@ -81,6 +81,11 @@
       <stop offset=".75" stop-color="#e9a2bb"/>
       <stop offset="1" stop-color="#d9608a"/>
     </linearGradient>
+    <linearGradient id="budGreen" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="-178">
+      <stop offset="0" stop-color="#5f9a45"/>
+      <stop offset=".7" stop-color="#93bf66"/>
+      <stop offset="1" stop-color="#c9d98a"/>
+    </linearGradient>
     <linearGradient id="antherGrad" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#4a1a0a"/>
       <stop offset=".5" stop-color="#8a3a16"/>
@@ -98,6 +103,17 @@
       <feComposite in="nc" in2="SourceGraphic" operator="in" result="ni"/>
       <feBlend in="SourceGraphic" in2="ni" mode="multiply"/>
     </filter>
+    <linearGradient id="soilGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a5236"/>
+      <stop offset=".35" stop-color="#5a3a24"/>
+      <stop offset="1" stop-color="#3a2416"/>
+    </linearGradient>
+    <filter id="soilTex">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" seed="3" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 -.15" result="d"/>
+      <feComposite in="d" in2="SourceGraphic" operator="in" result="di"/>
+      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="di"/></feMerge>
+    </filter>
     <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
       <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#5a0a2a" flood-opacity=".28"/>
     </filter>
@@ -106,6 +122,7 @@
     <g id="plant"></g>
     <g id="flower" filter="url(#shadow)"></g>
   </g>
+  <g id="soil"></g>
 </svg>
 
 <h1 id="msg">Memuriyetin hayırlı olsun güzellik <span class="heart">💗</span></h1>
@@ -126,18 +143,26 @@
   const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
   const rr = (a, b) => a + (b - a) * rnd();
 
+  const clamp = v => Math.max(0, Math.min(1, v));
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const CX = 200, CY = 215;
   const plant = document.getElementById('plant');
   const flower = document.getElementById('flower');
 
   /* ---------- Sap, yapraklar ve tomurcuk ---------- */
-  el('path', { d: `M${CX} ${CY+10} C 196 300, 212 420, 204 560`, stroke: 'url(#stemGrad)',
+  const GROUND = 528;
+  const stem = el('path', { d: `M204 ${GROUND + 6} C 212 430, 194 320, ${CX} ${CY + 12}`, stroke: 'url(#stemGrad)',
     'stroke-width': 9, fill: 'none', 'stroke-linecap': 'round' }, plant);
+  const STEM_LEN = stem.getTotalLength();
+  stem.style.strokeDasharray = STEM_LEN;
+  // Sapın belli bir yüksekliğe ulaştığı büyüme oranı
+  const growAt = y => clamp((GROUND - y) / (GROUND - CY - 12));
 
   // Tomurcuk sapı + tomurcuk
+  const side = el('g', {}, plant);
   el('path', { d: 'M203 345 C 230 320, 262 300, 286 268', stroke: '#3f7f3a', 'stroke-width': 4,
-    fill: 'none', 'stroke-linecap': 'round' }, plant);
-  const bud = el('g', { transform: 'translate(286 268) rotate(-58)' }, plant);
+    fill: 'none', 'stroke-linecap': 'round' }, side);
+  const bud = el('g', { transform: 'translate(286 268) rotate(-58)' }, side);
   el('path', { d: 'M0 0 C 10 -13, 45 -16, 75 -9 C 88 -5, 96 -1, 100 0 C 96 1, 88 5, 75 9 C 45 16, 10 13, 0 0 Z',
     fill: 'url(#budGrad)', stroke: '#5f8a3c', 'stroke-width': .8 }, bud);
   ['M4 0 C 35 -6, 70 -5, 100 0', 'M4 -5 C 35 -11, 70 -7, 98 -1', 'M4 5 C 35 11, 70 7, 98 1']
@@ -146,10 +171,13 @@
   // Mızrak biçimli, paralel damarlı lilyum yaprakları
   const leaves = [
     [202, 300,  -28, 0.85, 1], [200, 330, 205, 0.9, -1], [204, 385, -18, 1.05, 1],
-    [203, 420, 198, 1.1, -1], [205, 470, -10, 1.15, 1], [205, 505, 192, 1.0, -1],
+    [203, 420, 198, 1.1, -1], [206, 460, -10, 1.15, 1], [207, 492, 192, 1.0, -1],
   ];
+  const leafEls = [];
   leaves.forEach(([x, y, a, s, side]) => {
-    const g = el('g', { transform: `translate(${x} ${y}) rotate(${a}) scale(${s})` }, plant);
+    const wrap = el('g', {}, plant);
+    leafEls.push({ wrap, x, y, a, s });
+    const g = el('g', {}, wrap);
     const bend = 6 * side;
     el('path', { d: `M0 0 C 25 -12, 85 ${-16 + bend}, 135 ${-4 + bend} C 88 ${8 + bend}, 28 11, 0 0 Z`,
       fill: 'url(#leafGrad)' }, g);
@@ -173,7 +201,8 @@
 
   function tepal(angle, scale, shape, maxW, len, closed) {
     const g = el('g', {}, F);
-    tepals.push({ g, angle, scale, closed });
+    const t = { g, angle, scale, closed };
+    tepals.push(t);
     el('path', { d: shape, fill: 'url(#petalGrad)', filter: 'url(#tex)' }, g);
     el('path', { d: shape, fill: 'url(#petalShade)' }, g);
 
@@ -207,6 +236,8 @@
     // Kenar ışığı
     el('path', { d: shape, fill: 'none', stroke: '#ffffff', 'stroke-opacity': .75, 'stroke-width': 1 }, g);
     el('path', { d: shape, fill: 'none', stroke: '#b0204f', 'stroke-opacity': .25, 'stroke-width': .5 }, g);
+    // Genç tomurcuk yeşildir; büyüdükçe pembeye döner
+    t.green = el('path', { d: shape, fill: 'url(#budGreen)' }, g);
   }
 
   // Önce arkadaki 3 dış yaprak, sonra öndeki 3 iç yaprak
@@ -246,18 +277,56 @@
     el('circle', { cx: x, cy: y, r: 4.6, fill: 'url(#stigmaGrad)' }, st));
   el('circle', { cx: -1.5, cy: -2.5, r: 1.6, fill: '#ffffff', 'fill-opacity': .55 }, st);
 
-  /* ---------- Kaydırdıkça açılma ---------- */
+  /* ---------- Toprak ---------- */
+  const soil = document.getElementById('soil');
+  el('path', { d: `M-20 ${GROUND + 14} C 60 ${GROUND - 2}, 140 ${GROUND - 10}, 205 ${GROUND - 8} ` +
+    `C 270 ${GROUND - 6}, 340 ${GROUND + 2}, 420 ${GROUND + 14} L420 600 L-20 600 Z`,
+    fill: 'url(#soilGrad)', filter: 'url(#soilTex)' }, soil);
+  // Filizin çıktığı çatlak
+  el('path', { d: `M186 ${GROUND - 6} Q 196 ${GROUND - 1}, 204 ${GROUND - 5} Q 213 ${GROUND - 1}, 222 ${GROUND - 6}`,
+    stroke: '#2a180d', 'stroke-width': 2, fill: 'none', 'stroke-linecap': 'round', opacity: .7 }, soil);
+  // Taşlar ve toprak kırıntıları
+  for (let i = 0; i < 26; i++) {
+    const x = rr(10, 390), y = rr(GROUND + 8, 592), r = rr(1.2, 4.5);
+    el('ellipse', { cx: x.toFixed(1), cy: y.toFixed(1), rx: r.toFixed(1), ry: (r * .7).toFixed(1),
+      fill: rnd() > .5 ? '#8a6a52' : '#6b4b33', opacity: .85 }, soil);
+  }
+  // Küçük çimen öbekleri
+  [[40, 4], [95, 3], [300, 4], [355, 3], [150, 2], [260, 2]].forEach(([x, n]) => {
+    const gy = GROUND + 10 - 12 * Math.sin(Math.PI * clamp((x + 20) / 440));
+    for (let k = 0; k < n; k++) {
+      const h = rr(10, 20), dx = rr(-7, 7);
+      el('path', { d: `M${x + k * 3} ${gy.toFixed(1)} q ${(dx * .3).toFixed(1)} ${(-h * .6).toFixed(1)} ${dx.toFixed(1)} ${(-h).toFixed(1)}`,
+        stroke: k % 2 ? '#4f9a46' : '#3b7f37', 'stroke-width': 1.6, fill: 'none', 'stroke-linecap': 'round' }, soil);
+    }
+  });
+
+  /* ---------- Kaydırdıkça büyüme ve açılma ---------- */
   const msg = document.getElementById('msg'), hint = document.getElementById('hint');
-  const clamp = v => Math.max(0, Math.min(1, v));
-  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   let target = 0, cur = 0;
   function progress() {
     const max = document.documentElement.scrollHeight - innerHeight;
     return max > 0 ? clamp(scrollY / (max * .85)) : 1;
   }
-  function render(p) {
-    const e = ease(p);
-    tepals.forEach(({ g, angle, scale, closed }, i) => {
+  function render(P) {
+    // 0–0.45: topraktan çıkıp büyüme, 0.45–1: tomurcuğun açılması
+    const G = clamp(P / .45), g = ease(G);
+    const p = clamp((P - .45) / .55), e = ease(p);
+
+    stem.style.strokeDashoffset = (STEM_LEN * (1 - g)).toFixed(1);
+    const tip = stem.getPointAtLength(STEM_LEN * g);
+    leafEls.forEach(({ wrap, x, y, a, s }) => {
+      const k = ease(clamp((g - growAt(y) - .02) / .2));
+      wrap.setAttribute('transform', `translate(${x} ${y}) rotate(${(a + (a > 90 ? 40 : -40) * (1 - k)).toFixed(1)}) scale(${(s * k).toFixed(3)} ${(s * (.3 + .7 * k)).toFixed(3)})`);
+      wrap.setAttribute('opacity', k > 0 ? 1 : 0);
+    });
+    const sb = ease(clamp((P - .3) / .3));
+    side.setAttribute('opacity', sb.toFixed(3));
+    side.setAttribute('transform', `translate(203 345) scale(${sb.toFixed(3)}) translate(-203 -345)`);
+
+    const gr = .92 * (1 - ease(clamp((P - .3) / .25)));
+    tepals.forEach(({ g, angle, scale, closed, green }, i) => {
+      green.setAttribute('opacity', gr.toFixed(3));
       // Dış yapraklar biraz önce, iç yapraklar biraz sonra açılır
       const local = ease(clamp((p - (i < 3 ? 0 : .08)) / .92));
       const a = closed + (angle - closed) * local;
@@ -267,11 +336,13 @@
     const c = clamp((p - .45) / .5);
     C.setAttribute('transform', `scale(${(.3 + .7 * ease(c)).toFixed(3)})`);
     C.setAttribute('opacity', c.toFixed(3));
-    F.setAttribute('transform', `translate(${CX} ${CY + 40 * (1 - e)}) scale(${(.72 + .28 * e).toFixed(3)} ${((.72 + .28 * e) * .93).toFixed(3)})`);
+    const fs = (.08 + .64 * g) + .28 * e;
+    F.setAttribute('transform', `translate(${tip.x.toFixed(1)} ${(tip.y + 26 * (1 - e)).toFixed(1)}) scale(${fs.toFixed(3)} ${(fs * .93).toFixed(3)})`);
+    F.setAttribute('opacity', clamp(G * 6).toFixed(3));
     const m = clamp((p - .82) / .18);
     msg.style.opacity = m;
     msg.style.transform = `translateY(${(14 * (1 - m)).toFixed(1)}px)`;
-    hint.style.opacity = 1 - clamp(p / .1);
+    hint.style.opacity = 1 - clamp(P / .06);
   }
   function tick() {
     cur += (target - cur) * .15;
