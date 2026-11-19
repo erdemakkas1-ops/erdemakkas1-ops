@@ -63,7 +63,7 @@ export function Machines() {
             </article>
           ))}
         </div>
-        <p className="mt-14 max-w-3xl text-xs leading-relaxed text-mist/50">
+        <p className="mt-14 max-w-3xl text-xs leading-relaxed text-mist/60">
           Marka isimleri yalnızca makine türünü tanımlamak için kullanılmıştır. Bağımsız teknik servis hizmetidir; üreticilerin
           yetkili servisi, temsilcisi veya iş ortağı değildir. Çizimler temsilîdir.
         </p>

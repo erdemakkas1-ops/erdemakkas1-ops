@@ -46,7 +46,7 @@ export default function ContactPage() {
 
           <aside className="space-y-10 lg:col-span-5 lg:order-2" aria-label="İletişim bilgileri">
             <div id="iletisim-bilgileri" className="scroll-mt-28">
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-mist/50">İletişim kanalları</h2>
+              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-mist/60">İletişim kanalları</h2>
               <div className="mt-5">
                 <ContactList />
               </div>
@@ -87,7 +87,7 @@ export default function ContactPage() {
             </div>
 
             <div>
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-mist/50">Sonraki adımlar</h2>
+              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-mist/60">Sonraki adımlar</h2>
               <ol className="mt-5 space-y-5">
                 {processSteps.map((s) => (
                   <li key={s.index} className="flex gap-4">

@@ -23,7 +23,7 @@ export function ProfileIntro() {
             {about.portrait ? (
               <Visual kind="photo" image={about.portrait} className="h-full w-full" sizes="(min-width:1024px) 40vw, 100vw" />
             ) : (
-              <div className="tech-grid flex h-full flex-col items-center justify-center gap-4 text-mist/50">
+              <div className="tech-grid flex h-full flex-col items-center justify-center gap-4 text-mist/60">
                 <UserRound className="h-24 w-24" strokeWidth={0.8} aria-hidden="true" />
                 {site.showContentPlaceholders && (
                   <span className="font-mono text-[10.5px] uppercase tracking-[0.18em]">Usta fotoğrafı · onay bekliyor</span>

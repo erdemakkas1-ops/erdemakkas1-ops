@@ -30,7 +30,7 @@ export function Footer() {
 
           <div className="grid gap-10 sm:grid-cols-3 lg:col-span-8">
             <div>
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-mist/50">Hizmetler</h2>
+              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-mist/60">Hizmetler</h2>
               <ul className="mt-5 space-y-1">
                 {services.map((s) => (
                   <li key={s.slug}>
@@ -42,7 +42,7 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-mist/50">Site</h2>
+              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-mist/60">Site</h2>
               <ul className="mt-5 space-y-1">
                 {mainNav.map((n) => (
                   <li key={n.href}>
@@ -59,11 +59,11 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-mist/50">İletişim</h2>
+              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-mist/60">İletişim</h2>
               <div className="mt-5 text-sm">
                 <ContactList compact />
               </div>
-              <h2 className="mt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-mist/50">Hizmet Bölgesi</h2>
+              <h2 className="mt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-mist/60">Hizmet Bölgesi</h2>
               <p className="mt-3 text-sm leading-relaxed text-mist/80">
                 {business.serviceArea ?? 'Hizmet bölgesi, talep ve makine konumuna göre ön değerlendirmede netleştirilir.'}
               </p>
@@ -77,7 +77,7 @@ export function Footer() {
 
         <div className="hairline mt-10" />
 
-        <div className="mt-8 grid gap-6 text-xs leading-relaxed text-mist/55 lg:grid-cols-2">
+        <div className="mt-8 grid gap-6 text-xs leading-relaxed text-mist/60 lg:grid-cols-2">
           <p>
             <strong className="font-semibold text-mist/75">Marka bağımsızlığı:</strong> BOBST ve manroland, ilgili hak
             sahiplerinin markalarıdır. Bu sitede marka isimleri yalnızca hizmet verilen makine türlerini tanımlamak amacıyla
@@ -93,7 +93,7 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="mt-8 flex flex-col gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-mist/40 sm:flex-row sm:justify-between">
+        <div className="mt-8 flex flex-col gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-mist/60 sm:flex-row sm:justify-between">
           <span>
             © {year} {displayName}
           </span>

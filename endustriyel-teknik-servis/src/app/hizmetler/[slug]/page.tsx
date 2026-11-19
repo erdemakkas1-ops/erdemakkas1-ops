@@ -110,7 +110,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<Pa
               <li key={sym} className="flex gap-4 bg-ink p-6 sm:p-7">
                 <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-accent" strokeWidth={1.6} aria-hidden="true" />
                 <div>
-                  <span className="font-mono text-[11px] text-mist/40">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="font-mono text-[11px] text-mist/60">{String(i + 1).padStart(2, '0')}</span>
                   <p className="mt-1 leading-relaxed text-mist/90">{sym}</p>
                 </div>
               </li>

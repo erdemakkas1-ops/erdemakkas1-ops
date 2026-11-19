@@ -56,7 +56,7 @@ export function ContactList({ compact = false }: { compact?: boolean }) {
             {...(r.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             className={`group flex items-center justify-between gap-4 ${compact ? 'py-1' : 'py-4'}`}
           >
-            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-mist/50">{r.label}</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-mist/60">{r.label}</span>
             <span className="flex items-center gap-2 text-right font-medium text-white group-hover:text-accent">
               {r.value}
               {!compact && <ArrowRight className="h-4 w-4" aria-hidden="true" />}

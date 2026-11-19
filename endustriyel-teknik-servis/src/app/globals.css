@@ -7,7 +7,7 @@
   --color-steel: #2a2f34;
   --color-steel-2: #3a4148;
   --color-accent: #e39b2d;
-  --color-accent-strong: #8f5a0c;
+  --color-accent-strong: #7a4c08; /* açık zeminde küçük yazı için ≥ 4.5:1 (surface ve surface-2) */
   --color-surface: #f2f3f3;
   --color-surface-2: #dfe2e4;
   --color-mist: #d3d8dc;
@@ -582,18 +582,22 @@
    JS yoksa / hareket azaltılmışsa sınıf eklenmez → içerik olduğu gibi görünür. */
 .motion-ready [data-reveal],
 .motion-ready [data-stagger] > * {
+  /* yalnızca opaklık + konum: içerik ekran okuyucu ve klavye için erişilebilir kalır (visibility kullanılmaz) */
   opacity: 0;
-  visibility: hidden;
   transform: translate3d(0, var(--reveal-dist, 70px), 0);
   transition:
     opacity var(--reveal-dur, 1.15s) cubic-bezier(0.215, 0.61, 0.355, 1) var(--reveal-delay, 0s),
-    transform var(--reveal-dur, 1.15s) cubic-bezier(0.215, 0.61, 0.355, 1) var(--reveal-delay, 0s),
-    visibility 0s linear var(--reveal-delay, 0s);
+    transform var(--reveal-dur, 1.15s) cubic-bezier(0.215, 0.61, 0.355, 1) var(--reveal-delay, 0s);
 }
 .motion-ready [data-reveal].is-in,
 .motion-ready [data-stagger].is-in > * {
   opacity: 1;
-  visibility: visible;
+  transform: none;
+}
+/* klavyeyle henüz görünmemiş bir öğeye gelinirse hemen görünür olsun */
+.motion-ready [data-reveal]:focus-within,
+.motion-ready [data-stagger] > :focus-within {
+  opacity: 1;
   transform: none;
 }
 .motion-ready [data-line] {
@@ -611,6 +615,12 @@
   .motion-ready [data-line] {
     transition-duration: 0.9s;
   }
+}
+
+/* Açık zeminli bölümlerde üst etiket (eyebrow) amber yerine koyu amber: kontrast ≥ 4.5:1 */
+.bg-surface .eyebrow,
+.bg-surface-2 .eyebrow {
+  color: var(--color-accent-strong);
 }
 
 /* Footer: dev konturlu yazı */

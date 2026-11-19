@@ -178,7 +178,7 @@ export function ServiceRequestForm() {
         </p>
 
         <div className="mt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-mist/50">Mesaj önizlemesi</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-mist/60">Mesaj önizlemesi</p>
           <pre
             data-testid="message-preview"
             className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap break-words border border-mist/10 bg-ink-2 p-5 font-mono text-[13px] leading-relaxed text-mist/90"
@@ -227,7 +227,7 @@ export function ServiceRequestForm() {
             >
               <span className="flex flex-col leading-tight">
                 <span>{u.label}</span>
-                <span className="mt-1 text-xs text-mist/55">{u.hint}</span>
+                <span className="mt-1 text-xs text-mist/60">{u.hint}</span>
               </span>
             </Choice>
           ))}
@@ -406,7 +406,7 @@ export function ServiceRequestForm() {
 
       <div className="flex flex-col gap-5 border-t border-mist/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
         <p id={id('privacy')} className="flex max-w-md gap-2.5 text-xs leading-relaxed text-mist/60">
-          <ShieldCheck className="h-4 w-4 shrink-0 text-mist/50" aria-hidden="true" />
+          <ShieldCheck className="h-4 w-4 shrink-0 text-mist/60" aria-hidden="true" />
           Bilgileriniz bu sitede saklanmaz. {whatsappNumber ? 'Gönder dediğinizde yalnızca WhatsApp mesajı hazırlanır; mesajı WhatsApp’ta siz gönderirsiniz.' : 'Form yalnızca kopyalanabilir bir servis metni hazırlar.'}
         </p>
         <button type="submit" className="btn btn-primary min-h-14 w-full shrink-0 px-8 text-base sm:w-auto">
@@ -469,13 +469,13 @@ function Field({
     <div data-field={field}>
       <div className="mb-2 flex items-baseline justify-between gap-4">
         <label htmlFor={id} className="text-sm font-semibold text-white">
-          {label} {required ? <Req /> : <span className="font-normal text-mist/50">(isteğe bağlı)</span>}
+          {label} {required ? <Req /> : <span className="font-normal text-mist/60">(isteğe bağlı)</span>}
         </label>
         {counter && <span className="font-mono text-[11px] text-mist/65">{counter}</span>}
       </div>
       {children}
       {hint && (
-        <p id={`${id}-hint`} className="mt-2 text-xs leading-relaxed text-mist/55">
+        <p id={`${id}-hint`} className="mt-2 text-xs leading-relaxed text-mist/60">
           {hint}
         </p>
       )}
