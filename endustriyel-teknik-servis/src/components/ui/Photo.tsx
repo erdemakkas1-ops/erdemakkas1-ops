@@ -19,11 +19,16 @@ export function Photo({
   style?: CSSProperties;
   sizes?: string;
 }) {
+  // Duyarlı set: <file>-<genişlik>.avif/.webp (scripts/optimize-images.py); yoksa tek dosya <file>.avif/.webp
+  const set = (ext: string) =>
+    m.widths ? m.widths.map((w) => `${assetPath(`${m.file}-${w}.${ext}`)} ${w}w`).join(', ') : assetPath(`${m.file}.${ext}`);
+  const fallback = m.widths ? `${m.file}-${m.widths[Math.min(1, m.widths.length - 1)]}.webp` : `${m.file}.webp`;
   return (
     <picture>
-      <source type="image/avif" srcSet={assetPath(`${m.file}.avif`)} sizes={sizes} />
+      <source type="image/avif" srcSet={set('avif')} sizes={sizes} />
+      <source type="image/webp" srcSet={set('webp')} sizes={sizes} />
       <img
-        src={assetPath(`${m.file}.webp`)}
+        src={assetPath(fallback)}
         alt={m.alt}
         width={m.width}
         height={m.height}

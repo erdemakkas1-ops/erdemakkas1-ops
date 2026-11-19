@@ -61,7 +61,7 @@ npm run dev          # http://localhost:3000
 | `process.ts` | Servis süreci adımları |
 | `form.ts` | Form marka ve arıza türü seçenekleri |
 | `media.ts` | Sinematik sahne görselleri (slotlar), açılış etiketleri |
-| `systems.ts` | Sahne 2: dört teknik sistem, metinler ve görsel etiketleri |
+| `tours.ts` | Sahne 2–3 kamera turları: adım başlıkları, metinler, odak/yakınlaşma ve görsel etiketleri |
 | `guides.ts` | Teknik rehber yazıları (`/rehber`) |
 | `faq.ts` | Sıkça sorulan sorular (FAQPage JSON-LD de buradan üretilir) |
 | `visuals.ts` | Sayfa görselleri (hero vb.) |
@@ -94,7 +94,7 @@ src/
     hizmetler/[slug]/     # 5 hizmet detay sayfası (generateStaticParams)
     makineler/ calismalarimiz/ hakkimizda/ iletisim/ gizlilik/
   components/
-    cinema/               # HeroCinema, SystemsScene, ServiceScene, CoverImage (+ Hotspot)
+    cinema/               # HeroCinema, FocusTour, ServiceScene, CoverImage (+ Hotspot)
     layout/               # Header, Footer, QuickContact (masaüstü), MobileContactBar (mobil sabit çubuk), Logo
     sections/             # Expertise, Process, Machines, Projects, About, Faq, ContactSection, ServiceCta, PageHero…
     forms/                # ServiceRequestForm (doğrulama + WhatsApp mesajı)
@@ -123,14 +123,17 @@ ile sabitlenir, GSAP ScrollTrigger zaman çizelgesi `scrub` ile ilerler ve geri 
 
 | Sahne | Dosya | Ne olur |
 | --- | --- | --- |
-| 1 — Makineye yaklaşma | `HeroCinema.tsx` | Tam ekran makine fotoğrafı rulman yatağı bölgesine yakınlaşır (masaüstü 1.6×, mobil 1.3×); başlık ve CTA'lar kademeli kaybolur; teknik detay etiketleri belirir; sonda kararıp sonraki bölüme geçer |
-| 2 — Teknik sistemler | `SystemsScene.tsx` | Elektrik → PLC → sürücü/servo → mekanik: yeni fotoğraf maskeyle açılır (masaüstü soldan, mobil alttan) ve küçülerek oturur, önceki yakınlaşıp kararır (parallax); etiketler ve açıklama belirir; ilerleme çizgisi |
-| 3 — Servis ve müdahale | `ServiceScene.tsx` | Fotoğraf küçük pencereden tam ekrana açılır; güven mesajları (çalışma prensipleri) ve iletişim belirir |
+| 1 — Açılış | `HeroCinema.tsx` | Tam ekran baskı makinesi; görüntü makineye doğru büyür (masaüstü 1.35×, mobil 1.22×), başlık ve CTA'lar kademeli kaybolur, sonda kararıp sonraki bölüme geçer |
+| 2 — Mekanik (kamera turu) | `FocusTour.tsx` + `tours.ts` → `mechanicalTour` | Dişli/silindir fotoğrafında sırayla: Mekanik arıza tespiti → Rulman ve mil sistemleri → Aktarma organları → Makine revizyonu. Kamera ilgili bölgeye kayar, çevre kararır, yalnızca görünen parçalar etiketlenir |
+| 3 — PLC ve otomasyon (kamera turu) | `FocusTour.tsx` + `tours.ts` → `controlTour` | Pano kadraja çerçeveyle girer; PLC → sürücüler → servo/sürücü modülü → koruma elemanları ve klemensler |
+| 4 — Sahada müdahale | `ServiceScene.tsx` | Sabitlenmez: görsel çerçeveden tam genişliğe açılır (clip-path) + hafif parallax; dört hizmet ve iletişim çağrısı. Görsel temsilîdir |
+
+Sabitlenen (sticky) yalnızca 3 bölüm vardır: açılış ve iki kamera turu.
 
 - Görseller `src/data/media.ts` slotlarından gelir (AVIF + WebP, `<picture>`); açılış görseli `fetchpriority=high`,
   diğerleri `loading=lazy`. Etiketler `CoverImage` ile görselin yüzde koordinatlarında kalır (kapsayıcı birimleri).
-- Mobil: daha kısa sahneler, daha az yakınlaşma, maske alttan. `prefers-reduced-motion`: sabitleme yok, teknik
-  sistemler sade liste olarak görünür.
+- Mobil: daha kısa sahneler, daha az yakınlaşma, odak noktası ekranın üst kısmında, metin altta. `prefers-reduced-motion`:
+  sabitleme yok, kamera turları sabit görsel + adım listesi olarak görünür.
 - Gemini görselleri: [`GEMINI-GORSELLER.md`](./GEMINI-GORSELLER.md) (dosya adları, istemler, kurallar).
 
 ## Çizim dili (kaydırmayla çizilen grafikler)
