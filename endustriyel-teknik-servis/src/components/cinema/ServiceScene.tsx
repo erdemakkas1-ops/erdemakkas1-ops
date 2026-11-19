@@ -52,10 +52,11 @@ export function ServiceScene() {
         );
         gsap.fromTo(
           q('[data-kenburns]'),
-          { scale: 1.18, yPercent: -4 },
+          // ölçek her an ≥ 1 + 2·|kayma| → kenarda boşluk açılmaz (önceki sürümde sonda üstte boşluk kalıyordu)
+          { scale: 1.16, yPercent: -3 },
           {
-            scale: 1,
-            yPercent: 4,
+            scale: 1.07,
+            yPercent: 3,
             ease: 'none',
             scrollTrigger: { trigger: q('[data-window]')[0], start: 'top bottom', end: 'bottom top', scrub: true },
           },

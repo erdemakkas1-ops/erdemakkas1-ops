@@ -134,6 +134,18 @@ Sabitlenen (sticky) yalnızca 3 bölüm vardır: açılış ve iki kamera turu.
   diğerleri `loading=lazy`. Etiketler `CoverImage` ile görselin yüzde koordinatlarında kalır (kapsayıcı birimleri).
 - Mobil: daha kısa sahneler, daha az yakınlaşma, odak noktası ekranın üst kısmında, metin altta. `prefers-reduced-motion`:
   sabitleme yok, kamera turları sabit görsel + adım listesi olarak görünür.
+- **Koordinat sistemi:** görsel ve etiketler aynı kapak kutusunda (`CoverImage`, `[data-cover-box]`); kutu yalnızca
+  left/top/width/height ile yerleşir (transform yok). Kamera (`[data-cam]`) kutunun DOM ölçülerinden hesaplanır ve
+  görseli + etiketleri birlikte taşır. Kamera içindeki `CoverImage` `clip={false}` kullanır (kırpma dıştaki sahnede);
+  aksi hâlde yakınlaşmada sahnede boşluk açılır ve etiketler kaybolur.
+- **Etiket yerleşimi:** her adımda etiket ekrana sığmıyor / metin paneline ya da başka etikete çarpıyorsa yönü
+  (sağ → sol → üst → alt) değişir, hiçbiri olmuyorsa o ekranda gizlenir. Odak noktası metin panelinin dışındaki serbest
+  alanın ortasına getirilir. Koordinatlar `src/data/tours.ts` içinde, görsel üzerinde %5 ızgarayla ölçülmüştür.
+- **Hata ayıklama:** `npm run dev` → `http://localhost:3000/?debug`: görsel sınırı + %10 ızgara, etiket koordinatları,
+  adım odak noktaları (F1…), canlı kamera ölçek/x/y. Production derlemesinde bu katman hiç oluşturulmaz.
+- **Doğrulama:** `npm run build && npx next start -p 3100`, sonra `BASE_URL=http://localhost:3100 npm run test:tour [klasör]`
+  — 375/390/430/768/1440/1920 px; her adımda nokta sapması (≤1 px), ekran içi, panel/etiket çakışması, piksel bazlı
+  görsel kaplama, geri kaydırma; klasör verilirse %0/25/50/75/100 ekran görüntüleri.
 - Gemini görselleri: [`GEMINI-GORSELLER.md`](./GEMINI-GORSELLER.md) (dosya adları, istemler, kurallar).
 
 ## Çizim dili (kaydırmayla çizilen grafikler)

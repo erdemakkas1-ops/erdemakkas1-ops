@@ -294,15 +294,20 @@
   overflow: hidden;
   container-type: size;
 }
-/* Görsel oranını koruyarak kaplar; odak noktası --fx/--fy, yakınlaşma --z */
+/* Kamera içindeki çerçeve kırpmaz; kırpma kameranın dışındaki sahne kapsayıcısında ([data-tour-frame]) yapılır */
+.cover-frame--free {
+  overflow: visible;
+}
+/* Görsel oranını koruyarak kaplar; odak noktası --fx/--fy (0–1), yakınlaşma --z.
+   Yalnızca left/top/width/height: transform yok → DOM ölçümü = gerçek yer (kamera hesabı bunu kullanır) */
 .cover-box {
+  --bw: calc(max(100cqw, 100cqh * var(--ar)) * var(--z));
+  --bh: calc(max(100cqh, 100cqw / var(--ar)) * var(--z));
   position: absolute;
-  width: calc(max(100cqw, 100cqh * var(--ar)) * var(--z));
-  height: calc(max(100cqh, 100cqw / var(--ar)) * var(--z));
-  left: var(--fx);
-  top: var(--fy);
-  translate: calc(var(--fx) * -1) calc(var(--fy) * -1);
-  will-change: transform;
+  width: var(--bw);
+  height: var(--bh);
+  left: calc((100cqw - var(--bw)) * var(--fx));
+  top: calc((100cqh - var(--bh)) * var(--fy));
 }
 .cover-box picture,
 .cover-box img {
@@ -331,6 +336,15 @@
   width: 0;
   height: 0;
   z-index: 3;
+}
+.hotspot__scale {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+.hotspot--off {
+  display: none;
 }
 .hotspot__inner {
   position: absolute;
@@ -394,6 +408,34 @@
   left: auto;
   right: 70px;
 }
+/* Dikey yerleşim: etiket noktanın üstünde / altında ortalı (dar alanlarda) */
+.hotspot {
+  --hs-v: 36px;
+}
+.hotspot--top .hotspot__line,
+.hotspot--bottom .hotspot__line {
+  left: 0;
+  width: 0;
+  height: var(--hs-v);
+  border-top: 0;
+  border-left: 1px solid rgba(242, 243, 243, 0.8);
+}
+.hotspot--top .hotspot__line {
+  top: calc(-10px - var(--hs-v));
+}
+.hotspot--bottom .hotspot__line {
+  top: 10px;
+}
+.hotspot--top .hotspot__tag {
+  left: 0;
+  top: calc(-10px - var(--hs-v));
+  transform: translate(-50%, -100%);
+}
+.hotspot--bottom .hotspot__tag {
+  left: 0;
+  top: calc(10px + var(--hs-v));
+  transform: translate(-50%, 0);
+}
 @media (max-width: 767.98px) {
   .hotspot__line {
     width: 26px;
@@ -405,18 +447,11 @@
   .hotspot--left .hotspot__tag {
     right: 40px;
   }
+  .hotspot {
+    --hs-v: 22px;
+  }
   .hotspot__tag b {
     font-size: 0.7rem;
-  }
-  /* dar ekranda fotoğrafın sağ yarısındaki etiketler sola açılır (taşmasın) */
-  .hotspot--m-left .hotspot__line {
-    left: auto;
-    right: 10px;
-    transform-origin: right;
-  }
-  .hotspot--m-left .hotspot__tag {
-    left: auto;
-    right: 40px;
   }
 }
 
@@ -436,14 +471,16 @@
   grid-area: 1 / 1;
 }
 .tour-spot {
-  background: radial-gradient(42vmax 34vmax at 66% 50%, transparent 0%, transparent 38%, rgba(15, 17, 18, 0.62) 100%);
+  --sx: 66%;
+  --sy: 50%;
+  background: radial-gradient(42vmax 34vmax at var(--sx) var(--sy), transparent 0%, transparent 38%, rgba(15, 17, 18, 0.62) 100%);
 }
 .tour-shade {
   background: linear-gradient(90deg, rgba(15, 17, 18, 0.9) 0%, rgba(15, 17, 18, 0.62) 30%, rgba(15, 17, 18, 0.06) 55%, transparent 100%);
 }
 @media (max-width: 767.98px) {
   .tour-spot {
-    background: radial-gradient(70vmax 40vmax at 50% 30%, transparent 0%, transparent 34%, rgba(15, 17, 18, 0.6) 100%);
+    background: radial-gradient(70vmax 40vmax at var(--sx) var(--sy), transparent 0%, transparent 34%, rgba(15, 17, 18, 0.6) 100%);
   }
   .tour-shade {
     background: linear-gradient(180deg, transparent 0%, transparent 48%, rgba(15, 17, 18, 0.88) 66%, rgba(15, 17, 18, 0.97) 100%);
@@ -490,6 +527,55 @@
   .tour-static {
     display: block;
   }
+}
+
+/* Geliştirme ortamı hata ayıklama katmanı (?debug) — production derlemesinde hiç oluşturulmaz */
+.tour-debug .cover-box {
+  outline: 2px dashed #22d3ee;
+  outline-offset: -2px;
+}
+.tour-debug .cover-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(34, 211, 238, 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.35) 1px, transparent 1px);
+  background-size: 10% 10%;
+}
+.tour-debug [data-hotspot]::after {
+  content: attr(data-x) ',' attr(data-y);
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  font: 600 10px/1 var(--font-mono);
+  color: #22d3ee;
+  white-space: nowrap;
+}
+.tour-debug .hotspot--off {
+  display: block;
+  opacity: 0.35;
+}
+.tour-debug__focus {
+  position: absolute;
+  z-index: 4;
+  translate: -50% -50%;
+  padding: 2px 4px;
+  border: 1px solid #f43f5e;
+  font: 600 10px/1 var(--font-mono);
+  color: #f43f5e;
+  white-space: nowrap;
+}
+.tour-debug__readout {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 30;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.8);
+  font: 600 11px/1.2 var(--font-mono);
+  color: #22d3ee;
 }
 
 /* Footer: dev konturlu yazı */
