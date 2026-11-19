@@ -25,7 +25,7 @@ export function ContactSection() {
           <p className="mt-6 max-w-md leading-relaxed text-mist/80" data-reveal>
             Arayın, makineyi ve arızayı anlatın. Uygun değilsem bunu da hemen söylerim.
           </p>
-          <p className="wide mt-10 text-[clamp(1.8rem,3vw,2.6rem)] leading-none text-paper" data-reveal>
+          <p id="iletisim-bilgileri" className="wide mt-10 scroll-mt-28 text-[clamp(1.4rem,2.6vw,2.4rem)] leading-none text-paper" data-reveal>
             <Ph f={profile.phone} />
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row" data-reveal>

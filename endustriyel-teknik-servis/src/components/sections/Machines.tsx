@@ -7,7 +7,7 @@ import { Visual } from '@/components/visuals/Visual';
 /** Makine grupları: her marka bir teknik resim paftası (çizim + bölüm listesi + antet). */
 export function Machines() {
   return (
-    <section className="relative overflow-hidden bg-ink-2 py-24 sm:py-32" aria-labelledby="makine-baslik">
+    <section id="makineler" className="relative scroll-mt-16 overflow-hidden bg-ink-2 py-24 sm:py-32" aria-labelledby="makine-baslik">
       <div className="container-x">
         <SectionHead
           id="makine-baslik"
@@ -56,7 +56,7 @@ export function Machines() {
                     </li>
                   ))}
                 </ol>
-                <Link href={`/makineler/${b.id}`} className="mt-8 inline-flex items-center gap-2 font-semibold text-accent hover:text-[#ff9a5c]">
+                <Link href={`/makineler/${b.id}`} className="mt-8 inline-flex items-center gap-2 font-semibold text-accent hover:text-[#f0b456]">
                   {b.name}: modeller ve ayrıntılar <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>

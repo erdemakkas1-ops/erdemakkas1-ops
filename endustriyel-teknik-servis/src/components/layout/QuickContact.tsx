@@ -28,7 +28,7 @@ export function QuickContact() {
   const item = 'flex items-center gap-3 whitespace-nowrap border border-mist/15 bg-ink/95 px-4 py-3 text-sm font-semibold text-paper shadow-lg backdrop-blur transition-colors hover:border-accent hover:text-accent';
 
   return (
-    <div ref={ref} data-quick-contact className="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-2 sm:bottom-6 sm:right-6">
+    <div ref={ref} data-quick-contact className="fixed bottom-6 right-6 z-40 hidden flex-col items-end gap-2 md:flex">
       <div id="hizli-iletisim" hidden={!open} className="flex flex-col items-end gap-2">
         <Link href={serviceRequestHref} className={item} onClick={() => setOpen(false)}>
           <Wrench className="h-4 w-4 text-accent" aria-hidden="true" /> Arıza bildir
@@ -50,7 +50,7 @@ export function QuickContact() {
         aria-expanded={open}
         aria-controls="hizli-iletisim"
         aria-label={open ? 'Hızlı iletişimi kapat' : 'Hızlı iletişim'}
-        className="grid h-14 w-14 place-items-center rounded-full bg-accent text-ink shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:bg-[#ff9a5c]"
+        className="grid h-14 w-14 place-items-center rounded-full bg-accent text-ink shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-colors hover:bg-[#f0b456]"
       >
         {open ? <X className="h-5 w-5" aria-hidden="true" /> : <MessageSquareMore className="h-5 w-5" aria-hidden="true" />}
       </button>

@@ -1,11 +1,10 @@
 import { MessageCircle, Phone } from 'lucide-react';
 import { generalWhatsappUrl, phoneHref } from '@/lib/contact';
-import { profile } from '@/data/site';
-import { Ph } from './Ph';
+import { business } from '@/data/site';
 
 /**
- * Usta sitelerindeki gibi telefon önce. Numara tanımlıysa tel: / wa.me; tanımlı değilse şablon numara
- * görünür ve buton iletişim bölümüne gider (çalışmayan arama bağlantısı oluşmaz).
+ * Telefon önce. Numara tanımlıysa tel: / wa.me; tanımlı değilse numara gösterilmez (sahte numara yok),
+ * buton iletişim bilgileri bölümüne gider (çalışmayan arama bağlantısı oluşmaz).
  */
 type Variant = 'primary' | 'ghost' | 'dark' | 'outline-dark';
 
@@ -13,9 +12,7 @@ export function CallButton({ className = '', variant = 'primary', fallbackHref =
   return (
     <a href={phoneHref ?? fallbackHref} className={`btn btn-${variant} ${className}`}>
       <Phone className="h-4 w-4" aria-hidden="true" />
-      <span>
-        Ara · <Ph f={profile.phone} />
-      </span>
+      <span>{business.phone ? `Ara · ${business.phone}` : 'Telefonla ara'}</span>
     </a>
   );
 }

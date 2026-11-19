@@ -14,12 +14,11 @@ import { gsap, MQ, ScrollTrigger, useGSAP } from './gsap';
  *  data-parallax="0.12"        → hafif parallax (masaüstü)
  *  data-timeline / data-timeline-progress → süreç çizgisi ilerlemesi
  *  data-draw                   → içindeki SVG çizgileri kaydırmayla çizilir (pathLength=1 + stroke-dashoffset, scrub)
- *  data-draw="load"            → aynı çizim, sayfa açılışında zamana bağlı (ekranın üstündeki çizimler için)
  *
  * prefers-reduced-motion: reduce → hiçbir animasyon kurulmaz, içerik olduğu gibi görünür.
  * Mobilde mesafeler ve süreler küçültülür, scrub efektleri kapatılır.
  * Tüm tetikleyiciler useGSAP + gsap.matchMedia ile kurulur ve rota değişiminde/unmount'ta revert edilir.
- * Açılış filmi sticky ile sabitlenir (pin-spacer yok); bu yüzden tetikleyici sırası sorun olmaz.
+ * Sinematik sahneler (components/cinema) kendi tetikleyicilerini kurar; sticky kullandıkları için sıra sorun olmaz.
  */
 export function ScrollEffects() {
   const pathname = usePathname();
@@ -122,15 +121,12 @@ export function ScrollEffects() {
           if (!strokes.length) return;
           gsap.set(strokes, { attr: { pathLength: 1 }, strokeDasharray: 1, strokeDashoffset: 1 });
           if (texts.length) gsap.set(texts, { autoAlpha: 0 });
-          const onLoad = root.dataset.draw === 'load';
-          const tl = gsap.timeline(
-            onLoad
-              ? { delay: 0.3 }
-              : { scrollTrigger: { trigger: root, start: 'top 88%', end: desktop ? 'center 42%' : 'center 50%', scrub: 0.6 } },
-          );
+          const tl = gsap.timeline({
+            scrollTrigger: { trigger: root, start: 'top 88%', end: desktop ? 'center 42%' : 'center 50%', scrub: 0.6 },
+          });
           const each = Math.min(0.03, 0.9 / strokes.length);
-          tl.to(strokes, { strokeDashoffset: 0, duration: onLoad ? 1.2 : 0.6, ease: onLoad ? 'power2.inOut' : 'none', stagger: { each } }, 0);
-          if (texts.length) tl.to(texts, { autoAlpha: 1, duration: 0.25, stagger: 0.02 }, onLoad ? 0.8 : '>-0.3');
+          tl.to(strokes, { strokeDashoffset: 0, duration: 0.6, ease: 'none', stagger: { each } }, 0);
+          if (texts.length) tl.to(texts, { autoAlpha: 1, duration: 0.25, stagger: 0.02 }, '>-0.3');
         });
 
         q('[data-timeline]').forEach((tl) => {
