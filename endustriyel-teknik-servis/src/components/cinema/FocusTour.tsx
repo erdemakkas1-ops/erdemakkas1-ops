@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { media } from '@/data/media';
 import type { Tour } from '@/data/tours';
-import { gsap, MQ, ScrollTrigger, useGSAP } from '@/components/animations/gsap';
+import { gsap, idleMatchMedia, MQ, ScrollTrigger, useGSAP } from '@/components/animations/gsap';
 import { Photo } from '@/components/ui/Photo';
 import { CoverImage, Hotspot } from './CoverImage';
 
@@ -40,7 +40,7 @@ export function FocusTour({ tour }: { tour: Tour }) {
 
   useGSAP(
     () => {
-      const mm = gsap.matchMedia();
+      return idleMatchMedia((mm) => {
       mm.add({ desktop: MQ.desktop, mobile: MQ.mobile }, (ctx) => {
         const { desktop } = ctx.conditions as { desktop: boolean };
         const q = gsap.utils.selector(root);
@@ -210,6 +210,7 @@ export function FocusTour({ tour }: { tour: Tour }) {
         );
 
         return () => ScrollTrigger.removeEventListener('refresh', placeHotspots);
+      });
       });
     },
     { scope: root, dependencies: [debug] },

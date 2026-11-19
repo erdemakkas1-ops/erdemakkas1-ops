@@ -2,7 +2,8 @@ import { UserRound } from 'lucide-react';
 import { about } from '@/data/about';
 import { profile, site } from '@/data/site';
 import { Ph } from '@/components/ui/Ph';
-import { CallButton, WhatsappCta } from '@/components/ui/CallButtons';
+import { ContactButtons } from '@/components/ui/CallButtons';
+import { serviceRequestHref } from '@/data/navigation';
 import { Visual } from '@/components/visuals/Visual';
 
 /** Bağımsız usta sitelerindeki gibi: kişi önce. Ad, deneyim, geçmiş, bölge, saatler, telefon. */
@@ -53,8 +54,7 @@ export function ProfileIntro() {
             ))}
           </dl>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row" data-reveal>
-            <CallButton variant="dark" />
-            <WhatsappCta variant="outline-dark" />
+            <ContactButtons fallbackHref={serviceRequestHref} callVariant="dark" whatsappVariant="outline-dark" />
           </div>
         </div>
       </div>

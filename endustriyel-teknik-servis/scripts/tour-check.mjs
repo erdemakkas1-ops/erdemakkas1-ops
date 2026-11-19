@@ -33,6 +33,8 @@ for (const w of WIDTHS) {
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   await page.goto(BASE, { waitUntil: 'networkidle' });
+  // sahne kurulumları tarayıcı boşta kalınca yapılır (idleMatchMedia): hazır olmalarını bekle
+  await page.waitForFunction(() => [...document.querySelectorAll('.scene--tour')].every((x) => x.dataset.tourDuration));
 
   const scrollTo = async (id, f) => {
     await page.evaluate(([id, f]) => {

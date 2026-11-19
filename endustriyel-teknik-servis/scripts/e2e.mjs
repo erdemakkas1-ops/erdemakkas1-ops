@@ -12,7 +12,7 @@ const routes = [
   '/hakkimizda', '/iletisim', '/gizlilik', '/makineler/bobst', '/makineler/manroland', '/rehber',
   '/rehber/ariza-bildirmeden-once', '/rehber/surucu-hata-koduna-ilk-bakis', '/rehber/planli-bakimin-temel-basliklari',
 ];
-const widths = [360, 390, 768, 1024, 1280, 1440, 1920];
+const widths = [360, 375, 390, 430, 768, 1024, 1280, 1440, 1920];
 const failures = [];
 const fail = (m) => { failures.push(m); console.log('  ✗', m); };
 
@@ -69,7 +69,8 @@ const req = await browser.newContext();
 for (const h of links) {
   if (/^(https?:|tel:|mailto:)/.test(h)) continue;
   const [path, hash] = h.split('#');
-  const url = new URL(path || '/', BASE).toString();
+  // yalnızca #çapa olan bağlantılar ana sayfaya aittir; BASE alt yol içerebilir (GitHub Pages)
+  const url = path ? new URL(path, BASE).toString() : BASE.replace(/\/?$/, '/');
   const res = await req.request.get(url);
   if (res.status() !== 200) { fail(`bağlantı ${h}: HTTP ${res.status()}`); continue; }
   if (hash) {
@@ -78,7 +79,7 @@ for (const h of links) {
   }
 }
 console.log(`✓ ${links.size} benzersiz bağlantı kontrol edildi`);
-for (const f of ['/sitemap.xml', '/robots.txt', '/opengraph-image', '/icon.svg']) {
+for (const f of ['/sitemap.xml', '/robots.txt', '/og-image.png', '/icon.svg']) {
   const res = await req.request.get(BASE + f);
   if (res.status() !== 200) fail(`${f}: HTTP ${res.status()}`);
 }
@@ -124,7 +125,7 @@ if (!/kopyalandı|başarısız/.test(status)) fail('form: kopyalama durumu göst
 const clip = await page.evaluate(() => navigator.clipboard.readText().catch(() => ''));
 if (clip && !clip.includes('Örnek Model')) fail('form: panodaki metin hatalı');
 console.log(`✓ form doğrulama, ön seçim, mesaj oluşturma, kopyalama (WhatsApp açılışı: ${waConfigured ? 'evet' : 'numara tanımlı değil – kopyalama modu'})`);
-if (!/numarası bu sürümde henüz tanımlanmadığı|WhatsApp’ta hazır/.test(await page.locator('h3, p').allInnerTexts().then((t) => t.join(' '))))
+if (!/numarası henüz tanımlanmadığı|WhatsApp’ta hazır/.test(await page.locator('h3, p').allInnerTexts().then((t) => t.join(' '))))
   fail('form: sonuç bilgilendirmesi yok');
 
 // 3b) Marka/model ön doldurma

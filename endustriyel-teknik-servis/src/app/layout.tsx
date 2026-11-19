@@ -7,7 +7,7 @@ import { QuickContact } from '@/components/layout/QuickContact';
 import { MobileContactBar } from '@/components/layout/MobileContactBar';
 import { ScrollEffects } from '@/components/animations/ScrollEffects';
 import { JsonLd } from '@/components/ui/JsonLd';
-import { displayName, site } from '@/data/site';
+import { displayName, site, ogImage } from '@/data/site';
 import { businessJsonLd } from '@/lib/seo';
 
 // Maviron Çelik ile aynı tipografi: Archivo %125 genişlik (başlıklar), Instrument Sans (metin), JetBrains Mono (etiketler)
@@ -28,8 +28,9 @@ export const metadata: Metadata = {
     title: site.defaultTitle,
     description: site.description,
     url: '/',
+    images: [ogImage],
   },
-  twitter: { card: 'summary_large_image', title: site.defaultTitle, description: site.description },
+  twitter: { card: 'summary_large_image', title: site.defaultTitle, description: site.description, images: [ogImage.url] },
   robots: { index: true, follow: true },
   formatDetection: { telephone: false },
 };

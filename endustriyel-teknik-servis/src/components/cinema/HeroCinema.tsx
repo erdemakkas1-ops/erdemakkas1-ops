@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { media } from '@/data/media';
 import { serviceRequestHref } from '@/data/navigation';
-import { gsap, MQ, useGSAP } from '@/components/animations/gsap';
+import { gsap, idleMatchMedia, MQ, useGSAP } from '@/components/animations/gsap';
 import { CoverImage } from './CoverImage';
 
 const ZOOM_DESKTOP = 1.35;
@@ -20,7 +20,7 @@ export function HeroCinema() {
 
   useGSAP(
     () => {
-      const mm = gsap.matchMedia();
+      return idleMatchMedia((mm) => {
       mm.add({ desktop: MQ.desktop, mobile: MQ.mobile }, (ctx) => {
         const { desktop } = ctx.conditions as { desktop: boolean };
         const zoom = desktop ? ZOOM_DESKTOP : ZOOM_MOBILE;
@@ -33,6 +33,7 @@ export function HeroCinema() {
           .to('[data-hero-hint]', { autoAlpha: 0, duration: 0.1 }, 0)
           .to('[data-hero-text-shade]', { opacity: 0, duration: 0.45 }, 0.15)
           .to('[data-hero-shade]', { opacity: 0.9, duration: 0.3 }, 0.7);
+      });
       });
     },
     { scope: root },

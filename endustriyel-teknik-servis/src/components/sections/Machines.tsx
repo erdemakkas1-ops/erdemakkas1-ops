@@ -38,7 +38,7 @@ export function Machines() {
                     ['Pafta', `${String(n + 1).padStart(2, '0')} / ${String(machineBrands.length).padStart(2, '0')}`],
                   ].map(([k, v]) => (
                     <div key={k} className="border-b border-r border-mist/20 px-3 py-2.5 last:border-r-0">
-                      <dt className="text-mist/45">{k}</dt>
+                      <dt className="text-mist/65">{k}</dt>
                       <dd className="mt-1 normal-case tracking-[0.04em] text-paper">{v}</dd>
                     </div>
                   ))}

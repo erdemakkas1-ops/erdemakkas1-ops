@@ -6,6 +6,7 @@ import {
   buildServiceMessage,
   buildWhatsappUrl,
   normalizeWhatsappNumber,
+  buildMailtoUrl,
 } from '../src/lib/whatsapp.ts';
 
 const valid = {
@@ -18,6 +19,7 @@ const valid = {
   city: 'İstanbul',
   district: 'Esenyurt',
   contactName: '',
+  contactPhone: '',
 };
 
 test('boş form tüm zorunlu alanlar için hata verir', () => {
@@ -64,4 +66,19 @@ test('wa.me bağlantısı doğru kodlanır ve geri çözülebilir', () => {
   const url = buildWhatsappUrl('905320000000', msg);
   assert.ok(url.startsWith('https://wa.me/905320000000?text='));
   assert.equal(decodeURIComponent(new URL(url).search.slice(6)), msg);
+});
+
+test('geri dönüş telefonu isteğe bağlı; girilirse doğrulanır ve mesaja eklenir', () => {
+  assert.deepEqual(validateRequest({ ...valid, contactPhone: '0532 000 00 00' }), {});
+  assert.ok(validateRequest({ ...valid, contactPhone: '12ab' }).contactPhone);
+  assert.ok(validateRequest({ ...valid, contactPhone: '123' }).contactPhone);
+  assert.ok(buildServiceMessage({ ...valid, contactPhone: '0532 000 00 00' }).includes('*Geri dönüş telefonu:* 0532 000 00 00'));
+  assert.ok(!buildServiceMessage(valid).includes('Geri dönüş'));
+});
+
+test('e-posta bağlantısı düz metin gövde içerir', () => {
+  const url = buildMailtoUrl('servis@example.com', buildServiceMessage(valid));
+  assert.ok(url.startsWith('mailto:servis@example.com?subject='));
+  const body = decodeURIComponent(url.split('&body=')[1]);
+  assert.ok(body.includes('Durum: Makine durdu') && !body.includes('*Durum:*'));
 });

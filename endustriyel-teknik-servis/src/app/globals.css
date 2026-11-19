@@ -578,6 +578,41 @@
   color: #22d3ee;
 }
 
+/* Scroll ile görünme (ScrollEffects): JS hazır olunca .motion-ready eklenir, öğe görününce .is-in.
+   JS yoksa / hareket azaltılmışsa sınıf eklenmez → içerik olduğu gibi görünür. */
+.motion-ready [data-reveal],
+.motion-ready [data-stagger] > * {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, var(--reveal-dist, 70px), 0);
+  transition:
+    opacity var(--reveal-dur, 1.15s) cubic-bezier(0.215, 0.61, 0.355, 1) var(--reveal-delay, 0s),
+    transform var(--reveal-dur, 1.15s) cubic-bezier(0.215, 0.61, 0.355, 1) var(--reveal-delay, 0s),
+    visibility 0s linear var(--reveal-delay, 0s);
+}
+.motion-ready [data-reveal].is-in,
+.motion-ready [data-stagger].is-in > * {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+.motion-ready [data-line] {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 1.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.motion-ready [data-line][data-line-from='right'] {
+  transform-origin: right center;
+}
+.motion-ready [data-line].is-in {
+  transform: scaleX(1);
+}
+@media (max-width: 767.98px) {
+  .motion-ready [data-line] {
+    transition-duration: 0.9s;
+  }
+}
+
 /* Footer: dev konturlu yazı */
 .outline-word {
   font-family: var(--font-display);

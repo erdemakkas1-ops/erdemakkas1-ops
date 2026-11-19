@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { business, displayName, hasVerifiedBusinessData, site } from '@/data/site';
+import { business, displayName, hasVerifiedBusinessData, ogImage, site } from '@/data/site';
 
 type PageMeta = { title: string; description: string; path: string };
 
@@ -16,8 +16,10 @@ export function pageMetadata({ title, description, path }: PageMeta): Metadata {
       siteName: displayName,
       locale: site.locale,
       type: 'website',
+      // sayfa düzeyindeki openGraph üst düzeyi tamamen ezdiği için görsel her sayfada tekrar verilir
+      images: [ogImage],
     },
-    twitter: { card: 'summary_large_image', title, description },
+    twitter: { card: 'summary_large_image', title, description, images: [ogImage.url] },
   };
 }
 

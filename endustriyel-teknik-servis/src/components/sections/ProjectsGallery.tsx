@@ -68,7 +68,7 @@ function ProjectCard({ p }: { p: Project }) {
 function PlaceholderCard({ category, visual, tall, light }: { category: string; visual: (typeof projectPlaceholders)[number]['visual']; tall: boolean; light?: boolean }) {
   const t = light
     ? { card: 'border-ink/25 bg-white/45', k: 'text-ink/45', title: 'text-ink/75', dl: 'text-ink/60', dt: 'text-ink/40', dd: 'text-ink/75' }
-    : { card: 'border-mist/20 bg-ink-2/60', k: 'text-mist/45', title: 'text-mist/70', dl: 'text-mist/55', dt: 'text-mist/40', dd: 'text-mist/70' };
+    : { card: 'border-mist/20 bg-ink-2/60', k: 'text-mist/65', title: 'text-mist/75', dl: 'text-mist/65', dt: 'text-mist/60', dd: 'text-mist/70' };
   return (
     <article className={`relative overflow-hidden border border-dashed ${t.card}`} aria-label="Örnek içerik – gerçek çalışma değildir">
       <div className={`relative overflow-hidden ${tall ? 'aspect-[4/5]' : 'aspect-[4/3]'}`}>

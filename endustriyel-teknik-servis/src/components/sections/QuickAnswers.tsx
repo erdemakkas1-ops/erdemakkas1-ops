@@ -4,7 +4,8 @@ import { machineBrands } from '@/data/machines';
 import { profile } from '@/data/site';
 import { serviceRequestHref } from '@/data/navigation';
 import { Ph } from '@/components/ui/Ph';
-import { CallButton, WhatsappCta } from '@/components/ui/CallButtons';
+import { ContactButtons } from '@/components/ui/CallButtons';
+import { hasDirectContact } from '@/lib/contact';
 
 /** Müşterinin ilk 5 sorusu, açılışın hemen altında tek bakışta. */
 export function QuickAnswers() {
@@ -72,11 +73,12 @@ export function QuickAnswers() {
         <div className="py-6 md:px-6 lg:pr-0" data-reveal>
           <p className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-accent">05 — Nasıl ulaşırım?</p>
           <div className="mt-3 flex flex-col gap-2">
-            <CallButton variant="primary" className="min-h-11 justify-start px-4 text-sm" fallbackHref="#iletisim-bilgileri" />
-            <WhatsappCta className="min-h-11 justify-start px-4 text-sm" fallbackHref="#servis-formu" />
-            <Link href={serviceRequestHref} className="inline-flex items-center gap-1.5 pt-1 text-xs font-semibold text-mist/70 hover:text-accent">
-              Servis talep formu <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-            </Link>
+            <ContactButtons fallbackHref={serviceRequestHref} buttonClassName="min-h-11 justify-start px-4 text-sm" />
+            {hasDirectContact && (
+              <Link href={serviceRequestHref} className="inline-flex items-center gap-1.5 pt-1 text-xs font-semibold text-mist/70 hover:text-accent">
+                Servis talep formu <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+              </Link>
+            )}
           </div>
         </div>
       </div>

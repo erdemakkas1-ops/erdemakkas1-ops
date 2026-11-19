@@ -44,8 +44,23 @@ npm run dev          # http://localhost:3000
 
 `NEXT_PUBLIC_SITE_URL` verilmezse Vercel'in production alan adı (`VERCEL_PROJECT_PRODUCTION_URL`) kullanılır.
 
-**GitHub Pages:** Depodaki `pages.yml` iş akışı siteyi `PAGES_BASE_PATH` ile statik olarak (`out/`) dışa aktarır ve
-`/endustriyel-teknik-servis/` altında yayınlar (yalnızca `main` dalına push'ta).
+**GitHub Pages:** Depodaki `.github/workflows/pages.yml` iş akışı siteyi `PAGES_BASE_PATH` ile statik olarak (`out/`)
+dışa aktarır ve `/endustriyel-teknik-servis/` altında yayınlar (yalnızca `main` dalına push'ta). `NEXT_PUBLIC_SITE_URL`
+aynı adımda gerçek yayın adresine ayarlıdır (canonical, sitemap, og:image buradan üretilir; değiştirmeyin).
+
+**İletişim bilgilerini girmek (GitHub Pages):** `pages.yml` içinde *endustriyel-teknik-servis* derleme adımının `env:`
+bölümüne ekleyin ve `main`'e gönderin:
+
+```yaml
+          NEXT_PUBLIC_PHONE: "+90 5xx xxx xx xx"
+          NEXT_PUBLIC_WHATSAPP_NUMBER: "905xxxxxxxxx"
+          NEXT_PUBLIC_EMAIL: "servis@alanadiniz.com"
+```
+
+Davranış: numara **tanımlı değilse** Ara / WhatsApp butonları hiç görünmez (sahte numara, başka yere giden buton yok);
+mobil alt çubukta yalnızca "Servis talebi oluştur" kalır ve form kopyalanabilir servis metni üretir. Telefon
+tanımlanınca `tel:` butonları, WhatsApp tanımlanınca `wa.me` butonları ve formdan WhatsApp'a gönderim, e-posta
+tanımlanınca (WhatsApp yoksa) formdan e-postayla gönderim açılır.
 
 ---
 
@@ -90,7 +105,7 @@ Gerçek veriler girildikten sonra `site.showContentPlaceholders` değerini `fals
 
 ```
 src/
-  app/                    # Rotalar, metadata, sitemap.ts, robots.ts, opengraph-image.tsx, icon.svg
+  app/                    # Rotalar, metadata, sitemap.ts, robots.ts, icon.svg (paylaşım görseli: public/og-image.png)
     hizmetler/[slug]/     # 5 hizmet detay sayfası (generateStaticParams)
     makineler/ calismalarimiz/ hakkimizda/ iletisim/ gizlilik/
   components/
@@ -179,21 +194,18 @@ Bağımsız servis sitelerinin incelemesi ve uygulanan iyileştirmeler: [`RAKIP-
 
 ## Test sonuçları (bu sürüm için gerçekten çalıştırılanlar)
 
-- `npm run lint` – hatasız, uyarısız
-- `npm run typecheck` – hatasız
-- `npm run build` – başarılı (19 statik sayfa/rota). `PAGES_BASE_PATH` ile statik dışa aktarım da başarılı.
-- `npm run test:whatsapp` – 8/8 test geçti
-- `npm run test:e2e` (Chromium/Playwright) – geçti:
-  - 12 rota × 360/390/768/1024/1440/1920 px: HTTP 200, yatay taşma yok, sayfa başına tek h1, kırık görsel yok,
-    etiketsiz buton/bağlantı yok, konsol hatası yok
-  - Sayfalardaki tüm iç bağlantılar ve `#` hedefleri, sitemap/robots/OG/ikon, 404 sayfası
-  - Form: boş gönderim hata özeti ve odak, "Diğer" marka doğrulaması, kısa açıklama doğrulaması, `?ariza=` ön seçimi,
-    mesaj içeriği, kopyalama
-  - Mobil menü açma / Escape ile kapatma; `prefers-reduced-motion` altında gizli içerik kalmaması
-- WhatsApp numarası tanımlı build ayrıca test edildi (geçici test numarasıyla): `wa.me/<numara>?text=...` yeni sekmede
-  açıldı, mesaj doğru kodlandı, `tel:` bağlantısı ve mobil WhatsApp butonu göründü.
-- **Yapılmayanlar:** Gerçek iOS/Android cihaz ve Safari/Firefox testi, Lighthouse ölçümü yapılmadı. Gerçek WhatsApp
-  uygulamasına mesaj gönderimi denenmedi (yalnızca bağlantının açıldığı doğrulandı).
+Testler, CI ile aynı ortam değişkenleriyle (`PAGES_BASE_PATH`, `NEXT_PUBLIC_SITE_URL`) alınan statik derlemeye,
+GitHub Pages ile aynı alt yolda (404.html davranışı dahil) çalıştırıldı.
+
+- `npm run lint`, `npm run typecheck` – hatasız; `npm run build` – başarılı
+- `npm run test:whatsapp` – 10/10 (doğrulama, mesaj içeriği, geri dönüş telefonu, e-posta bağlantısı)
+- `npm run test:e2e` (Chromium/Playwright) – 18 rota × 360/375/390/430/768/1024/1280/1440/1920 px: HTTP 200, yatay
+  taşma yok, tek h1, kırık görsel yok, etiketsiz buton yok, başlık kırpılması yok, konsol hatası yok; tüm iç
+  bağlantılar ve `#` hedefleri; sitemap/robots/og-image/ikon/404; form akışı; mobil menü; `prefers-reduced-motion`
+- `npm run test:tour` – mekanik ve PLC sahneleri, 375/390/430/768/1440/1920 px (bkz. Sinematik sahneler)
+- SEO çıktısı: tüm sayfalarda canonical ve og:image gerçek yayın adresini gösteriyor; çıktı HTML'lerinde `localhost` yok
+- **Yapılmayanlar:** Gerçek iOS/Android cihaz, Safari/Firefox testi; gerçek WhatsApp uygulamasına gönderim
+  (numara tanımlı olmadığı için yalnızca kopyalama modu test edildi).
 
 ---
 

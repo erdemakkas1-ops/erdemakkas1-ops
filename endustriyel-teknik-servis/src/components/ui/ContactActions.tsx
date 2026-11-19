@@ -3,24 +3,14 @@ import Link from 'next/link';
 import { generalWhatsappUrl, phoneHref } from '@/lib/contact';
 import { business } from '@/data/site';
 
-/**
- * Telefon butonu: numara tanımlıysa tel: bağlantısı; değilse iletişim bilgileri bölümüne gider
- * (çalışmayan buton oluşmaz, hayali numara gösterilmez).
- */
+/** Telefon butonu: yalnızca numara tanımlıysa (hayali numara / boşa giden buton yok). */
 export function PhoneButton({ className = '', variant = 'ghost' }: { className?: string; variant?: 'ghost' | 'dark' | 'primary' }) {
-  if (phoneHref) {
-    return (
-      <a href={phoneHref} className={`btn btn-${variant} ${className}`}>
-        <Phone className="h-4 w-4" aria-hidden="true" />
-        <span>Telefon ile İletişim</span>
-      </a>
-    );
-  }
+  if (!phoneHref) return null;
   return (
-    <Link href="/iletisim#iletisim-bilgileri" className={`btn btn-${variant} ${className}`}>
+    <a href={phoneHref} className={`btn btn-${variant} ${className}`}>
       <Phone className="h-4 w-4" aria-hidden="true" />
-      <span>İletişim Bilgileri</span>
-    </Link>
+      <span>Telefon ile İletişim</span>
+    </a>
   );
 }
 
