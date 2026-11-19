@@ -51,8 +51,8 @@ export const media = {
   electrical: {
     file: `${C}/sistem-elektrik-pano`,
     alt: 'Kapağı açık endüstriyel elektrik panosu: PLC rafı, motor sürücüleri, sigortalar, kontaktörler ve klemensler',
-    width: 1672,
-    height: 941,
+    width: 1600,
+    height: 900,
     widths: [960, 1600],
     position: '58% 45%',
     representative: true,
