@@ -8,8 +8,9 @@
 <style>
   :root { --bg1:#fff5f8; --bg2:#fde4ec; --text:#b03a62; }
   @media (prefers-color-scheme: dark) {
-    :root { --bg1:#2a1420; --bg2:#14080f; --text:#ffb3cc; }
+    :root:not([data-theme="light"]) { --bg1:#2a1420; --bg2:#14080f; --text:#ffb3cc; }
   }
+  :root[data-theme="dark"] { --bg1:#2a1420; --bg2:#14080f; --text:#ffb3cc; }
   * { box-sizing: border-box; }
   body {
     margin: 0; min-height: 100vh; padding: 16px;
