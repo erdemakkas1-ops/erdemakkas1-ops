@@ -12,29 +12,38 @@
   }
   :root[data-theme="dark"] { --bg1:#2a1420; --bg2:#100609; --text:#ffb8cf; }
   * { box-sizing: border-box; }
+  html { background: var(--bg2); }
   body {
-    margin: 0; min-height: 100vh; padding: 16px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: radial-gradient(circle at 50% 35%, var(--bg1), var(--bg2));
+    margin: 0; padding: 0 16px;
+    background: radial-gradient(circle at 50% 35%, var(--bg1), var(--bg2)) fixed;
     font-family: 'Dancing Script', cursive; overflow-x: hidden;
   }
-  svg { width: min(460px, 92vw); height: auto; display: block; }
-  .bloom { transform-origin: 200px 215px; animation: bloom 2.2s cubic-bezier(.2,.8,.2,1) both; }
-  @keyframes bloom { from { transform: scale(.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .scroller { height: 400vh; }
+  .stage {
+    position: sticky; top: 0; height: 100vh; height: 100svh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  svg { width: min(460px, 92vw); max-height: 74svh; height: auto; display: block; }
+  .hint {
+    position: absolute; bottom: 18px; left: 0; right: 0; text-align: center;
+    color: var(--text); font-size: 22px; transition: opacity .3s;
+  }
+  .hint span { display: inline-block; animation: nudge 1.4s ease-in-out infinite; }
+  @keyframes nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
   .sway { transform-origin: 200px 560px; animation: sway 7s ease-in-out infinite; }
   @keyframes sway { 0%,100% { transform: rotate(-1.2deg); } 50% { transform: rotate(1.2deg); } }
   h1 {
     color: var(--text); text-align: center; margin: 4px 0 0;
     font-size: clamp(28px, 7vw, 52px); line-height: 1.2;
-    animation: fade 2s 1.8s ease-out both;
+    opacity: 0; transform: translateY(14px);
     text-shadow: 0 2px 12px rgba(214, 51, 108, .25);
   }
-  @keyframes fade { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
   .heart { display: inline-block; animation: beat 1.2s infinite; }
   @keyframes beat { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 </style>
 </head>
 <body>
+<div class="scroller"><div class="stage">
 <svg id="lily" viewBox="0 0 400 560" xmlns="http://www.w3.org/2000/svg" aria-label="Lilyum çiçeği">
   <defs>
     <!-- Stargazer lilyumu renkleri: yeşil boğaz, koyu pembe orta, beyaz kenar -->
@@ -95,11 +104,13 @@
   </defs>
   <g class="sway">
     <g id="plant"></g>
-    <g class="bloom"><g id="flower" filter="url(#shadow)"></g></g>
+    <g id="flower" filter="url(#shadow)"></g>
   </g>
 </svg>
 
-<h1>Memuriyetin hayırlı olsun güzellik <span class="heart">💗</span></h1>
+<h1 id="msg">Memuriyetin hayırlı olsun güzellik <span class="heart">💗</span></h1>
+<div class="hint" id="hint">Aşağı kaydır <span>↓</span></div>
+</div></div>
 
 <script>
 (() => {
@@ -150,6 +161,7 @@
 
   /* ---------- Çiçek ---------- */
   const F = el('g', { transform: `translate(${CX} ${CY}) scale(1 .93)` }, flower);
+  const tepals = [];
 
   // Dış (sepal) ve iç (petal) taç yaprak şekilleri; uç yukarı doğru, taban (0,0)
   const SEPAL = 'M0 0 C -13 -22, -33 -62, -31 -102 C -29 -132, -14 -156, 5 -172 ' +
@@ -159,8 +171,9 @@
                 'C 45 -110, 39 -102, 45 -92 C 45 -55, 21 -20, 0 0 Z';
   const halfWidth = (t, max) => max * Math.sin(Math.PI * Math.pow(t, .85));
 
-  function tepal(angle, scale, shape, maxW, len) {
-    const g = el('g', { transform: `rotate(${angle}) scale(${scale})` }, F);
+  function tepal(angle, scale, shape, maxW, len, closed) {
+    const g = el('g', {}, F);
+    tepals.push({ g, angle, scale, closed });
     el('path', { d: shape, fill: 'url(#petalGrad)', filter: 'url(#tex)' }, g);
     el('path', { d: shape, fill: 'url(#petalShade)' }, g);
 
@@ -197,11 +210,14 @@
   }
 
   // Önce arkadaki 3 dış yaprak, sonra öndeki 3 iç yaprak
-  [[-8, 1.0], [114, .96], [233, 1.02]].forEach(([a, s]) => tepal(a, s, SEPAL, 30, 170));
-  [[55, 1.0], [174, .97], [293, 1.03]].forEach(([a, s]) => tepal(a, s, PETAL, 44, 176));
+  // [açık açı, ölçek, kapalı (tomurcuk) açı]
+  [[-8, 1.0, -7], [114, .96, 8], [-127, 1.02, -10]].forEach(([a, s, c]) => tepal(a, s, SEPAL, 30, 170, c));
+  [[55, 1.0, 4], [174, .97, 1], [-67, 1.03, -4]].forEach(([a, s, c]) => tepal(a, s, PETAL, 44, 176, c));
 
+  // Ortadaki organlar ayrı bir grupta: çiçek açtıkça ortaya çıkar
+  const C = el('g', {}, F);
   // Boğazdaki yeşilimsi ışıltı
-  el('circle', { cx: 0, cy: 0, r: 20, fill: '#e3f0a6', 'fill-opacity': .55 }, F);
+  el('circle', { cx: 0, cy: 0, r: 20, fill: '#e3f0a6', 'fill-opacity': .55 }, C);
 
   // Erkek organlar: kıvrık sapçıklar + kahverengi başçıklar ve polen
   const pol = (a, r) => [r * Math.sin(a * Math.PI / 180), -r * Math.cos(a * Math.PI / 180)];
@@ -210,10 +226,10 @@
     const [ex, ey] = pol(a, L);
     const [cx, cy] = pol(a + (i % 2 ? 14 : -14), L * .55);
     el('path', { d: `M0 0 Q ${cx.toFixed(1)} ${cy.toFixed(1)}, ${ex.toFixed(1)} ${ey.toFixed(1)}`,
-      stroke: '#dfeec0', 'stroke-width': 2.2, fill: 'none', 'stroke-linecap': 'round' }, F);
+      stroke: '#dfeec0', 'stroke-width': 2.2, fill: 'none', 'stroke-linecap': 'round' }, C);
     el('path', { d: `M0 0 Q ${cx.toFixed(1)} ${cy.toFixed(1)}, ${ex.toFixed(1)} ${ey.toFixed(1)}`,
-      stroke: '#8fb86a', 'stroke-width': .6, fill: 'none', 'stroke-opacity': .6 }, F);
-    const ag = el('g', { transform: `translate(${ex.toFixed(1)} ${ey.toFixed(1)}) rotate(${a + 90 + rr(-20, 20)})` }, F);
+      stroke: '#8fb86a', 'stroke-width': .6, fill: 'none', 'stroke-opacity': .6 }, C);
+    const ag = el('g', { transform: `translate(${ex.toFixed(1)} ${ey.toFixed(1)}) rotate(${a + 90 + rr(-20, 20)})` }, C);
     el('ellipse', { cx: 0, cy: 0, rx: 13, ry: 3.6, fill: 'url(#antherGrad)' }, ag);
     for (let p = 0; p < 9; p++)
       el('circle', { cx: rr(-11, 11).toFixed(1), cy: rr(-3.5, 3.5).toFixed(1), r: rr(.6, 1.3).toFixed(2),
@@ -222,13 +238,55 @@
 
   // Dişi organ: uzun yeşil boyuncuk ve üç loplu tepecik
   el('path', { d: 'M0 0 Q -10 -60, 6 -128', stroke: '#b9d98c', 'stroke-width': 3.4,
-    fill: 'none', 'stroke-linecap': 'round' }, F);
+    fill: 'none', 'stroke-linecap': 'round' }, C);
   el('path', { d: 'M0 0 Q -10 -60, 6 -128', stroke: '#e8f5cf', 'stroke-width': 1,
-    fill: 'none', 'stroke-opacity': .7 }, F);
-  const st = el('g', { transform: 'translate(6 -131)' }, F);
+    fill: 'none', 'stroke-opacity': .7 }, C);
+  const st = el('g', { transform: 'translate(6 -131)' }, C);
   [[-4.5, 1], [4.5, 1], [0, -3.5]].forEach(([x, y]) =>
     el('circle', { cx: x, cy: y, r: 4.6, fill: 'url(#stigmaGrad)' }, st));
   el('circle', { cx: -1.5, cy: -2.5, r: 1.6, fill: '#ffffff', 'fill-opacity': .55 }, st);
+
+  /* ---------- Kaydırdıkça açılma ---------- */
+  const msg = document.getElementById('msg'), hint = document.getElementById('hint');
+  const clamp = v => Math.max(0, Math.min(1, v));
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  let target = 0, cur = 0;
+  function progress() {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    return max > 0 ? clamp(scrollY / (max * .85)) : 1;
+  }
+  function render(p) {
+    const e = ease(p);
+    tepals.forEach(({ g, angle, scale, closed }, i) => {
+      // Dış yapraklar biraz önce, iç yapraklar biraz sonra açılır
+      const local = ease(clamp((p - (i < 3 ? 0 : .08)) / .92));
+      const a = closed + (angle - closed) * local;
+      const sx = .42 + .58 * local;
+      g.setAttribute('transform', `rotate(${a.toFixed(2)}) scale(${(scale * sx).toFixed(3)} ${scale.toFixed(3)})`);
+    });
+    const c = clamp((p - .45) / .5);
+    C.setAttribute('transform', `scale(${(.3 + .7 * ease(c)).toFixed(3)})`);
+    C.setAttribute('opacity', c.toFixed(3));
+    F.setAttribute('transform', `translate(${CX} ${CY + 40 * (1 - e)}) scale(${(.72 + .28 * e).toFixed(3)} ${((.72 + .28 * e) * .93).toFixed(3)})`);
+    const m = clamp((p - .82) / .18);
+    msg.style.opacity = m;
+    msg.style.transform = `translateY(${(14 * (1 - m)).toFixed(1)}px)`;
+    hint.style.opacity = 1 - clamp(p / .1);
+  }
+  function tick() {
+    cur += (target - cur) * .15;
+    if (Math.abs(target - cur) < .0005) cur = target;
+    render(cur);
+    if (cur !== target) requestAnimationFrame(tick); else running = false;
+  }
+  let running = false;
+  function onScroll() {
+    target = progress();
+    if (!running) { running = true; requestAnimationFrame(tick); }
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  render(0); onScroll();
 })();
 </script>
 </body>
