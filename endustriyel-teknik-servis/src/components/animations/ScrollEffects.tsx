@@ -1,14 +1,14 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { gsap, MQ, ScrollTrigger, useGSAP } from './gsap';
+import { gsap, idleMatchMedia, MQ, ScrollTrigger, useGSAP } from './gsap';
 
 /**
  * Tek noktadan yönetilen, veri-özniteliği tabanlı scroll animasyonları.
  *
- *  data-reveal                 → yumuşak yukarı kayarak görünme
- *  data-stagger                → doğrudan çocukları sırayla görünür
- *  data-line                   → ince ayırıcı çizgi soldan çizilir
+ *  data-reveal                 → yumuşak yukarı kayarak görünme   (CSS geçişi, globals.css → .motion-ready)
+ *  data-stagger                → doğrudan çocukları sırayla görünür (CSS geçişi)
+ *  data-line                   → ince ayırıcı çizgi soldan çizilir  (CSS geçişi)
  *  data-clip                   → görsel aşağıdan yukarı klip ile açılır
  *  data-zoom                   → görsel kaydırmayla hafifçe uzaklaşır (masaüstü)
  *  data-parallax="0.12"        → hafif parallax (masaüstü)
@@ -25,8 +25,8 @@ export function ScrollEffects() {
 
   useGSAP(
     () => {
-    const mm = gsap.matchMedia();
-
+    let cancelled = false;
+    const cleanup = idleMatchMedia((mm) => {
     mm.add(
       { desktop: MQ.desktop, mobile: MQ.mobile },
       (ctx) => {
@@ -35,37 +35,28 @@ export function ScrollEffects() {
         const dur = desktop ? 1.15 : 0.85;
         const q = <T extends Element = HTMLElement>(sel: string) => gsap.utils.toArray<T>(sel);
 
+        // Görünme efektleri (reveal / stagger / line): GSAP tween'i yerine CSS geçişi + sınıf.
+        // Her öğe için tween kurmak, açılışta öğe başına getComputedStyle okuması ve stil yeniden hesaplaması
+        // yaptırıyordu (mobilde ~0,5 sn uzun görev). Burada yalnızca yazma yapılır, okuma yoktur; görünüm aynı.
+        const root = document.documentElement;
+        root.style.setProperty('--reveal-dist', `${dist}px`);
+        root.style.setProperty('--reveal-dur', `${dur}s`);
+        root.classList.add('motion-ready');
         q('[data-reveal]').forEach((el) => {
-          gsap.from(el, {
-            y: dist,
-            autoAlpha: 0,
-            duration: dur,
-            delay: Number(el.dataset.revealDelay || 0),
-            ease: 'power3.out',
-            scrollTrigger: { trigger: el, start: 'top 90%', once: true },
-          });
+          if (el.dataset.revealDelay) el.style.setProperty('--reveal-delay', `${el.dataset.revealDelay}s`);
         });
-
         q('[data-stagger]').forEach((el) => {
-          gsap.from(el.children, {
-            y: dist,
-            autoAlpha: 0,
-            duration: dur,
-            ease: 'power3.out',
-            stagger: desktop ? 0.09 : 0.06,
-            scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-          });
+          Array.from(el.children).forEach((c, i) => (c as HTMLElement).style.setProperty('--reveal-delay', `${i * (desktop ? 0.09 : 0.06)}s`));
         });
-
-        q('[data-line]').forEach((el) => {
-          gsap.from(el, {
-            scaleX: 0,
-            transformOrigin: el.dataset.lineFrom === 'right' ? 'right center' : 'left center',
-            duration: desktop ? 1.4 : 0.9,
-            ease: 'power2.inOut',
-            scrollTrigger: { trigger: el, start: 'top 95%', once: true },
+        const reveal = (sel: string, start: string) =>
+          ScrollTrigger.batch(q(sel), {
+            start,
+            once: true,
+            onEnter: (els) => els.forEach((el) => el.classList.add('is-in')),
           });
-        });
+        reveal('[data-reveal]', 'top 90%');
+        reveal('[data-stagger]', 'top 88%');
+        reveal('[data-line]', 'top 95%');
 
         q('[data-clip]').forEach((el) => {
           gsap.fromTo(
@@ -107,17 +98,22 @@ export function ScrollEffects() {
           });
         }
 
-        // Teknik çizimler: çizgiler plotter gibi çizilir, yazılar ardından belirir
-        q('[data-draw]').forEach((root) => {
+        // Teknik çizimler: çizgiler plotter gibi çizilir, yazılar ardından belirir.
+        // Önce TÜM çizimlerin stilleri okunur, sonra hepsine yazılır (okuma/yazma iç içe geçmez → tek stil hesabı).
+        const drawings = q('[data-draw]').map((root) => {
           const shapes = Array.from(root.querySelectorAll<SVGGeometryElement>('path, line, polyline, polygon, rect, circle, ellipse'));
-          const stroked = (el: Element) => {
+          const info = shapes.map((el) => {
             const st = getComputedStyle(el);
-            return st.stroke !== 'none' && st.strokeWidth !== '0px';
+            return { el, stroked: st.stroke !== 'none' && st.strokeWidth !== '0px', dashed: st.strokeDasharray !== 'none' };
+          });
+          return {
+            root,
+            // kesik desenli çizgiler çizilmez, belirir (deseni korunur)
+            strokes: info.filter((x) => x.stroked && !x.dashed).map((x) => x.el),
+            texts: [...Array.from(root.querySelectorAll('text, [data-draw-fade]')), ...info.filter((x) => x.stroked && x.dashed).map((x) => x.el)],
           };
-          // kesik desenli çizgiler çizilmez, belirir (deseni korunur)
-          const dashed = (el: Element) => getComputedStyle(el).strokeDasharray !== 'none';
-          const strokes = shapes.filter((el) => stroked(el) && !dashed(el));
-          const texts = [...Array.from(root.querySelectorAll('text, [data-draw-fade]')), ...shapes.filter((el) => stroked(el) && dashed(el))];
+        });
+        drawings.forEach(({ root, strokes, texts }) => {
           if (!strokes.length) return;
           gsap.set(strokes, { attr: { pathLength: 1 }, strokeDasharray: 1, strokeDashoffset: 1 });
           if (texts.length) gsap.set(texts, { autoAlpha: 0 });
@@ -144,20 +140,26 @@ export function ScrollEffects() {
             },
           );
         });
+        return () => {
+          root.classList.remove('motion-ready');
+          q('.is-in').forEach((el) => el.classList.remove('is-in'));
+        };
       },
     );
 
+    // Her tetikleyici oluşturulurken kendi konumunu zaten hesaplar; tam yenileme (tüm animasyonları geri alıp
+    // yeniden ölçer, mobilde ~0,3 sn) yalnızca web fontları henüz yüklenmemişse, yüklendiklerinde bir kez yapılır.
     ScrollTrigger.sort();
-    ScrollTrigger.refresh();
-    // Web fontları yüklenince ölçüleri tazele
-    let cancelled = false;
-    document.fonts?.ready.then(() => {
-      if (!cancelled) ScrollTrigger.refresh();
+    if (document.fonts && document.fonts.status !== 'loaded') {
+      document.fonts.ready.then(() => {
+        if (!cancelled) ScrollTrigger.refresh();
+      });
+    }
     });
 
     return () => {
       cancelled = true;
-      mm.revert();
+      cleanup();
     };
     },
     { dependencies: [pathname], revertOnUpdate: true },

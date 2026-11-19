@@ -1,6 +1,7 @@
 import { business, profile } from '@/data/site';
 import { ServiceRequestForm } from '@/components/forms/ServiceRequestForm';
-import { CallButton, WhatsappCta } from '@/components/ui/CallButtons';
+import { ContactButtons } from '@/components/ui/CallButtons';
+import { hasDirectContact, whatsappNumber } from '@/lib/contact';
 import { Ph } from '@/components/ui/Ph';
 
 /** Telefon önce: büyük numara, ara / WhatsApp; form yazmayı tercih edenler için. */
@@ -23,14 +24,15 @@ export function ContactSection() {
             <em>arıza mı var?</em>
           </h2>
           <p className="mt-6 max-w-md leading-relaxed text-mist/80" data-reveal>
-            Arayın, makineyi ve arızayı anlatın. Uygun değilsem bunu da hemen söylerim.
+            {hasDirectContact
+              ? 'Arayın, makineyi ve arızayı anlatın. Uygun değilsem bunu da hemen söylerim.'
+              : 'Formu doldurun; makineyi ve arızayı anlatan servis metniniz hazırlansın. Uygun değilsem bunu da açıkça söylerim.'}
           </p>
           <p id="iletisim-bilgileri" className="wide mt-10 scroll-mt-28 text-[clamp(1.4rem,2.6vw,2.4rem)] leading-none text-paper" data-reveal>
             <Ph f={profile.phone} />
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row" data-reveal>
-            <CallButton fallbackHref="#servis-formu" />
-            <WhatsappCta fallbackHref="#servis-formu" />
+            <ContactButtons fallbackHref="#servis-formu" fallbackLabel="Servis formunu doldurun" />
           </div>
           <dl className="mt-10 border-t border-mist/15" data-reveal>
             {rows.map((r) => (
@@ -45,7 +47,9 @@ export function ContactSection() {
           <div id="servis-formu" className="scroll-mt-28 border border-mist/15 bg-ink-2 p-6 sm:p-9" data-reveal>
             <p className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-mist/55">Yazmayı tercih ederseniz</p>
             <p className="mt-3 mb-8 text-sm leading-relaxed text-mist/70">
-              Formu doldurun; bilgileriniz düzenli bir WhatsApp mesajına dönüşür, mesajı siz gönderirsiniz.
+              {whatsappNumber
+                ? 'Formu doldurun; bilgileriniz düzenli bir WhatsApp mesajına dönüşür, mesajı siz gönderirsiniz.'
+                : 'Formu doldurun; bilgileriniz düzenli bir servis metnine dönüşür, kopyalayıp iletebilirsiniz.'}
             </p>
             <ServiceRequestForm />
           </div>

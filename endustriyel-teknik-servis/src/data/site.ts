@@ -80,6 +80,17 @@ export const site = {
 };
 
 /** JSON-LD yalnızca doğrulanmış temel işletme verileri varken üretilir. */
+/**
+ * Paylaşım (Open Graph) görseli: public/og-image.png (1200×630). Tam adres olarak verilir; göreli verildiğinde
+ * Next.js GitHub Pages alt yolunu (basePath) metadataBase'deki yolla birleştirip iki kez yazıyordu.
+ */
+export const ogImage = {
+  url: `${site.url}/og-image.png`,
+  width: 1200,
+  height: 630,
+  alt: 'Endüstriyel baskı ve ambalaj makinelerinde teknik servis',
+};
+
 export const hasVerifiedBusinessData = Boolean(business.name && (business.phone || business.email));
 
 /**

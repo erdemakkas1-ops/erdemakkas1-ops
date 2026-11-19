@@ -1,5 +1,13 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+
+/** 404: dizine eklenmez, ana sayfaya canonical vermez (layout'tan miras alınanlar ezilir) */
+export const metadata: Metadata = {
+  title: 'Sayfa bulunamadı',
+  robots: { index: false, follow: true },
+  alternates: { canonical: null },
+};
 
 export default function NotFound() {
   return (

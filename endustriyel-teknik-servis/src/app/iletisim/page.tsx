@@ -1,6 +1,7 @@
 import { Clock3, MapPin, MessageCircle } from 'lucide-react';
 import { pageMetadata } from '@/lib/seo';
 import { business } from '@/data/site';
+import { whatsappNumber } from '@/lib/contact';
 import { PageHero } from '@/components/sections/PageHero';
 import { ServiceRequestForm } from '@/components/forms/ServiceRequestForm';
 import { ContactList } from '@/components/ui/ContactActions';
@@ -9,7 +10,7 @@ import { processSteps } from '@/data/process';
 export const metadata = pageMetadata({
   title: 'İletişim ve Servis Talebi – Arıza Bildirim Formu',
   description:
-    'Makinenizin markası, modeli ve arıza bilgileriyle servis talebi oluşturun. Talebiniz WhatsApp mesajı olarak hazırlanır; ön teknik değerlendirme için iletişime geçin.',
+    'Makinenizin markası, modeli ve arıza bilgileriyle servis talebi oluşturun. Talebiniz düzenli bir servis metni olarak hazırlanır; ön teknik değerlendirme için iletişime geçin.',
   path: '/iletisim',
 });
 
@@ -32,8 +33,10 @@ export default function ContactPage() {
                 Servis talebi oluşturun
               </h2>
               <p className="mt-4 text-[0.97rem] leading-relaxed text-mist/75">
-                <span className="text-accent">*</span> ile işaretli alanlar zorunludur. Talebiniz, siz WhatsApp’ta
-                gönderdiğinizde iletilmiş olur.
+                <span className="text-accent">*</span> ile işaretli alanlar zorunludur.{' '}
+                {whatsappNumber
+                  ? 'Talebiniz, siz WhatsApp’ta gönderdiğinizde iletilmiş olur.'
+                  : 'Form, talebinizi kopyalanabilir bir servis metni olarak hazırlar.'}
               </p>
               <div className="mt-10">
                 <ServiceRequestForm />
@@ -74,8 +77,10 @@ export default function ContactPage() {
                 <div>
                   <h3 className="font-semibold text-white">Fotoğraf ve video</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-mist/70">
-                    Alarm ekranı, makine etiketi, ses veya hareketin kısa videosu teşhisi kolaylaştırır. Bunları WhatsApp
-                    konuşmasına ekleyebilirsiniz.
+                    Alarm ekranı, makine etiketi, ses veya hareketin kısa videosu teşhisi kolaylaştırır.{' '}
+                    {whatsappNumber
+                      ? 'Bunları WhatsApp konuşmasına ekleyebilirsiniz.'
+                      : 'Talebinizi ilettikten sonra paylaşabilirsiniz.'}
                   </p>
                 </div>
               </div>

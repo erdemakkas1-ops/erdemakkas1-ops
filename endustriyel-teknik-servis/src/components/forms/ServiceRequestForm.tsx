@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { AlertCircle, Camera, Check, Copy, ExternalLink, MessageCircle, RotateCcw, ShieldCheck } from 'lucide-react';
+import { AlertCircle, Camera, Check, Copy, ExternalLink, Mail, MessageCircle, RotateCcw, ShieldCheck } from 'lucide-react';
 import { faultTypes, formBrands, urgencyOptions } from '@/data/form';
 import { whatsappNumber } from '@/lib/contact';
+import { business } from '@/data/site';
 import {
   LIMITS,
+  buildMailtoUrl,
   buildServiceMessage,
   buildWhatsappUrl,
   validateRequest,
@@ -23,9 +25,10 @@ const empty: ServiceRequest = {
   city: '',
   district: '',
   contactName: '',
+  contactPhone: '',
 };
 
-const fieldOrder: (keyof ServiceRequest)[] = ['urgency', 'brand', 'otherBrand', 'model', 'faultType', 'description', 'city', 'district', 'contactName'];
+const fieldOrder: (keyof ServiceRequest)[] = ['urgency', 'brand', 'otherBrand', 'model', 'faultType', 'description', 'city', 'district', 'contactName', 'contactPhone'];
 
 type Result = { message: string; url: string | null } | null;
 
@@ -140,8 +143,10 @@ export function ServiceRequestForm() {
           </p>
         ) : (
           <p className="mt-4 leading-relaxed text-mist/80">
-            İşletmenin WhatsApp numarası bu sürümde henüz tanımlanmadığı için mesaj otomatik olarak açılamıyor. Aşağıdaki
-            metni kopyalayarak servis talebinizi iletebilirsiniz. <span className="text-mist/60">(Demo ortamı)</span>
+            WhatsApp numarası henüz tanımlanmadığı için mesaj otomatik olarak açılamıyor.{' '}
+            {business.email
+              ? 'Servis talebinizi e-postayla gönderebilir ya da aşağıdaki metni kopyalayabilirsiniz.'
+              : 'Aşağıdaki metni kopyalayarak servis talebinizi iletebilirsiniz.'}
           </p>
         )}
 
@@ -152,7 +157,13 @@ export function ServiceRequestForm() {
               WhatsApp açılmadıysa tıklayın
             </a>
           )}
-          <button type="button" onClick={() => copy(result.message)} className={`btn ${result.url ? 'btn-ghost' : 'btn-primary'}`}>
+          {!result.url && business.email && (
+            <a href={buildMailtoUrl(business.email, result.message)} className="btn btn-primary">
+              <Mail className="h-4 w-4" aria-hidden="true" />
+              E-postayla gönder
+            </a>
+          )}
+          <button type="button" onClick={() => copy(result.message)} className={`btn ${result.url || business.email ? 'btn-ghost' : 'btn-primary'}`}>
             {copied === 'ok' ? <Check className="h-4 w-4" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
             {copied === 'ok' ? 'Metin kopyalandı' : 'Servis metnini kopyala'}
           </button>
@@ -358,11 +369,38 @@ export function ServiceRequestForm() {
         />
       </Field>
 
+      <Field
+        label="Geri dönüş telefonu"
+        id={id('contactPhone')}
+        error={errors.contactPhone}
+        field="contactPhone"
+        hint={
+          whatsappNumber
+            ? 'İsteğe bağlı. Size dönüş yapılabilmesi için; WhatsApp ile gönderirseniz numaranız zaten görünür.'
+            : 'İsteğe bağlı. Size dönüş yapılabilmesi için servis metnine eklenir.'
+        }
+      >
+        <input
+          id={id('contactPhone')}
+          className="field"
+          type="tel"
+          inputMode="tel"
+          value={values.contactPhone}
+          maxLength={LIMITS.contactPhone}
+          onChange={(e) => set('contactPhone', e.target.value)}
+          aria-invalid={Boolean(errors.contactPhone)}
+          aria-describedby={`${id('contactPhone-hint')}${errors.contactPhone ? ` ${id('contactPhone-err')}` : ''}`}
+          autoComplete="tel"
+        />
+      </Field>
+
       <div className="flex gap-3 border-l-2 border-accent bg-ink/60 p-4 text-sm leading-relaxed text-mist/80">
         <Camera className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
         <p>
-          Bu formda fotoğraf yükleme alanı yoktur. Arıza ekranı, etiket veya hareketin fotoğraf ve videolarını WhatsApp
-          konuşması üzerinden paylaşabilirsiniz.
+          Bu formda fotoğraf yükleme alanı yoktur.{' '}
+          {whatsappNumber
+            ? 'Arıza ekranı, etiket veya hareketin fotoğraf ve videolarını WhatsApp konuşması üzerinden paylaşabilirsiniz.'
+            : 'Arıza ekranı, etiket veya hareketin fotoğraf ve videolarını talebinizi ilettikten sonra paylaşabilirsiniz.'}
         </p>
       </div>
 
@@ -433,7 +471,7 @@ function Field({
         <label htmlFor={id} className="text-sm font-semibold text-white">
           {label} {required ? <Req /> : <span className="font-normal text-mist/50">(isteğe bağlı)</span>}
         </label>
-        {counter && <span className="font-mono text-[11px] text-mist/45">{counter}</span>}
+        {counter && <span className="font-mono text-[11px] text-mist/65">{counter}</span>}
       </div>
       {children}
       {hint && (

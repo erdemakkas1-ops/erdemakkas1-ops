@@ -90,7 +90,7 @@ Gerçek veriler girildikten sonra `site.showContentPlaceholders` değerini `fals
 
 ```
 src/
-  app/                    # Rotalar, metadata, sitemap.ts, robots.ts, opengraph-image.tsx, icon.svg
+  app/                    # Rotalar, metadata, sitemap.ts, robots.ts, icon.svg (paylaşım görseli: public/og-image.png)
     hizmetler/[slug]/     # 5 hizmet detay sayfası (generateStaticParams)
     makineler/ calismalarimiz/ hakkimizda/ iletisim/ gizlilik/
   components/

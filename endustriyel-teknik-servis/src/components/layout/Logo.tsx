@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { business, displayName, profile } from '@/data/site';
+import { business, fieldText, profile } from '@/data/site';
 import { Ph } from '@/components/ui/Ph';
 
 export function Logo({ onClick }: { onClick?: () => void }) {
   return (
-    <Link href="/" onClick={onClick} className="group flex items-center gap-3" aria-label={`${displayName} – Ana sayfa`}>
+    <Link href="/" onClick={onClick} className="group flex items-center gap-3" aria-label={`${fieldText(profile.name)} – Ana sayfa`}>
       <span className="relative grid h-10 w-10 shrink-0 place-items-center border border-mist/30 font-display text-lg font-bold text-white transition-colors group-hover:border-accent">
         {business.shortMark}
         <span className="absolute -bottom-px -right-px h-2 w-2 bg-accent" aria-hidden="true" />

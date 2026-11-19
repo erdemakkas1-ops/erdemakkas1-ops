@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { media } from '@/data/media';
 import { serviceRequestHref } from '@/data/navigation';
-import { gsap, MQ, useGSAP } from '@/components/animations/gsap';
+import { gsap, idleMatchMedia, MQ, useGSAP } from '@/components/animations/gsap';
 import { CallButton, WhatsappCta } from '@/components/ui/CallButtons';
 import { CoverImage } from './CoverImage';
 
@@ -37,7 +37,7 @@ export function ServiceScene() {
 
   useGSAP(
     () => {
-      const mm = gsap.matchMedia();
+      return idleMatchMedia((mm) => {
       mm.add({ desktop: MQ.desktop, mobile: MQ.mobile }, (ctx) => {
         const { desktop } = ctx.conditions as { desktop: boolean };
         const q = gsap.utils.selector(root);
@@ -72,6 +72,7 @@ export function ServiceScene() {
             scrollTrigger: { trigger: q('[data-window]')[0], start: 'top 45%', end: 'top 5%', scrub: 0.5 },
           },
         );
+      });
       });
     },
     { scope: root },
@@ -114,8 +115,8 @@ export function ServiceScene() {
           <Link href={serviceRequestHref} className="btn btn-primary">
             Servis Talebi Oluştur <ArrowRight className="btn-arrow h-4 w-4" aria-hidden="true" />
           </Link>
-          <CallButton variant="ghost" fallbackHref="#iletisim-bilgileri" />
-          <WhatsappCta fallbackHref="#servis-formu" className="max-sm:hidden" />
+          <CallButton variant="ghost" />
+          <WhatsappCta className="max-sm:hidden" />
         </div>
       </div>
     </section>

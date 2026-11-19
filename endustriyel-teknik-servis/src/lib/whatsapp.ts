@@ -13,6 +13,8 @@ export type ServiceRequest = {
   city: string;
   district: string;
   contactName: string;
+  /** İsteğe bağlı geri dönüş telefonu (kopyalama / e-posta yolunda ustanın müşteriye ulaşabilmesi için) */
+  contactPhone: string;
 };
 
 export type FieldErrors = Partial<Record<keyof ServiceRequest, string>>;
@@ -24,6 +26,7 @@ export const LIMITS = {
   city: 40,
   district: 40,
   contactName: 60,
+  contactPhone: 20,
 } as const;
 
 const clean = (v: string) => v.replace(/\s+/g, ' ').trim();
@@ -45,6 +48,9 @@ export function validateRequest(r: ServiceRequest): FieldErrors {
   else if (clean(r.city).length > LIMITS.city) e.city = `En fazla ${LIMITS.city} karakter.`;
   if (clean(r.district).length > LIMITS.district) e.district = `En fazla ${LIMITS.district} karakter.`;
   if (clean(r.contactName).length > LIMITS.contactName) e.contactName = `En fazla ${LIMITS.contactName} karakter.`;
+  const phoneDigits = r.contactPhone.replace(/\D/g, '');
+  if (r.contactPhone.trim() && (phoneDigits.length < 10 || phoneDigits.length > 13 || /[^\d\s()+-]/.test(r.contactPhone)))
+    e.contactPhone = 'Geçerli bir telefon numarası yazın (örn. 05xx xxx xx xx) ya da boş bırakın.';
   return e;
 }
 
@@ -61,12 +67,13 @@ export function buildServiceMessage(r: ServiceRequest): string {
     `*Konum (il / ilçe):* ${location}`,
   ];
   if (clean(r.contactName)) lines.push(`*İletişim adı:* ${clean(r.contactName)}`);
+  if (clean(r.contactPhone)) lines.push(`*Geri dönüş telefonu:* ${clean(r.contactPhone)}`);
   lines.push(
     '',
     '*Arıza açıklaması:*',
     r.description.trim().replace(/\n{3,}/g, '\n\n'),
     '',
-    'Arızayla ilgili fotoğraf/videoları bu konuşmada paylaşabilirim.',
+    'Arızayla ilgili fotoğraf ve videoları ayrıca paylaşabilirim.',
   );
   return lines.join('\n');
 }
@@ -82,4 +89,10 @@ export function normalizeWhatsappNumber(raw: string | null | undefined): string 
 
 export function buildWhatsappUrl(number: string, text: string): string {
   return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+}
+
+/** E-posta için: WhatsApp kalın yazı işaretleri (*...*) kaldırılmış düz metin + mailto bağlantısı */
+export function buildMailtoUrl(email: string, message: string): string {
+  const body = message.replace(/\*([^*\n]+)\*/g, '$1');
+  return `mailto:${email}?subject=${encodeURIComponent('Servis talebi')}&body=${encodeURIComponent(body)}`;
 }

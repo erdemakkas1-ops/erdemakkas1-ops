@@ -22,7 +22,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/gizlilik', priority: 0.2 },
   ];
   return paths.map(({ path, priority }) => ({
-    url: `${site.url}${path}`,
+    // trailingSlash: true → canonical adreslerle aynı biçim (sonda /)
+    url: `${site.url}${path}/`,
     lastModified: now,
     changeFrequency: 'monthly',
     priority,
