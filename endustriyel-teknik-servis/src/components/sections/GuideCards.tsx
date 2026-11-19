@@ -17,7 +17,7 @@ export function GuideCards({ limit, tone = 'dark' }: { limit?: number; tone?: 'd
               {g.title}
             </h3>
             <p className={`mt-4 text-[0.93rem] leading-relaxed ${light ? 'text-ink/65' : 'text-mist/70'}`}>{g.description}</p>
-            <span className={`mt-auto flex items-center justify-between pt-8 text-xs ${light ? 'text-ink/50' : 'text-mist/50'}`}>
+            <span className={`mt-auto flex items-center justify-between pt-8 text-xs ${light ? 'text-ink/50' : 'text-mist/60'}`}>
               <span>
                 {fmt(g.date)} · {g.readingMinutes} dk okuma
               </span>

@@ -16,7 +16,7 @@ export function ServiceCta({ index = '' }: { index?: string }) {
         <div className="grid gap-12 pt-12 lg:grid-cols-12 lg:items-end lg:pt-16">
           <div className="lg:col-span-8">
             <p className="eyebrow" data-reveal>
-              {index && <span className="text-mist/50">{index}</span>}Servis Talebi
+              {index && <span className="text-mist/60">{index}</span>}Servis Talebi
             </p>
             <h2 id="cta-baslik" className="display-lg mt-6 text-paper" data-reveal>
               Makinenizde

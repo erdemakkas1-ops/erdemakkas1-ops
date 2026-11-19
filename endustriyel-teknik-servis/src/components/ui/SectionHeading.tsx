@@ -15,7 +15,7 @@ export function SectionHeading({ index, eyebrow, title, lead, tone = 'dark', as:
   return (
     <header className={`max-w-3xl ${className}`}>
       <p className="eyebrow" data-reveal>
-        {index && <span className={light ? 'text-ink/50' : 'text-mist/50'}>{index}</span>}
+        {index && <span className={light ? 'text-ink/50' : 'text-mist/60'}>{index}</span>}
         {eyebrow}
       </p>
       <H className={`display-lg mt-5 ${light ? 'text-ink' : 'text-white'}`} data-reveal>

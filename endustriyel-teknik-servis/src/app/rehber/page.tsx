@@ -25,7 +25,8 @@ export default function GuidesPage() {
         }
         lead="Bakım ekipleri ve fabrika yetkilileri için kısa, genel teknik yazılar. Yazılar makineye özel talimatların yerine geçmez; iş güvenliği her zaman önceliklidir."
       />
-      <section className="bg-ink py-20 sm:py-28" aria-label="Yazılar">
+      <section className="bg-ink py-20 sm:py-28" aria-labelledby="yazilar-baslik">
+        <h2 id="yazilar-baslik" className="sr-only">Yazılar</h2>
         <div className="container-x">
           <GuideCards />
         </div>

@@ -25,7 +25,7 @@ export function AboutFacts() {
     <dl className="grid gap-px overflow-hidden border border-mist/10 bg-mist/10 sm:grid-cols-2">
       {about.experienceYears !== null && (
         <div className="bg-ink p-6">
-          <dt className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-mist/55">
+          <dt className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-mist/60">
             <Clock3 className="h-3.5 w-3.5 text-accent" aria-hidden="true" /> Saha deneyimi
           </dt>
           <dd className="mt-2 font-display text-4xl font-bold text-white">{about.experienceYears} yıl</dd>
@@ -33,7 +33,7 @@ export function AboutFacts() {
       )}
       {about.certifications.length > 0 && (
         <div className="bg-ink p-6">
-          <dt className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-mist/55">
+          <dt className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-mist/60">
             <Award className="h-3.5 w-3.5 text-accent" aria-hidden="true" /> Belgeler
           </dt>
           <dd className="mt-3 space-y-1.5 text-sm text-mist/85">
@@ -45,7 +45,7 @@ export function AboutFacts() {
       )}
       {about.background.length > 0 && (
         <div className="bg-ink p-6 sm:col-span-2">
-          <dt className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-mist/55">
+          <dt className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-mist/60">
             <BadgeCheck className="h-3.5 w-3.5 text-accent" aria-hidden="true" /> Geçmiş
           </dt>
           <dd className="mt-3 space-y-1.5 text-sm text-mist/85">
@@ -70,7 +70,7 @@ export function About({ full = false }: { full?: boolean }) {
               <Visual kind="photo" image={about.portrait} tone="steel" className="h-full w-full" sizes="(min-width:1024px) 40vw, 100vw" />
             </div>
           </div>
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.18em] text-mist/50">
+          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.18em] text-mist/60">
             {who}
             {!about.portrait && site.showContentPlaceholders && <span className="text-accent"> · Fotoğraf alanı (eklenecek)</span>}
           </p>

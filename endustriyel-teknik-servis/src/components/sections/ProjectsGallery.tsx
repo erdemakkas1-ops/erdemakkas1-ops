@@ -26,7 +26,7 @@ function ProjectCard({ p }: { p: Project }) {
         </span>
       </div>
       <div className="p-6">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-mist/55">{p.brand}</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-mist/60">{p.brand}</p>
         <h3 className="mt-1.5 font-display text-2xl font-semibold uppercase text-white">{p.model}</h3>
         <dl className="mt-5 space-y-4 text-sm leading-relaxed">
           <div>
@@ -39,7 +39,7 @@ function ProjectCard({ p }: { p: Project }) {
           </div>
         </dl>
         {(date || rest.length > 0) && (
-          <div className="mt-6 flex items-center justify-between border-t border-mist/10 pt-4 text-xs text-mist/55">
+          <div className="mt-6 flex items-center justify-between border-t border-mist/10 pt-4 text-xs text-mist/60">
             {date ? (
               <span className="flex items-center gap-2">
                 <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />

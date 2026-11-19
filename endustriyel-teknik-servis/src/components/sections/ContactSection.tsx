@@ -9,7 +9,7 @@ export function ContactSection() {
   const rows = [
     { k: 'Çalışma saatleri', v: <Ph f={profile.hours} /> },
     { k: 'Gittiğim bölgeler', v: <Ph f={profile.region} /> },
-    { k: 'E-posta', v: business.email ? <a href={`mailto:${business.email}`} className="underline underline-offset-4 hover:text-accent">{business.email}</a> : <span className="text-mist/55">—</span> },
+    { k: 'E-posta', v: business.email ? <a href={`mailto:${business.email}`} className="underline underline-offset-4 hover:text-accent">{business.email}</a> : <span className="text-mist/60">—</span> },
   ];
   return (
     <section id="servis-talebi" className="bg-ink py-24 sm:py-32" aria-labelledby="cta-baslik">
@@ -37,7 +37,7 @@ export function ContactSection() {
           <dl className="mt-10 border-t border-mist/15" data-reveal>
             {rows.map((r) => (
               <div key={r.k} className="grid grid-cols-[9.5rem_1fr] items-baseline gap-4 border-b border-mist/15 py-4">
-                <dt className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-mist/50">{r.k}</dt>
+                <dt className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-mist/60">{r.k}</dt>
                 <dd className="text-paper">{r.v}</dd>
               </div>
             ))}
@@ -45,7 +45,7 @@ export function ContactSection() {
         </div>
         <div className="lg:col-span-7">
           <div id="servis-formu" className="scroll-mt-28 border border-mist/15 bg-ink-2 p-6 sm:p-9" data-reveal>
-            <p className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-mist/55">Yazmayı tercih ederseniz</p>
+            <p className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-mist/60">Yazmayı tercih ederseniz</p>
             <p className="mt-3 mb-8 text-sm leading-relaxed text-mist/70">
               {whatsappNumber
                 ? 'Formu doldurun; bilgileriniz düzenli bir WhatsApp mesajına dönüşür, mesajı siz gönderirsiniz.'

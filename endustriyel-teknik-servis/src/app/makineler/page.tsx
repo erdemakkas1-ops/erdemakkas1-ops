@@ -50,7 +50,7 @@ export default function MachinesPage() {
                 {b.description}
               </p>
 
-              <h3 className="mt-10 font-mono text-[11px] uppercase tracking-[0.2em] text-mist/50">Makine türleri</h3>
+              <h3 className="mt-10 font-mono text-[11px] uppercase tracking-[0.2em] text-mist/60">Makine türleri</h3>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {b.machineTypes.map((t) => (
                   <li key={t} className="border border-mist/15 px-3.5 py-2 text-sm text-mist/85">
@@ -59,7 +59,7 @@ export default function MachinesPage() {
                 ))}
               </ul>
 
-              <h3 className="mt-10 font-mono text-[11px] uppercase tracking-[0.2em] text-mist/50">Çalışılan modeller</h3>
+              <h3 className="mt-10 font-mono text-[11px] uppercase tracking-[0.2em] text-mist/60">Çalışılan modeller</h3>
               <Link href={`/makineler/${b.id}`} className="mt-8 inline-flex items-center gap-2 font-semibold text-accent hover:text-[#f0b456]">
                 {b.name} sayfası: modeller ve makine grupları <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>

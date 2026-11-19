@@ -117,7 +117,7 @@ export function Header() {
                   }`}
                 >
                   {item.label}
-                  <span className="font-mono text-xs text-mist/40">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="font-mono text-xs text-mist/60">{String(i + 1).padStart(2, '0')}</span>
                 </Link>
               </li>
             ))}

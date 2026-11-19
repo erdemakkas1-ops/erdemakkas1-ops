@@ -14,7 +14,7 @@ export function ServiceCard({ service, tone = 'dark' }: { service: Service; tone
           <Visual kind={service.visual} image={service.image} note={false} draw="scroll" className="h-full w-full" sizes="(min-width:1280px) 20vw, (min-width:768px) 40vw, 100vw" />
         </div>
       </div>
-      <p className={`mt-5 font-mono text-[11px] tracking-[0.18em] ${light ? 'text-ink/50' : 'text-mist/50'}`}>{service.index}</p>
+      <p className={`mt-5 font-mono text-[11px] tracking-[0.18em] ${light ? 'text-ink/50' : 'text-mist/60'}`}>{service.index}</p>
       <h3 className={`mt-2 font-display text-[1.15rem] uppercase leading-[1.05] ${light ? 'text-ink' : 'text-paper'}`}>
         <Link href={href} className="hover:text-accent">
           {service.title}
