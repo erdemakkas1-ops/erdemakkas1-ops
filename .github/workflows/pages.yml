@@ -62,6 +62,7 @@ jobs:
         working-directory: endustriyel-teknik-servis
         env:
           PAGES_BASE_PATH: /erdemakkas1-ops/endustriyel-teknik-servis
+          NEXT_PUBLIC_SITE_URL: https://erdemakkas1-ops.github.io/erdemakkas1-ops/endustriyel-teknik-servis
         run: |
           npm ci --no-audit --no-fund
           npm run build
