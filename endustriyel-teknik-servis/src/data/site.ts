@@ -110,7 +110,7 @@ export const profile = {
   /** Çalışma saatleri */
   hours: field(business.workingHours, 'Çalışma saatleri'),
   /** Görünen telefon */
-  phone: field(business.phone, '0 5XX XXX XX XX'),
+  phone: field(business.phone, 'Telefon numarası eklenecek'),
 };
 
 export const fieldText = (f: ProfileField) => f.value ?? f.template;

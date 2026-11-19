@@ -6,7 +6,7 @@
 
 import type { ReactNode } from 'react';
 
-const ACCENT = '#ff7a2f';
+const ACCENT = '#e39b2d';
 const ns = { vectorEffect: 'non-scaling-stroke' as const };
 
 type SvgProps = { className?: string; title: string };

@@ -4,6 +4,7 @@ import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { QuickContact } from '@/components/layout/QuickContact';
+import { MobileContactBar } from '@/components/layout/MobileContactBar';
 import { ScrollEffects } from '@/components/animations/ScrollEffects';
 import { JsonLd } from '@/components/ui/JsonLd';
 import { displayName, site } from '@/data/site';
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0d1726',
+  themeColor: '#0f1112',
   colorScheme: 'dark',
 };
 
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="icerik">{children}</main>
         <Footer />
         <QuickContact />
+        <MobileContactBar />
         <ScrollEffects />
         <JsonLd data={businessJsonLd()} />
       </body>

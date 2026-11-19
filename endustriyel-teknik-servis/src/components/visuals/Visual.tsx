@@ -36,8 +36,8 @@ type Props = {
   /** Temsilî fotoğraflarda küçük not (varsayılan: açık) */
   note?: boolean;
   imgClassName?: string;
-  /** Çizim yer tutucusunda çizgiler kaydırmayla ('scroll') veya açılışta ('load') çizilsin */
-  draw?: 'scroll' | 'load';
+  /** Çizim yer tutucusunda çizgiler kaydırmayla çizilsin */
+  draw?: 'scroll';
 };
 
 /**
@@ -77,7 +77,7 @@ export function Visual({ kind, image, className = '', priority, sizes = '100vw',
   return (
     <div
       className={`visual-frame relative overflow-hidden ${tone === 'steel' ? 'visual-steel' : ''} ${className}`}
-      {...(draw ? { 'data-draw': draw === 'load' ? 'load' : '' } : {})}
+      {...(draw ? { 'data-draw': '' } : {})}
     >
       <div className="tech-grid absolute inset-0" aria-hidden="true" />
       <div className="visual-glow absolute inset-0" aria-hidden="true" />

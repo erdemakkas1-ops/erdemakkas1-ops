@@ -9,7 +9,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
   const all = [{ name: 'Ana Sayfa', path: '/' }, ...items];
   return (
     <>
-      <nav aria-label="Sayfa konumu" className="rise">
+      <nav aria-label="Sayfa konumu">
         <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11px] uppercase tracking-[0.16em] text-mist/60">
           {all.map((c, i) => {
             const last = i === all.length - 1;

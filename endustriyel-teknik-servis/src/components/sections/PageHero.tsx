@@ -20,27 +20,27 @@ export function PageHero({ crumbs, eyebrow, title, lead, visual, image, children
       <div className="container-x grid gap-12 lg:grid-cols-12 lg:items-end">
         <div className={visual ? 'lg:col-span-7' : 'lg:col-span-10'}>
           <Breadcrumbs items={crumbs} />
-          <p className="eyebrow rise mt-10" style={{ ['--d' as string]: '80ms' }}>
+          <p className="eyebrow mt-10">
             {eyebrow}
           </p>
-          <h1 className="display-lg rise mt-5 text-white" style={{ ['--d' as string]: '160ms' }}>
+          <h1 className="display-lg mt-5 text-white">
             {title}
           </h1>
           {lead && (
-            <p className="rise mt-7 max-w-2xl text-lg leading-relaxed text-mist/85" style={{ ['--d' as string]: '260ms' }}>
+            <p className="mt-7 max-w-2xl text-lg leading-relaxed text-mist/85">
               {lead}
             </p>
           )}
           {children && (
-            <div className="rise mt-9" style={{ ['--d' as string]: '360ms' }}>
+            <div className="mt-9">
               {children}
             </div>
           )}
         </div>
         {visual && (
-          <div className="fade lg:col-span-5" style={{ ['--d' as string]: '200ms' }}>
+          <div className="lg:col-span-5">
             <div className="relative aspect-[4/3] overflow-hidden border border-mist/10">
-              <Visual kind={visual} image={image} priority draw="load" className="h-full w-full" sizes="(min-width:1024px) 40vw, 100vw" />
+              <Visual kind={visual} image={image} priority className="h-full w-full" sizes="(min-width:1024px) 40vw, 100vw" />
             </div>
           </div>
         )}
